@@ -25,8 +25,8 @@ if __name__ == '__main__':
         confidence=0.9
     )
 
-    api_key = "tWhCDi-UTdKd14Boav6W1qKHW2fmLHC8Coz1gXqa3k8"
-    api_url = "https://lil-mas-aio.cybsi.ptsecurity.ru"
+    api_key = "api-key"
+    api_url = "https://cybsi-api.com"
 
     auth = APIKeyAuth(api_url, api_key, ssl_verify=False)
     config = Config(api_url, auth, ssl_verify=False)
@@ -34,4 +34,3 @@ if __name__ == '__main__':
 
     ref = client.observations.generics.register(generic)
     view = client.observations.generics.view(ref.uuid)
-    print(view)

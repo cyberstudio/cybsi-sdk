@@ -11,9 +11,9 @@ Software development kit for working with CYBSI API.
 from datetime import datetime, timezone
 
 from cybsi_sdk import enums
-from cybsi_sdk import APIKeyAuth, CybsiClient, ClientConfig
-from cybsi_sdk.client import observable
-from cybsi_sdk.client import observations
+from cybsi_sdk.auth import APIKeyAuth
+from cybsi_sdk.client import Config, CybsiClient
+from cybsi_sdk.client import observable, observations
 
 if __name__ == '__main__':
     domain = observable.EntityForm()
@@ -35,14 +35,13 @@ if __name__ == '__main__':
         confidence=0.9
     )
 
-    api_key = "client-key"
-    api_url = "http://cybsi.api.com"
+    api_key = "api-key"
+    api_url = "https://cybsi-api.com"
 
     auth = APIKeyAuth(api_url, api_key, ssl_verify=False)
-    cfg = ClientConfig(api_url, auth, ssl_verify=False)
-    client = CybsiClient(cfg)
+    config = Config(api_url, auth, ssl_verify=False)
+    client = CybsiClient(config)
 
     ref = client.observations.generics.register(generic)
     view = client.observations.generics.view(ref.uuid)
-
 ```
