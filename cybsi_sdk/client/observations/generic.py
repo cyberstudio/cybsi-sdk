@@ -9,27 +9,22 @@ from cybsi_sdk.client import observable
 
 class GenericObservationForm(base.JsonObjectForm):
 
+    def __init__(self,
+                 share_level: enums.ShareLevels,
+                 seen_at: datetime.datetime):
+        super().__init__()
+        self._data['shareLevel'] = share_level.value
+        self._data['seenAt'] = seen_at.isoformat()
+
     @property
     def _content(self):
         return self._data.setdefault('content', {})
-
-    def set_share_level(self, share_level: enums.ShareLevels):
-        """Set observations share level
-        """
-        self._data['shareLevel'] = share_level.value
-        return self
 
     def set_data_source(self, source_uuid: str):
         """Set data source
         """
 
         self._data['dataSourceUUID'] = source_uuid
-        return self
-
-    def set_seen_at(self, seen_at: datetime.datetime):
-        """Set observations seenAt
-        """
-        self._data['seenAt'] = seen_at.isoformat()
         return self
 
     def add_attribute_fact(self,

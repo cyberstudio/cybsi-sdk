@@ -14,11 +14,11 @@ docker-build:
 
 docker-lint:
 	docker run $(DOCKER_FLAGS) "$(DOCKER_IMAGE):$(DOCKER_TAG)" \
-	make lint
+	flake8 --exclude=.venv --exclude=venv
 
 docker-test:
 	docker run $(DOCKER_FLAGS) "$(DOCKER_IMAGE):$(DOCKER_TAG)" \
-	make test
+	python3 -m unittest discover tests/ -v
 
 docker-clean:
 	docker rmi -f "$$(docker images -q $(DOCKER_IMAGE):$(DOCKER_TAG))"

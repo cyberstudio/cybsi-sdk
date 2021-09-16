@@ -16,14 +16,13 @@ from cybsi_sdk.client import Config, CybsiClient
 from cybsi_sdk.client import observable, observations
 
 if __name__ == '__main__':
-    domain = observable.EntityForm()
-    domain.set_type(enums.EntityTypes.DomainName)
+    domain = observable.EntityForm(enums.EntityTypes.DomainName)
     domain.add_key(enums.EntityKeyTypes.String, "test.com")
 
-    generic = observations.GenericObservationForm()
-    generic.set_seen_at(datetime.now(timezone.utc))
-    generic.set_share_level(enums.ShareLevels.Green)
-    generic.add_attribute_fact(
+    generic = observations.GenericObservationForm(
+        share_level=enums.ShareLevels.Green,
+        seen_at=datetime.now(timezone.utc)
+    ).add_attribute_fact(
         entity=domain,
         attribute_name=enums.AttributeNames.IsIoC,
         value=True,
@@ -41,7 +40,5 @@ if __name__ == '__main__':
     auth = APIKeyAuth(api_url, api_key, ssl_verify=False)
     config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
-
-    ref = client.observations.generics.register(generic)
-    view = client.observations.generics.view(ref.uuid)
+    client.observations.generics.register(generic)
 ```

@@ -6,11 +6,9 @@ from cybsi_sdk.client import base
 
 class EntityForm(base.JsonObjectForm):
 
-    def set_type(self, entity_type: enums.EntityTypes):
-        """Set entities type
-        """
-        self._data['type'] = entity_type.value
-        return self
+    def __init__(self, ent_type: enums.EntityTypes):
+        super().__init__()
+        self._data['type'] = ent_type.value
 
     def add_key(self,
                 key_type: enums.EntityKeyTypes,
