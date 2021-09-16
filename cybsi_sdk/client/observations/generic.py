@@ -23,7 +23,7 @@ class GenericObservationForm(base.JsonObjectForm):
         """Set data source
         """
 
-        self._data['dataSource'] = source_uuid
+        self._data['dataSourceUUID'] = source_uuid
         return self
 
     def set_seen_at(self, seen_at: datetime.datetime):
