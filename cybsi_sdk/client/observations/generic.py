@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 from typing import List, Any
 
@@ -20,11 +21,11 @@ class GenericObservationForm(base.JsonObjectForm):
     def _content(self):
         return self._data.setdefault('content', {})
 
-    def set_data_source(self, source_uuid: str):
+    def set_data_source(self, source_uuid: uuid.UUID):
         """Set data source
         """
 
-        self._data['dataSourceUUID'] = source_uuid
+        self._data['dataSourceUUID'] = str(source_uuid)
         return self
 
     def add_attribute_fact(self,
