@@ -1,7 +1,7 @@
 import datetime
 import uuid
 
-from typing import List, Any
+from typing import Any, cast, List, Optional
 
 from cybsi_sdk import enums
 from cybsi_sdk.client import base
@@ -32,7 +32,7 @@ class GenericObservationForm(base.JsonObjectForm):
                            entity: observable.EntityForm,
                            attribute_name: enums.AttributeNames,
                            value: Any,
-                           confidence: float):
+                           confidence: Optional[float] = None):
         """Add attribute value fact to observations
         """
         attribute_facts = self._content.setdefault('entityAttributeValues', [])
@@ -97,7 +97,7 @@ class _ContentView(dict):
         """Get expiresAt
         """
 
-        return self.get('expiresAt')
+        return cast(str, self.get('expiresAt'))
 
     @property
     def entity_relationships(self) -> List['_RelationshipView']:
@@ -118,43 +118,43 @@ class _ContentView(dict):
 
 class _RelationshipView(dict):
     @property
-    def source(self) -> dict:
+    def source(self) -> base.RefView:
         """Get relationship's source
         """
 
         # TODO: implement entities view
-        return self.get('source')
+        return cast(base.RefView, self.get('source'))
 
     @property
-    def kind(self) -> str:
+    def kind(self) -> enums.RelationshipKinds:
         """Get relationship's kind
         """
 
-        return self.get('kind')
+        return enums.RelationshipKinds(self.get('kind'))
 
     @property
-    def target(self) -> dict:
+    def target(self) -> base.RefView:
         """Get target
         """
 
-        return self.get('target')
+        return cast(base.RefView, self.get('target'))
 
     @property
     def confidence(self) -> float:
         """Get confidence
         """
 
-        return self.get('confidence')
+        return cast(float, self.get('confidence'))
 
 
 class _AttributeValueView(dict):
 
     @property
-    def entity(self) -> dict:
-        """Get entities view
+    def entity(self) -> base.RefView:
+        """Get entity view
         """
 
-        return self.get('entities')
+        return cast(base.RefView, self.get('entity'))
 
     @property
     def attribute_name(self):
@@ -175,4 +175,4 @@ class _AttributeValueView(dict):
         """Get confidence
         """
 
-        return self.get('confidence')
+        return cast(float, self.get('confidence'))

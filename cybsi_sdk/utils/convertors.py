@@ -1,7 +1,8 @@
 from cybsi_sdk import enums
+from typing import Any, Callable, Dict
 
 
-_entity_key_convertors = {
+_entity_key_convertors: Dict[enums.EntityKeyTypes, Callable[[str], Any]] = {
     enums.EntityKeyTypes.String:    str,
     enums.EntityKeyTypes.MD5:       str,
     enums.EntityKeyTypes.SHA1:      str,
@@ -37,7 +38,7 @@ def _bool_converter(val: str):
     raise ValueError("bool value must be 'true' or 'false'")
 
 
-_attribute_value_converters = {
+_attr_value_converters: Dict[enums.AttributeNames, Callable[[str], Any]] = {
     enums.AttributeNames.Size:                  int,
     enums.AttributeNames.Class:                 str,
     enums.AttributeNames.Sectors:               str,
@@ -58,7 +59,7 @@ def convert_attribute_value(attribute_name: enums.AttributeNames, val: str):
     :param val: value to convert
     """
 
-    converter = _attribute_value_converters.get(attribute_name)
+    converter = _attr_value_converters.get(attribute_name)
     if not converter:
         raise ValueError("no converter for attribute: %s", attribute_name)
     try:

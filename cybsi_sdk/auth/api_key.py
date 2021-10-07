@@ -1,6 +1,8 @@
 import logging
 import requests
 
+from typing import Optional
+
 from cybsi_sdk.client import auth
 from cybsi_sdk.client.connector import HTTPConnector
 from cybsi_sdk.exceptions import APIClientException
@@ -26,7 +28,7 @@ class APIKeyAuth:
 
         self._api_key = api_key
         self._connector = HTTPConnector(api_url, ssl_verify=ssl_verify)
-        self._token = None
+        self._token = None  # type: Optional[str]
 
     def __call__(self, r: requests.Request):
         if self._token:
@@ -64,7 +66,7 @@ class APIKeyAuth:
         req.headers['Authorization'] = self._token
 
         try:
-            _r = r.connection.send(req, **kwargs)
+            _r = r.raw.connection.send(req, **kwargs)
         except Exception as exp:
             raise APIClientException(
                 f'unable to send authenticated request: {exp}'
