@@ -49,6 +49,7 @@ _attr_value_converters: Dict[enums.AttributeNames, Callable[[str], Any]] = {
     enums.AttributeNames.IsIoC:                 _bool_converter,
     enums.AttributeNames.IsTrusted:             _bool_converter,
     enums.AttributeNames.IsMalicious:           _bool_converter,
+    enums.AttributeNames.IsDGA:                 _bool_converter,
 }
 
 

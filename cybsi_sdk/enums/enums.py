@@ -39,6 +39,7 @@ class AttributeNames(Enum):
     Sectors = 'Sectors'
     Size = 'Size'
     IsMalicious = 'IsMalicious'
+    IsDGA = 'IsDGA'
 
 
 class RelationshipKinds(Enum):
