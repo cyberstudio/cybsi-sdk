@@ -4,7 +4,7 @@ DOCKER_TAG ?= latest
 DOCKER_NOROOT := -u $$(id -u):$$(id -g)
 
 lint:
-	flake8 --exclude=.venv --exclude=venv && mypy cybsi_sdk
+	flake8 --exclude=.venv,venv && mypy cybsi_sdk
 
 test:
 	python3 -m unittest discover tests/ -v
@@ -14,7 +14,7 @@ docker-build:
 
 docker-lint:
 	docker run $(DOCKER_FLAGS) "$(DOCKER_IMAGE):$(DOCKER_TAG)" \
-	sh -c "flake8 --exclude=.venv --exclude=venv && mypy cybsi_sdk"
+	sh -c "flake8 --exclude=.venv,venv && mypy cybsi_sdk"
 
 docker-test:
 	docker run $(DOCKER_FLAGS) "$(DOCKER_IMAGE):$(DOCKER_TAG)" \

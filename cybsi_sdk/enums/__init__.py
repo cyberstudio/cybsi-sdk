@@ -4,6 +4,7 @@ from .enums import (
     EntityTypes,
     RelationshipKinds,
     ShareLevels,
+    ReplistOperations,
 )
 
 __all__ = [
@@ -11,5 +12,6 @@ __all__ = [
     'EntityKeyTypes',
     'EntityTypes',
     'RelationshipKinds',
-    'ShareLevels'
+    'ShareLevels',
+    'ReplistOperations',
 ]

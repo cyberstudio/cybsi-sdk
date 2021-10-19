@@ -2,7 +2,7 @@ from cybsi_sdk import enums
 from typing import Any, Callable, Dict
 
 
-_entity_key_convertors: Dict[enums.EntityKeyTypes, Callable[[str], Any]] = {
+_entity_key_converters: Dict[enums.EntityKeyTypes, Callable[[str], Any]] = {
     enums.EntityKeyTypes.String:    str,
     enums.EntityKeyTypes.MD5:       str,
     enums.EntityKeyTypes.SHA1:      str,
@@ -20,7 +20,7 @@ def convert_entity_key(k_type: enums.EntityKeyTypes, val: str):
     :param val: value to convert
     """
 
-    converter = _entity_key_convertors.get(k_type)
+    converter = _entity_key_converters.get(k_type)
     if not converter:
         raise ValueError("no converter for key type: %s", k_type)
     try:

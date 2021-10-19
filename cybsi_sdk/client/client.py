@@ -3,6 +3,7 @@ from typing import Callable
 
 from .connector import HTTPConnector
 from .observations import ObservationsAPI
+from .replists import ReplistsAPI
 
 
 @dataclass
@@ -26,3 +27,7 @@ class CybsiClient:
     @property
     def observations(self):
         return ObservationsAPI(self._connector)
+
+    @property
+    def replists(self):
+        return ReplistsAPI(self._connector)

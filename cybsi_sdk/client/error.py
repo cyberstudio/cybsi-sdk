@@ -1,14 +1,14 @@
-from .base import ResponseView
+from .base import JsonObjectView
 
 
-class ErrorView(ResponseView):
+class ErrorView(JsonObjectView):
 
     @property
     def code(self) -> str:
         """Get internal error code
         """
 
-        return self._data.get('code')
+        return self._get('code')
 
     @property
     def message(self):
@@ -17,4 +17,4 @@ class ErrorView(ResponseView):
         :rtype: str
         """
 
-        return self._data.get('message')
+        return self._get('message')

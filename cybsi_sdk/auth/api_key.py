@@ -37,7 +37,7 @@ class APIKeyAuth:
         r.register_hook('response', self.handle_401)
         return r
 
-    def handle_401(self, r: requests.Response, **kwargs):
+    def handle_401(self, r, **kwargs):
         """Handler for 401 http response
         """
 
@@ -60,13 +60,13 @@ class APIKeyAuth:
                 f'unable to get access token: {exp}'
             ) from None
 
-        token = auth.TokenView(resp)
+        token = auth.TokenView(resp.json())
 
         self._token = f'{token.type} {token.access_token}'
         req.headers['Authorization'] = self._token
 
         try:
-            _r = r.raw.connection.send(req, **kwargs)
+            _r = r.connection.send(req, **kwargs)
         except Exception as exp:
             raise APIClientException(
                 f'unable to send authenticated request: {exp}'

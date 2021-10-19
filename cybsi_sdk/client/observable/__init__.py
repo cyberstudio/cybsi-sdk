@@ -1,3 +1,3 @@
-from .entity import EntityForm
+from .entity import EntityForm, EntityView
 
-__all__ = ['EntityForm']
+__all__ = ['EntityForm', 'EntityView']

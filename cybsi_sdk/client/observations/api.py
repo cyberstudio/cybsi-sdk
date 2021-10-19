@@ -9,14 +9,14 @@ class GenericObservationAPI(base.API):
         """Register generic observations
         """
         r = self._connector.do_post(path=self._path, json=model.json())
-        return base.RefView(r)
+        return base.RefView(r.json())
 
     def view(self, observation_uuid) -> generic.GenericObservationView:
         """Get generic observations view
         """
         path = f'{self._path}/{observation_uuid}'
         r = self._connector.do_get(path)
-        return generic.GenericObservationView(r)
+        return generic.GenericObservationView(r.json())
 
 
 class ObservationsAPI(base.API):

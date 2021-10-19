@@ -45,49 +45,49 @@ class GenericObservationForm(base.JsonObjectForm):
         return self
 
 
-class GenericObservationView(base.ResponseView):
+class GenericObservationView(base.JsonObjectView):
 
     @property
     def reporter(self) -> base.RefView:
         """Get observations reporter
         """
 
-        return base.RefView(self._data.get('reporter'))
+        return base.RefView(self._get('reporter'))
 
     @property
     def data_source(self) -> base.RefView:
         """Get observations data source
         """
 
-        return base.RefView(self._data.get('dataSource'))
+        return base.RefView(self._get('dataSource'))
 
     @property
-    def share_level(self) -> str:
+    def share_level(self) -> enums.ShareLevels:
         """Get observations share level
         """
 
-        return self._data.get('shareLevel')
+        return enums.ShareLevels(self._get('shareLevel'))
 
     @property
     def seen_at(self) -> str:
         """Get observations seenAt
         """
 
-        return self._data.get('seenAt')
+        return self._get('seenAt')
 
     @property
     def registered_at(self):
         """Get observations RegisteredAt
         """
 
-        return self._data.get('registeredAt')
+        return self._get('registeredAt')
 
     @property
     def content(self) -> '_ContentView':
         """Get observations content
         """
 
-        return _ContentView(self._data.get('content'))
+        return _ContentView(self._get('content'))
 
 
 class _ContentView(dict):

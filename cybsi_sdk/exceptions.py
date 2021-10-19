@@ -5,6 +5,10 @@ class CybsiException(Exception):
     pass
 
 
+class CybsiInvalidViewData(CybsiException):
+    pass
+
+
 class APIClientException(CybsiException):
     pass
 

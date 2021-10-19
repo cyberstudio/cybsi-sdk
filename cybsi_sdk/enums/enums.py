@@ -58,3 +58,8 @@ class RelationshipKinds(Enum):
     Hosts = 'Hosts'
     Serves = 'Serves'
     Locates = 'Locates'
+
+
+class ReplistOperations(Enum):
+    Add = 'Add'
+    Remove = 'Remove'

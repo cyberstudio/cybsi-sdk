@@ -1,3 +1,4 @@
+from os import environ
 from datetime import datetime, timezone
 
 from cybsi_sdk import enums
@@ -24,8 +25,8 @@ if __name__ == '__main__':
         confidence=0.9
     )
 
-    api_key = "api-key"
-    api_url = "https://cybsi-api.com"
+    api_key = environ.get('CYBSI_API_KEY')
+    api_url = environ.get('CYBSI_API_URL')
 
     auth = APIKeyAuth(api_url, api_key, ssl_verify=False)
     config = Config(api_url, auth, ssl_verify=False)
