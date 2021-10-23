@@ -10,7 +10,7 @@ requests.packages.urllib3.disable_warnings()
 
 
 class HTTPConnector:
-
+    """Connector performing round trips to Cybsi. Internal"""
     def __init__(self, base_url: str,
                  auth: Callable = None,
                  ssl_verify=True):

@@ -6,11 +6,12 @@ from cybsi_sdk.auth import APIKeyAuth
 from cybsi_sdk.client import Config, CybsiClient
 from cybsi_sdk.client import observable, observations
 
-if __name__ == '__main__':
+
+def create_generic_observation():
     domain = observable.EntityForm(enums.EntityTypes.DomainName)
     domain.add_key(enums.EntityKeyTypes.String, "test.com")
 
-    generic = observations.GenericObservationForm(
+    observation = observations.GenericObservationForm(
         share_level=enums.ShareLevels.Green,
         seen_at=datetime.now(timezone.utc)
     ).add_attribute_fact(
@@ -24,7 +25,10 @@ if __name__ == '__main__':
         value=True,
         confidence=0.9
     )
+    return observation
 
+
+if __name__ == '__main__':
     api_key = environ.get('CYBSI_API_KEY')
     api_url = environ.get('CYBSI_API_URL')
 
@@ -32,5 +36,6 @@ if __name__ == '__main__':
     config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
 
-    ref = client.observations.generics.register(generic)
+    generic_observation = create_generic_observation()
+    ref = client.observations.generics.register(generic_observation)
     view = client.observations.generics.view(ref.uuid)

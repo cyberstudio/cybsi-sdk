@@ -1,3 +1,7 @@
+"""
+Base internal classes, useful to simplify API implementation.
+"""
+
 import json
 
 from typing import Dict, Optional, List
@@ -54,6 +58,7 @@ class RefView(JsonObjectView):
     @property
     def uuid(self):
         """Get uuid
+        FIXME: return uuid, not string
         """
         return self._get("uuid")
 

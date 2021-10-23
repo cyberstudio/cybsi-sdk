@@ -1,3 +1,7 @@
+"""
+A set of utility functions allowing to convert
+a string to a valid value of a chosen type.
+"""
 from cybsi_sdk import enums
 from typing import Any, Callable, Dict
 
@@ -13,11 +17,12 @@ _entity_key_converters: Dict[enums.EntityKeyTypes, Callable[[str], Any]] = {
 }
 
 
-def convert_entity_key(k_type: enums.EntityKeyTypes, val: str):
+def convert_entity_key(k_type: enums.EntityKeyTypes, val: str) -> Any:
     """Convert value to entity key type
 
     :param k_type: type of entity key
     :param val: value to convert
+    :return: valid value of entity key, return type depends on entity key type
     """
 
     converter = _entity_key_converters.get(k_type)
@@ -53,11 +58,14 @@ _attr_value_converters: Dict[enums.AttributeNames, Callable[[str], Any]] = {
 }
 
 
-def convert_attribute_value(attribute_name: enums.AttributeNames, val: str):
+def convert_attribute_value(
+     attribute_name: enums.AttributeNames,
+     val: str) -> Any:
     """Convert value to attribute value type
 
     :param attribute_name: attribute name
-    :param val: value to convert
+    :param val: string to convert
+    :return: valid value of attribute, return type depends on attribute
     """
 
     converter = _attr_value_converters.get(attribute_name)

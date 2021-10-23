@@ -8,14 +8,14 @@ from .replists import ReplistsAPI
 
 @dataclass
 class Config:
-    api_url: str        # base client url
-    auth: Callable      # callable object for making an authentication
-    ssl_verify: bool    # enable ssl certificate verification
+    """CybsiClient configuration"""
+    api_url: str  #: Base API url
+    auth: Callable  #: Callable object for making an authentication
+    ssl_verify: bool  #: Enable ssl certificate verification
 
 
 class CybsiClient:
-    """Cybsi API low-level client
-    """
+    """Cybsi API low-level client"""
 
     def __init__(self, config: Config):
         self._connector = HTTPConnector(
@@ -25,9 +25,11 @@ class CybsiClient:
         )
 
     @property
-    def observations(self):
+    def observations(self) -> ObservationsAPI:
+        """Observations API handle"""
         return ObservationsAPI(self._connector)
 
     @property
-    def replists(self):
+    def replists(self) -> ReplistsAPI:
+        """Reputation lists API handle"""
         return ReplistsAPI(self._connector)

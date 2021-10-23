@@ -10,7 +10,7 @@ X_CHANGE_CURSOR = 'X-Change-Cursor'
 
 
 class ChangeView(base.JsonObjectView):
-
+    """Replist change"""
     @property
     def operation(self) -> enums.ReplistOperations:
         """Get change operation
@@ -25,6 +25,7 @@ class ChangeView(base.JsonObjectView):
 
 
 class ReplistsAPI(base.API):
+    """Replist API"""
     _replist_base_url = '/replists'
     _replist_entities_tpl = _replist_base_url + '/{}/entities'
     _replist_changes_tpl = _replist_base_url + '/{}/changes'

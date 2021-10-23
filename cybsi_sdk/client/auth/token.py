@@ -2,7 +2,7 @@ from cybsi_sdk.client import base
 
 
 class TokenView(base.JsonObjectView):
-
+    """Authorization token view"""
     @property
     def access_token(self):
         """Get access token

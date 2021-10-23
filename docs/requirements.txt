@@ -1,0 +1,4 @@
+Sphinx==4.2.0
+sphinx_toolbox==2.15.0
+sphinxjp.themes.basicstrap==0.5.0
+

@@ -10,6 +10,7 @@ T = TypeVar('T')
 
 
 class Page(Generic[T]):
+    """Page returned by Cybsi API"""
     def __init__(self,
                  api_call: Callable[..., requests.Response],
                  resp: requests.Response,

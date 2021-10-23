@@ -2,7 +2,7 @@ from .base import JsonObjectView
 
 
 class ErrorView(JsonObjectView):
-
+    """Error returned by Cybsi API"""
     @property
     def code(self) -> str:
         """Get internal error code

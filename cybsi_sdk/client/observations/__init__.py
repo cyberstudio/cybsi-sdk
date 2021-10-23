@@ -1,4 +1,14 @@
-from .generic import GenericObservationForm
-from .api import ObservationsAPI
+"""Use this section of API to register and retrieve observations.
 
-__all__ = ['GenericObservationForm', 'ObservationsAPI']
+Use ObservationsAPI as entry point,
+it allows to select observation type you want to work with.
+"""
+from .generic import GenericObservationForm, GenericObservationView
+from .api import GenericObservationAPI, ObservationsAPI
+
+__all__ = [
+    'GenericObservationAPI',
+    'GenericObservationForm',
+    'GenericObservationView',
+    'ObservationsAPI',
+]

@@ -19,6 +19,7 @@ setup(
       packages=find_packages(),
       install_requires=[
             'requests~=2.26',
+            'enum-tools==0.6.4'
       ],
       python_requires='~=3.7',
 )
