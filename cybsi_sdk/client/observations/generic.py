@@ -6,6 +6,7 @@ from typing import Any, cast, List, Optional
 from cybsi_sdk import enums
 from cybsi_sdk.client import base
 from cybsi_sdk.client import observable
+from cybsi_sdk.internal.time import rfc3339_timestamp
 
 
 class GenericObservationForm(base.JsonObjectForm):
@@ -15,7 +16,7 @@ class GenericObservationForm(base.JsonObjectForm):
                  seen_at: datetime.datetime):
         super().__init__()
         self._data['shareLevel'] = share_level.value
-        self._data['seenAt'] = seen_at.isoformat()
+        self._data['seenAt'] = rfc3339_timestamp(seen_at)
 
     @property
     def _content(self):
