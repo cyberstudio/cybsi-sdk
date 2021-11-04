@@ -9,7 +9,7 @@ from typing import Any, Callable, Dict
 def _str_converter(val: str):
     if isinstance(val, str):
         return val.strip()
-    raise f"value {val} is not a string"
+    raise ValueError(f"value {val} is not a string")
 
 
 def _int_converter(val: str):
@@ -21,7 +21,7 @@ def _bool_converter(val: str):
         return val
 
     if not isinstance(val, str):
-        raise f"value {val} is not boolean"
+        raise ValueError(f"value {val} is not boolean")
 
     if val.lower() == "true":
         return True
