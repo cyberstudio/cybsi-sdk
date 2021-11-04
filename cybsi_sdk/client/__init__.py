@@ -4,13 +4,8 @@ The client allows to call different sections of API.
 For example, there's a separate section for observations,
 and a separate section for reputation lists.
 """
+# APIKeyAuth is exposed from package client
+# only to improve initial SDK experience for newcomers
+# (less typing of imports)
+from .auth import APIKeyAuth
 from .client import CybsiClient, Config
-from .error import ErrorView
-from .pagination import Page
-
-__all__ = [
-    'CybsiClient',
-    'Config',
-    'ErrorView',
-    'Page',
-]

@@ -16,3 +16,7 @@ def rfc3339_timestamp(dt: datetime.datetime) -> str:
     dt = dt.astimezone(datetime.timezone.utc)
     timestamp = dt.strftime('%Y-%m-%dT%H:%M:%SZ')
     return timestamp
+
+
+def parse_rfc3339_timestamp(ts: str) -> datetime.datetime:
+    return datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%fZ")

@@ -4,7 +4,7 @@ DOCKER_TAG ?= latest
 DOCKER_NOROOT := -u $$(id -u):$$(id -g)
 
 lint:
-	flake8 --exclude=.venv,venv && mypy cybsi_sdk
+	flake8 && mypy cybsi_sdk
 
 test:
 	python3 -m unittest discover tests/ -v

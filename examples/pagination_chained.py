@@ -1,5 +1,4 @@
-from cybsi_sdk.auth import APIKeyAuth
-from cybsi_sdk.client import Config, CybsiClient
+from cybsi_sdk.client import APIKeyAuth, Config, CybsiClient
 from cybsi_sdk.client.pagination import chain_pages
 
 if __name__ == '__main__':

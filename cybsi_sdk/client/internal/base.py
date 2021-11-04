@@ -7,11 +7,11 @@ import json
 from typing import Dict, Optional, List
 
 from .connector import HTTPConnector
+from .error import CybsiInvalidViewDataError
 
-from cybsi_sdk.exceptions import CybsiInvalidViewData
 
-
-class API:
+class BaseAPI:
+    # Base class for all API handle implementations.
     def __init__(self, connector: HTTPConnector):
         self._connector = connector
 
@@ -41,7 +41,7 @@ class JsonObjectView:
             return self._data[key]
         except KeyError as exp:
             msg = f'{self.__class__.__name__} does not have field: {exp}'
-            raise CybsiInvalidViewData(msg) from None
+            raise CybsiInvalidViewDataError(msg) from None
 
 
 class JsonListView:
@@ -51,19 +51,3 @@ class JsonListView:
 
     def __str__(self):
         return json.dumps(self._data, indent=2)
-
-
-class RefView(JsonObjectView):
-
-    @property
-    def uuid(self):
-        """Get uuid
-        FIXME: return uuid, not string
-        """
-        return self._get("uuid")
-
-    @property
-    def url(self):
-        """Get url
-        """
-        return self._get("url")

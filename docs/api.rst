@@ -5,22 +5,17 @@ Developer Interface
 
 .. module:: cybsi_sdk
 
-This part of the documentation covers all the interfaces of Cybsi SDK. For
-parts where Cybsi SDK depends on external libraries, we document the most
-important right here and provide links to the canonical documentation.
-
-
-Authentication
---------------
-
-.. automodule:: cybsi_sdk.auth
-    :members:
+This part of the documentation covers all the public interfaces of Cybsi SDK.
 
 Low-level client
 ----------------
 .. automodule:: cybsi_sdk.client
     :members:
     :imported-members:
+    :exclude-members: APIKeyAuth
+
+.. automodule:: cybsi_sdk.client.common
+    :members:
 
 Auth
 ~~~~
@@ -28,13 +23,11 @@ Auth
     :members:
     :imported-members:
 
-
 Enrichment
 ~~~~~~~~~~
 .. automodule:: cybsi_sdk.client.enrichment
     :members:
     :imported-members:
-
 
 Observable entities
 ~~~~~~~~~~~~~~~~~~~
@@ -42,39 +35,52 @@ Observable entities
     :members:
     :imported-members:
 
-.. autoenum:: cybsi_sdk.enums.AttributeNames
-.. autoenum:: cybsi_sdk.enums.EntityTypes
-.. autoenum:: cybsi_sdk.enums.EntityKeyTypes
-.. autoenum:: cybsi_sdk.enums.RelationshipKinds
-.. autoenum:: cybsi_sdk.enums.ShareLevels
-
-
 Observations
 ~~~~~~~~~~~~
-.. automodule:: cybsi_sdk.client.observations
+.. autoclass:: cybsi_sdk.client.observation.api.ObservationsAPI
     :members:
-    :imported-members:
 
+Generic observations
+""""""""""""""""""""
+.. automodule:: cybsi_sdk.client.observation.generic
+    :members:
 
 Reputation lists
 ~~~~~~~~~~~~~~~~
-.. automodule:: cybsi_sdk.client.replists
+.. automodule:: cybsi_sdk.client.replist
     :members:
     :imported-members:
-
-.. autoenum:: cybsi_sdk.enums.ReplistOperations
 
 Reports
 ~~~~~~~
-.. automodule:: cybsi_sdk.client.reports
+.. automodule:: cybsi_sdk.client.report
     :members:
     :imported-members:
 
+Model
+-----
+
+Observable
+~~~~~~~~~~
+.. automodule:: cybsi_sdk.model.observable
+    :members:
+    :imported-members:
+
+Reputation lists
+~~~~~~~~~~~~~~~~
+.. automodule:: cybsi_sdk.model.replist
+    :members:
+    :imported-members:
 
 Exceptions
 ----------
 
-.. automodule:: cybsi_sdk.exceptions
+.. automodule:: cybsi_sdk.error
+    :members:
+
+Client exceptions
+~~~~~~~~~~~~~~~~~
+.. automodule:: cybsi_sdk.client.error
     :members:
 
 

@@ -1,27 +1,29 @@
 from os import environ
 from datetime import datetime, timezone
 
-from cybsi_sdk import enums
-from cybsi_sdk.auth import APIKeyAuth
-from cybsi_sdk.client import Config, CybsiClient
-from cybsi_sdk.client import observable, observations
+from cybsi_sdk.client import APIKeyAuth, Config, CybsiClient
+from cybsi_sdk.client.observable import EntityForm
+from cybsi_sdk.client.observation import GenericObservationForm
+from cybsi_sdk.model.observable import (
+    AttributeNames, EntityKeyTypes, EntityTypes, ShareLevels
+)
 
 
 def create_generic_observation():
-    domain = observable.EntityForm(enums.EntityTypes.DomainName)
-    domain.add_key(enums.EntityKeyTypes.String, "test.com")
+    domain = EntityForm(EntityTypes.DomainName)
+    domain.add_key(EntityKeyTypes.String, "test.com")
 
-    observation = observations.GenericObservationForm(
-        share_level=enums.ShareLevels.Green,
+    observation = GenericObservationForm(
+        share_level=ShareLevels.Green,
         seen_at=datetime.now(timezone.utc)
     ).add_attribute_fact(
         entity=domain,
-        attribute_name=enums.AttributeNames.IsIoC,
+        attribute_name=AttributeNames.IsIoC,
         value=True,
         confidence=0.9
     ).add_attribute_fact(
         entity=domain,
-        attribute_name=enums.AttributeNames.IsMalicious,
+        attribute_name=AttributeNames.IsMalicious,
         value=True,
         confidence=0.9
     )

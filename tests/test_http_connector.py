@@ -1,10 +1,11 @@
-import unittest
-import requests
 import json
+import unittest
+
+import requests
 
 from unittest.mock import patch
 
-from cybsi_sdk.client.connector import HTTPConnector
+from cybsi_sdk.client.internal.connector import HTTPConnector
 from cybsi_sdk.__version__ import __version__
 
 

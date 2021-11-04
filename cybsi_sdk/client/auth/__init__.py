@@ -1,5 +1,4 @@
-"""Use this section of API to retrieve authorization information.
+"""Use this section of API operate auth information.
 """
-from .token import TokenView
-
-__all__ = ['TokenView']
+from .api_key import APIKeyAuth
+from .token import TokenType, TokenView

@@ -3,14 +3,15 @@ import requests
 from typing import Callable
 from urllib.parse import urljoin
 
-from cybsi_sdk.exceptions import APIClientHTTPError, APIClientConnectorError
 from cybsi_sdk.__version__ import __version__
+
+from ..error import CybsiClientConnectionError, CybsiClientHTTPError
 
 requests.packages.urllib3.disable_warnings()
 
 
 class HTTPConnector:
-    """Connector performing round trips to Cybsi. Internal"""
+    """Connector performing round trips to Cybsi."""
     def __init__(self, base_url: str,
                  auth: Callable = None,
                  ssl_verify=True):
@@ -23,11 +24,17 @@ class HTTPConnector:
         }
 
     def _do(self, method: str, path: str, **kwargs):
-        """Do HTTP request
+        """Do HTTP request.
 
-        :param method: http method i.e GET, POST, PUT
-        :param path: url path
-        :param kwargs: any kwargs supported by request.Request
+        Args:
+            method: HTTP method i.e GET, POST, PUT.
+            path: URL path.
+            kwargs: Any kwargs supported by request.Request.
+        Return:
+            Response.
+        Raise:
+            :class:`CybsiAPIClientConnectorError` on network errors
+            :class:`CybsiAPIClientHTTPError` if response status code is >= 400
         """
 
         url = urljoin(self._base_url, path)
@@ -39,29 +46,33 @@ class HTTPConnector:
         try:
             resp = s.send(req.prepare(), verify=self._verify)
         except Exception as exp:
-            raise APIClientConnectorError(exp) from None
+            raise CybsiClientConnectionError(exp) from None
 
         if not resp.ok:
-            raise APIClientHTTPError(resp) from None
+            raise CybsiClientHTTPError(resp) from None
 
         return resp
 
     def do_get(self, path, params: dict = None, **kwargs) -> requests.Response:
-        """Do http GET request
+        """Do HTTP GET request.
 
-        :param path: url path
-        :param params: query params
-        :param kwargs: any kwargs which supported by requests library
+        Args:
+            path: URL path.
+            params: Query params.
+            kwargs: Any kwargs supported by request.Request.
+        Return:
+            Response.
         """
-
         return self._do('GET', path, params=params, **kwargs)
 
     def do_post(self, path, json=None, **kwargs) -> requests.Response:
-        """Do http POST request
+        """Do HTTP POST request.
 
-        :param path: url path
-        :param json: json body
-        :param kwargs: any kwargs which supported by requests library
+        Args:
+            path: URL path.
+            json: JSON body.
+            kwargs: Any kwargs supported by request.Request.
+        Return:
+            Response.
         """
-
         return self._do('POST', path, json=json, **kwargs)

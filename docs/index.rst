@@ -24,6 +24,18 @@ instructions for getting the most out of Cybsi SDK.
    user/authentication
 
 
+The API Documentation / Guide
+-----------------------------
+
+If you are looking for information on a specific function, class, or method,
+this part of the documentation is for you.
+
+.. toctree::
+   :maxdepth: 2
+
+   api
+
+
 The Community Guide
 -------------------
 
@@ -39,17 +51,6 @@ This part of the documentation details the Cybsi ecosystem.
    :maxdepth: 1
 
    community/updates
-
-The API Documentation / Guide
------------------------------
-
-If you are looking for information on a specific function, class, or method,
-this part of the documentation is for you.
-
-.. toctree::
-   :maxdepth: 2
-
-   api
 
 
 The Contributor Guide
