@@ -1,3 +1,10 @@
+"""
+Pagination API.
+
+See Also:
+    See :ref:`pagination-example`
+    for complete examples of pagination usage.
+"""
 import requests
 
 from typing import TypeVar, Callable, Iterator, List, Generic, Optional
@@ -10,30 +17,30 @@ T = TypeVar('T')
 
 
 class Page(Generic[T]):
-    """Page returned by Cybsi API"""
+    """Page returned by Cybsi API.
+
+    Args:
+        api_call: Callable object for getting next page
+        resp: Response which represents a start page
+        view: View class for page elements
+    """
     def __init__(self,
                  api_call: Callable[..., requests.Response],
                  resp: requests.Response,
                  view: Callable[..., T]):
-        """Init page
-        :param api_call: callable object for getting next page
-        :param resp: response which represents a start page
-        :param view: view class for page elements
-        """
-
         self._api_call = api_call
         self._resp = resp
         self._view = view
 
     @property
     def next_link(self) -> str:
-        """Get the next page link
+        """Next page link
         """
         return self._resp.links.get('next', {}).get('url')
 
     @property
     def cursor(self) -> str:
-        """Get cursor
+        """Page cursor
         """
         return self._resp.headers.get(X_CURSOR_HEADER, '')
 

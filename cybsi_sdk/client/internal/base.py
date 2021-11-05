@@ -4,7 +4,7 @@ Base internal classes, useful to simplify API implementation.
 
 import json
 
-from typing import Dict, Optional, List
+from typing import Dict, Optional
 
 from .connector import HTTPConnector
 from .error import CybsiInvalidViewDataError
@@ -43,11 +43,5 @@ class JsonObjectView:
             msg = f'{self.__class__.__name__} does not have field: {exp}'
             raise CybsiInvalidViewDataError(msg) from None
 
-
-class JsonListView:
-
-    def __init__(self, data: Optional[List] = None):
-        self._data = data or []
-
-    def __str__(self):
-        return json.dumps(self._data, indent=2)
+    def _get_optional(self, key):
+        return self._data.get(key, None)

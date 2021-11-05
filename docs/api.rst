@@ -17,6 +17,12 @@ Low-level client
 .. automodule:: cybsi_sdk.client.common
     :members:
 
+Artifacts
+~~~~~~~~~
+.. automodule:: cybsi_sdk.client.artifact
+    :members:
+    :imported-members:
+
 Auth
 ~~~~
 .. automodule:: cybsi_sdk.client.auth
@@ -29,6 +35,16 @@ Enrichment
     :members:
     :imported-members:
 
+Tasks
+"""""
+.. automodule:: cybsi_sdk.client.enrichment.task
+    :members:
+
+Task queue
+""""""""""
+.. automodule:: cybsi_sdk.client.enrichment.task_queue
+    :members:
+
 Observable entities
 ~~~~~~~~~~~~~~~~~~~
 .. automodule:: cybsi_sdk.client.observable
@@ -37,7 +53,10 @@ Observable entities
 
 Observations
 ~~~~~~~~~~~~
-.. autoclass:: cybsi_sdk.client.observation.api.ObservationsAPI
+.. automodule:: cybsi_sdk.client.observation
+    :members:
+
+.. automodule:: cybsi_sdk.client.observation.api
     :members:
 
 Generic observations
@@ -57,8 +76,24 @@ Reports
     :members:
     :imported-members:
 
+Pagination
+~~~~~~~~~~
+.. automodule:: cybsi_sdk.client.pagination
+    :members:
+
 Model
 -----
+Artifacts
+~~~~~~~~~
+.. automodule:: cybsi_sdk.model.artifact
+    :members:
+    :imported-members:
+
+Enrichment
+~~~~~~~~~~
+.. automodule:: cybsi_sdk.model.enrichment
+    :members:
+    :imported-members:
 
 Observable
 ~~~~~~~~~~

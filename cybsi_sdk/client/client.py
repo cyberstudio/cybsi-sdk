@@ -1,9 +1,12 @@
 from dataclasses import dataclass
 from typing import Callable
 
+from .artifact.api import ArtifactsAPI
+from .enrichment.api import EnrichmentAPI
 from .internal import HTTPConnector
 from .observation.api import ObservationsAPI
 from .replist.api import ReplistsAPI
+from .report.api import ReportsAPI
 
 
 @dataclass
@@ -24,6 +27,18 @@ class CybsiClient:
     providing little to no abstration from JSONs API uses.
     It's relatively easy to construct an invalid request,
     so use client's functions wisely.
+
+    Hint:
+        Use :class:`~cybsi_sdk.client.CybsiClient` properties
+        to construct needed API handles. Don't construct sub-APIs manually.
+
+        Do this:
+            >>> from cybsi_sdk.client import CybsiClient
+            >>> client = CybsiClient(config)
+            >>> client.observations.generics.view(observation_uuid)
+        Not this:
+            >>> from cybsi_sdk.client.observation import GenericObservationsAPI
+            >>> GenericObservationsAPI(connector).view(observation_uuid)
 
     Args:
         config: Client config.
@@ -46,6 +61,16 @@ class CybsiClient:
         )
 
     @property
+    def artifacts(self) -> ArtifactsAPI:
+        """Artifacts API handle."""
+        return ArtifactsAPI(self._connector)
+
+    @property
+    def enrichment(self) -> EnrichmentAPI:
+        """Enrichment API handle."""
+        return EnrichmentAPI(self._connector)
+
+    @property
     def observations(self) -> ObservationsAPI:
         """Observations API handle."""
         return ObservationsAPI(self._connector)
@@ -54,3 +79,8 @@ class CybsiClient:
     def replists(self) -> ReplistsAPI:
         """Reputation lists API handle."""
         return ReplistsAPI(self._connector)
+
+    @property
+    def reports(self) -> ReportsAPI:
+        """Reports API handle."""
+        return ReportsAPI(self._connector)

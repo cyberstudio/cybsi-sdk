@@ -1,5 +1,9 @@
 """Generic observation is the main form of observation.
 In essence, it's a container of arbitrary facts Cybsi domain model supports.
+
+See Also:
+    See :ref:`register-generic-observation-example`
+    for a complete example of generic observation API usage.
 """
 import datetime
 import uuid
@@ -65,8 +69,7 @@ class GenericObservationForm(JsonObjectForm):
     Usage:
         >>> from datetime import datetime, timezone
         >>> from cybsi_sdk.client.observable import EntityForm
-        >>> from cybsi_sdk.client.observation.generic import \
-GenericObservationForm
+        >>> from cybsi_sdk.client.observation import GenericObservationForm
         >>> from cybsi_sdk.model.observable import (
         >>>        AttributeNames, EntityKeyTypes, EntityTypes, ShareLevels
         >>> )

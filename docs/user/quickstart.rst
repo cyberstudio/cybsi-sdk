@@ -13,11 +13,47 @@ First, make sure that:
 
 Let's get started with some simple examples.
 
+.. _register-generic-observation-example:
 
 Register a generic observation
 ------------------------------
+Generic observations are universal containers of facts about entities.
+
+In the example below we make an observation about domain "test.com".
+The content of the observation says that "test.com" is IoC and malicious with confidence of 0.9.
 
 .. literalinclude:: ../../examples/register_generic.py
+
+.. _implement-custom-external-db-example:
+
+Implement an external database
+------------------------------
+External databases are useful for entity enrichment. An example of external database is global DNS system.
+
+In the example below we pass IP received from enrichment task to
+an imaginary system. The system can magically tell if IP is IoC or not.
+We form an observation from results and register the observation in Cybsi API.
+
+The example can be used as a general boilerplate for connectors to external databases.
+
+.. literalinclude:: ../../examples/external_db_lookup_enricher.py
+
+.. _implement-custom-analyzer-example:
+
+Implement an analyzer
+---------------------
+Analyzers perform artifact analysis. Typical analyzers are network traffic analyzers and sandboxes.
+
+In the example below we pass artifact and its content (i.e. bytes)
+to an imaginary third-party analyzer. The analyzer can magically tell if file associated with our artifact is malicious or not.
+We form a report from results and register the report in Cybsi API.
+
+The example can be used as a general boilerplate for connectors to analyzers.
+
+.. literalinclude:: ../../examples/artifact_analysis_enricher.py
+
+
+.. _pagination-example:
 
 Pagination
 ----------
