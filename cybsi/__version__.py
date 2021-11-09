@@ -1,4 +1,4 @@
-__version__ = '0.0.7'
+__version__ = '0.0.8'
 __title__ = 'cybsi-python-sdk'
 __description__ = 'Cybsi development kit'
 __license__ = 'Apache License 2.0'
