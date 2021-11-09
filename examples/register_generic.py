@@ -1,12 +1,10 @@
 from os import environ
 from datetime import datetime, timezone
 
-from cybsi_sdk.client import APIKeyAuth, Config, CybsiClient
-from cybsi_sdk.client.observable import EntityForm
-from cybsi_sdk.client.observation import GenericObservationForm
-from cybsi_sdk.model.observable import (
-    AttributeNames, EntityKeyTypes, EntityTypes, ShareLevels
-)
+from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api.observable import (
+    AttributeNames, EntityForm, EntityKeyTypes, EntityTypes, ShareLevels)
+from cybsi.api.observation import GenericObservationForm
 
 
 def create_generic_observation():

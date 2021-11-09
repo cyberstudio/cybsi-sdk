@@ -1,5 +1,6 @@
-from cybsi_sdk.client import APIKeyAuth, Config, CybsiClient
-from cybsi_sdk.client.pagination import chain_pages
+from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api.pagination import chain_pages
+
 
 if __name__ == '__main__':
     auth = APIKeyAuth('url', 'key', ssl_verify=False)

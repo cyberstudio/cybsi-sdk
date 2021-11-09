@@ -8,7 +8,7 @@ import os
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath("_themes"))
 
-import cybsi_sdk  # noqa: E402
+import cybsi  # noqa: E402
 
 
 # -- General configuration ------------------------------------------------
@@ -35,8 +35,8 @@ master_doc = "index"
 project = u"Cybsi SDK"
 copyright = u"PT"
 author = u"Cybsi Devs"
-version = cybsi_sdk.__version__
-release = cybsi_sdk.__version__
+version = cybsi.__version__
+release = cybsi.__version__
 language = None
 
 # List of patterns, relative to source directory, that match files and

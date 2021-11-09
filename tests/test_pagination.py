@@ -7,7 +7,7 @@ from itertools import chain
 from requests import Response
 from io import BytesIO
 
-from cybsi_sdk.client.pagination import Page, chain_pages
+from cybsi.api.pagination import Page, chain_pages
 
 
 class PaginationTest(unittest.TestCase):

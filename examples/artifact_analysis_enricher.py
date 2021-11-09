@@ -6,20 +6,18 @@ from datetime import datetime, timezone
 from os import environ
 from typing import cast
 
-from cybsi_sdk.client import APIKeyAuth, Config, CybsiClient
-from cybsi_sdk.client.artifact import ArtifactView
-from cybsi_sdk.client.enrichment import (
+from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api.artifact import ArtifactTypes, ArtifactView
+from cybsi.api.enrichment import (
     ArtifactAnalysisParamsView, AssignedTaskView, CompletedTaskForm,
-    FailedTaskForm, TaskResultReportForm
+    FailedTaskForm, TaskResultReportForm,
+    EnrichmentErrorCodes, EnrichmentTypes
 )
-from cybsi_sdk.client.observable import EntityForm
-from cybsi_sdk.client.observation import GenericObservationForm
-from cybsi_sdk.client.report import ReportForm
-from cybsi_sdk.model.artifact import ArtifactTypes
-from cybsi_sdk.model.enrichment import EnrichmentErrorCodes, EnrichmentTypes
-from cybsi_sdk.model.observable import (
-    AttributeNames, EntityKeyTypes, EntityTypes, ShareLevels
+from cybsi.api.observable import (
+    AttributeNames, EntityKeyTypes, EntityTypes, ShareLevels, EntityForm
 )
+from cybsi.api.observation import GenericObservationForm
+from cybsi.api.report import ReportForm
 
 
 def main():

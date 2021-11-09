@@ -5,8 +5,8 @@ import requests
 
 from unittest.mock import patch
 
-from cybsi_sdk.client.internal.connector import HTTPConnector
-from cybsi_sdk.__version__ import __version__
+from cybsi.api.internal.connector import HTTPConnector
+from cybsi.__version__ import __version__
 
 
 class HTTPConnectorTest(unittest.TestCase):

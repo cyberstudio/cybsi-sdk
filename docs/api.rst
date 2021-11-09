@@ -3,125 +3,100 @@
 Developer Interface
 ===================
 
-.. module:: cybsi_sdk
+.. module:: cybsi
 
 This part of the documentation covers all the public interfaces of Cybsi SDK.
 
 Low-level client
 ----------------
-.. automodule:: cybsi_sdk.client
+.. automodule:: cybsi.api
     :members:
     :imported-members:
     :exclude-members: APIKeyAuth
 
-.. automodule:: cybsi_sdk.client.common
-    :members:
-
 Artifacts
 ~~~~~~~~~
-.. automodule:: cybsi_sdk.client.artifact
+.. automodule:: cybsi.api.artifact
     :members:
     :imported-members:
 
 Auth
 ~~~~
-.. automodule:: cybsi_sdk.client.auth
+.. automodule:: cybsi.api.auth
     :members:
     :imported-members:
 
 Enrichment
 ~~~~~~~~~~
-.. automodule:: cybsi_sdk.client.enrichment
+.. automodule:: cybsi.api.enrichment
     :members:
-    :imported-members:
+
+.. automodule:: cybsi.api.enrichment.api
+    :members:
+
+.. automodule:: cybsi.api.enrichment.enums
+    :members:
 
 Tasks
 """""
-.. automodule:: cybsi_sdk.client.enrichment.task
+.. automodule:: cybsi.api.enrichment.task
     :members:
 
 Task queue
 """"""""""
-.. automodule:: cybsi_sdk.client.enrichment.task_queue
+.. automodule:: cybsi.api.enrichment.task_queue
     :members:
 
 Observable entities
 ~~~~~~~~~~~~~~~~~~~
-.. automodule:: cybsi_sdk.client.observable
+.. automodule:: cybsi.api.observable
     :members:
     :imported-members:
 
 Observations
 ~~~~~~~~~~~~
-.. automodule:: cybsi_sdk.client.observation
+.. automodule:: cybsi.api.observation
     :members:
 
-.. automodule:: cybsi_sdk.client.observation.api
+.. automodule:: cybsi.api.observation.api
     :members:
 
 Generic observations
 """"""""""""""""""""
-.. automodule:: cybsi_sdk.client.observation.generic
+.. automodule:: cybsi.api.observation.generic
     :members:
 
 Reputation lists
 ~~~~~~~~~~~~~~~~
-.. automodule:: cybsi_sdk.client.replist
+.. automodule:: cybsi.api.replist
     :members:
     :imported-members:
 
 Reports
 ~~~~~~~
-.. automodule:: cybsi_sdk.client.report
+.. automodule:: cybsi.api.report
     :members:
     :imported-members:
 
 Pagination
 ~~~~~~~~~~
-.. automodule:: cybsi_sdk.client.pagination
+.. automodule:: cybsi.api.pagination
     :members:
 
-Model
------
-Artifacts
-~~~~~~~~~
-.. automodule:: cybsi_sdk.model.artifact
+Common views
+~~~~~~~~~~~~
+.. automodule:: cybsi.api.common
     :members:
-    :imported-members:
-
-Enrichment
-~~~~~~~~~~
-.. automodule:: cybsi_sdk.model.enrichment
-    :members:
-    :imported-members:
-
-Observable
-~~~~~~~~~~
-.. automodule:: cybsi_sdk.model.observable
-    :members:
-    :imported-members:
-
-Reputation lists
-~~~~~~~~~~~~~~~~
-.. automodule:: cybsi_sdk.model.replist
-    :members:
-    :imported-members:
 
 Exceptions
 ----------
 
-.. automodule:: cybsi_sdk.error
+.. automodule:: cybsi.api.error
     :members:
-
-Client exceptions
-~~~~~~~~~~~~~~~~~
-.. automodule:: cybsi_sdk.client.error
-    :members:
-
 
 Converters
 ----------
-.. automodule:: cybsi_sdk.utils.converters
+.. automodule:: cybsi.utils.converters
     :members:
 
 

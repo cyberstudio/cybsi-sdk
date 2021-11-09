@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-from cybsi_sdk.__version__ import (
+from cybsi.__version__ import (
       __title__,
       __author_email__,
       __license__,
