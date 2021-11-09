@@ -20,4 +20,5 @@ class CybsiClientHTTPError(CybsiError):
     """
     def __init__(self, resp: Response):
         self.resp = resp
-        super().__init__(f'unexpected http status code: {resp.status_code}')
+        super().__init__(f'unexpected http response: {resp.status_code}, '
+                         f'{resp.text}')
