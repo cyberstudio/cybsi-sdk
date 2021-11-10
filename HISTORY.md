@@ -1,6 +1,10 @@
 Release History
 ===============
 
+0.0.10 (2021-11-10)
+------------------
+- Fix serialization token for API client
+
 0.0.9 (2021-11-10)
 ------------------
 - Add text description for errors for client API
