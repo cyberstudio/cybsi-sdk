@@ -1,6 +1,10 @@
 Release History
 ===============
 
+0.0.9 (2021-11-10)
+------------------
+- Add text description for errors for client API
+
 0.0.8 (2021-11-08)
 ------------------
 The update contains backward-incompatible changes, the SDK was restructured.
