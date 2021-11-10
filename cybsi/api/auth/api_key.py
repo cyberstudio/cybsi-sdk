@@ -62,7 +62,7 @@ class APIKeyAuth:
         )
         token = TokenView(resp.json())
 
-        self._token = f'{token.type} {token.access_token}'
+        self._token = f'{token.type.value} {token.access_token}'
         req.headers['Authorization'] = self._token
 
         try:
