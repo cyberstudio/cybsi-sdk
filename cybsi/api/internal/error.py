@@ -8,4 +8,5 @@ class CybsiInvalidViewDataError(CybsiError):
     doesn't follow the contract. Ideally, it shouldn't be thrown,
     but when it's thrown, this error simplifies cause analysis.
     """
+
     pass

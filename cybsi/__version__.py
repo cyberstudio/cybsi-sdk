@@ -1,6 +1,6 @@
-__version__ = '0.0.10'
-__title__ = 'cybsi-python-sdk'
-__description__ = 'Cybsi development kit'
-__license__ = 'Apache License 2.0'
-__author__ = 'SDK developers'
-__author_email__ = ''
+__version__ = "0.0.10"
+__title__ = "cybsi-python-sdk"
+__description__ = "Cybsi development kit"
+__license__ = "Apache License 2.0"
+__author__ = "SDK Developers"
+__author_email__ = ""

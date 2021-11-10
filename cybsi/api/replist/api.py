@@ -6,20 +6,21 @@ from ..observable import EntityView
 
 from .enums import EntitySetOperations
 
-X_CHANGE_CURSOR = 'X-Change-Cursor'
+X_CHANGE_CURSOR = "X-Change-Cursor"
 
 
 class ReplistsAPI(BaseAPI):
     """Reputation list API."""
-    _replist_base_url = '/replist'
-    _replist_entities_tpl = _replist_base_url + '/{}/entities'
-    _replist_changes_tpl = _replist_base_url + '/{}/changes'
+
+    _replist_base_url = "/replist"
+    _replist_entities_tpl = _replist_base_url + "/{}/entities"
+    _replist_changes_tpl = _replist_base_url + "/{}/changes"
 
     def entities(
-            self,
-            replist_uuid: str,
-            cursor: Optional[str] = None,
-            limit: Optional[int] = None,
+        self,
+        replist_uuid: str,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
     ) -> Tuple[Page[EntityView], str]:
         """Get replist entities.
 
@@ -36,25 +37,21 @@ class ReplistsAPI(BaseAPI):
 
         params = {}
         if cursor:
-            params['cursor'] = cursor
+            params["cursor"] = cursor
         if limit:
-            params['limit'] = str(limit)
+            params["limit"] = str(limit)
 
         path = self._replist_entities_tpl.format(replist_uuid)
         resp = self._connector.do_get(path, params=params)
-        page = Page(
-            self._connector.do_get,
-            resp,
-            EntityView
-        )
-        return page, resp.headers.get(X_CHANGE_CURSOR, '')
+        page = Page(self._connector.do_get, resp, EntityView)
+        return page, resp.headers.get(X_CHANGE_CURSOR, "")
 
     def changes(
-            self,
-            replist_uuid: str,
-            cursor: str,
-            limit: Optional[int] = None,
-    ) -> Page['EntitySetChangeView']:
+        self,
+        replist_uuid: str,
+        cursor: str,
+        limit: Optional[int] = None,
+    ) -> Page["EntitySetChangeView"]:
         """Get replist changes
 
         Note:
@@ -67,9 +64,9 @@ class ReplistsAPI(BaseAPI):
             Page with changes.
         """
 
-        params = {'cursor': cursor}
+        params = {"cursor": cursor}
         if limit:
-            params['limit'] = str(limit)
+            params["limit"] = str(limit)
 
         path = self._replist_entities_tpl.format(replist_uuid)
         resp = self._connector.do_get(path, params=params)
@@ -79,14 +76,13 @@ class ReplistsAPI(BaseAPI):
 
 class EntitySetChangeView(JsonObjectView):
     """Replist change."""
+
     @property
     def operation(self) -> EntitySetOperations:
-        """Get change operation.
-        """
-        return EntitySetOperations(self._get('operation'))
+        """Get change operation."""
+        return EntitySetOperations(self._get("operation"))
 
     @property
     def entity(self) -> EntityView:
-        """Get entity.
-        """
-        return self._get('entity')
+        """Get entity."""
+        return self._get("entity")

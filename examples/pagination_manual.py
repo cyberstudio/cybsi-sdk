@@ -1,12 +1,13 @@
+#!/usr/bin/env python3
 from cybsi.api import APIKeyAuth, Config, CybsiClient
 
 
-if __name__ == '__main__':
-    auth = APIKeyAuth('url', 'key', ssl_verify=False)
-    config = Config('url', auth, ssl_verify=False)
+if __name__ == "__main__":
+    auth = APIKeyAuth("url", "key", ssl_verify=False)
+    config = Config("url", auth, ssl_verify=False)
     client = CybsiClient(config)
 
-    page, _ = client.replists.entities('id')
+    page, _ = client.replists.entities("id")
     while page:
         # Page is iterable
         for ent in page:

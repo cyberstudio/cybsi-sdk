@@ -17,7 +17,6 @@ class BaseAPI:
 
 
 class JsonObjectForm:
-
     def __init__(self):
         self._data = {}
 
@@ -29,7 +28,6 @@ class JsonObjectForm:
 
 
 class JsonObjectView:
-
     def __init__(self, data: Optional[Dict] = None):
         self._data = data or {}
 
@@ -40,7 +38,7 @@ class JsonObjectView:
         try:
             return self._data[key]
         except KeyError as exp:
-            msg = f'{self.__class__.__name__} does not have field: {exp}'
+            msg = f"{self.__class__.__name__} does not have field: {exp}"
             raise CybsiInvalidViewDataError(msg) from None
 
     def _get_optional(self, key):

@@ -12,13 +12,12 @@ class EntityForm(JsonObjectForm):
     Args:
         ent_type: Entity type.
     """
+
     def __init__(self, ent_type: EntityTypes):
         super().__init__()
-        self._data['type'] = ent_type.value
+        self._data["type"] = ent_type.value
 
-    def add_key(self,
-                key_type: EntityKeyTypes,
-                value: Any) -> 'EntityForm':
+    def add_key(self, key_type: EntityKeyTypes, value: Any) -> "EntityForm":
         """Add natural key to the list of entity keys.
 
         Args:
@@ -27,34 +26,36 @@ class EntityForm(JsonObjectForm):
         Return:
             Updated entity form.
         """
-        keys = self._data.setdefault('keys', [])
-        keys.append({'type': key_type.value, 'value': value})
+        keys = self._data.setdefault("keys", [])
+        keys.append({"type": key_type.value, "value": value})
         return self
 
 
 class EntityKeyView(JsonObjectView):
     """Entity key view."""
+
     @property
     def type(self) -> EntityKeyTypes:
         """Entity key type."""
-        return EntityKeyTypes(self._get('type'))
+        return EntityKeyTypes(self._get("type"))
 
     @property
     def value(self) -> Any:
         """Entity key value.
         Type depends on key type.
         """
-        return self._get('value')
+        return self._get("value")
 
 
 class EntityView(RefView):
     """Complete entity view."""
+
     @property
     def type(self) -> EntityTypes:
         """Entity type."""
-        return EntityTypes(self._get('type'))
+        return EntityTypes(self._get("type"))
 
     @property
     def keys(self) -> List[EntityKeyView]:
         """Entity natural keys."""
-        return [EntityKeyView(x) for x in self._get('keys')]
+        return [EntityKeyView(x) for x in self._get("keys")]

@@ -12,6 +12,7 @@ from .report import ReportsAPI
 @dataclass
 class Config:
     """:class:`CybsiClient` config."""
+
     api_url: str  #: Base API URL.
     auth: Callable  # noqa: E501 #: Callable object :class:`CybsiClient` can use to authenticate requests.
     ssl_verify: bool = True  #: Enable SSL certificate verification.

@@ -4,7 +4,7 @@ DOCKER_TAG ?= latest
 DOCKER_NOROOT := -u $$(id -u):$$(id -g)
 
 lint:
-	flake8 && mypy cybsi
+	black cybsi examples && flake8 && mypy cybsi
 
 test:
 	python3 -m unittest discover tests/ -v
@@ -17,7 +17,7 @@ docker-build:
 
 docker-lint:
 	docker run $(DOCKER_FLAGS) "$(DOCKER_IMAGE):$(DOCKER_TAG)" \
-	sh -c "flake8 && mypy cybsi"
+	sh -c "black --check cybsi examples && flake8 && mypy cybsi"
 
 docker-test:
 	docker run $(DOCKER_FLAGS) "$(DOCKER_IMAGE):$(DOCKER_TAG)" \

@@ -32,13 +32,13 @@ def _bool_converter(val: str):
 
 
 _entity_key_converters: Dict[EntityKeyTypes, Callable[[Any], Any]] = {
-    EntityKeyTypes.String:    _str_converter,
-    EntityKeyTypes.MD5:       _str_converter,
-    EntityKeyTypes.SHA1:      _str_converter,
-    EntityKeyTypes.SHA256:    _str_converter,
-    EntityKeyTypes.IANAID:    _str_converter,
+    EntityKeyTypes.String: _str_converter,
+    EntityKeyTypes.MD5: _str_converter,
+    EntityKeyTypes.SHA1: _str_converter,
+    EntityKeyTypes.SHA256: _str_converter,
+    EntityKeyTypes.IANAID: _str_converter,
     EntityKeyTypes.NICHandle: _str_converter,
-    EntityKeyTypes.RIPEID:    _str_converter,
+    EntityKeyTypes.RIPEID: _str_converter,
 }
 
 
@@ -64,17 +64,17 @@ def convert_entity_key(k_type: EntityKeyTypes, val: Any) -> Any:
 
 
 _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
-    AttributeNames.Size:                  _int_converter,
-    AttributeNames.Class:                 _str_converter,
-    AttributeNames.Sectors:               _str_converter,
-    AttributeNames.DisplayNames:          _str_converter,
-    AttributeNames.Names:                 _str_converter,
-    AttributeNames.NodeRoles:             _str_converter,
-    AttributeNames.MalwareFamilyAliases:  _str_converter,
-    AttributeNames.IsIoC:                 _bool_converter,
-    AttributeNames.IsTrusted:             _bool_converter,
-    AttributeNames.IsMalicious:           _bool_converter,
-    AttributeNames.IsDGA:                 _bool_converter,
+    AttributeNames.Size: _int_converter,
+    AttributeNames.Class: _str_converter,
+    AttributeNames.Sectors: _str_converter,
+    AttributeNames.DisplayNames: _str_converter,
+    AttributeNames.Names: _str_converter,
+    AttributeNames.NodeRoles: _str_converter,
+    AttributeNames.MalwareFamilyAliases: _str_converter,
+    AttributeNames.IsIoC: _bool_converter,
+    AttributeNames.IsTrusted: _bool_converter,
+    AttributeNames.IsMalicious: _bool_converter,
+    AttributeNames.IsDGA: _bool_converter,
 }
 
 
@@ -97,5 +97,5 @@ def convert_attribute_value(attribute_name: AttributeNames, val: Any) -> Any:
     except ValueError:
         raise ValueError(
             f'"{val}" is not convertible to {attribute_name} value'
-        )
+        ) from None
     return result

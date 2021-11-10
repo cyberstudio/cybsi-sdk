@@ -12,8 +12,7 @@ class RefView(JsonObjectView):
 
     @property
     def uuid(self) -> uuid.UUID:
-        """Object UUID.
-        """
+        """Object UUID."""
         return uuid.UUID(self._get("uuid"))
 
     @property
@@ -29,14 +28,12 @@ class ErrorView(JsonObjectView):
 
     @property
     def code(self) -> str:
-        """Error code.
-        """
+        """Error code."""
 
-        return self._get('code')
+        return self._get("code")
 
     @property
     def message(self) -> str:
-        """Error message.
-        """
+        """Error message."""
 
-        return self._get('message')
+        return self._get("message")

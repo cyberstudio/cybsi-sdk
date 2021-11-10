@@ -12,15 +12,14 @@ requests.packages.urllib3.disable_warnings()
 
 class HTTPConnector:
     """Connector performing round trips to Cybsi."""
-    def __init__(self, base_url: str,
-                 auth: Callable = None,
-                 ssl_verify=True):
+
+    def __init__(self, base_url: str, auth: Callable = None, ssl_verify=True):
         self._base_url = base_url
         self._auth = auth
         self._verify = ssl_verify
         self._headers = {
-            'Accept': 'application/vnd.ptsecurity.app-v2',
-            'User-Agent': f'cybsi-sdk-client/v{__version__}',
+            "Accept": "application/vnd.ptsecurity.app-v2",
+            "User-Agent": f"cybsi-sdk-client/v{__version__}",
         }
 
     def _do(self, method: str, path: str, **kwargs):
@@ -38,7 +37,7 @@ class HTTPConnector:
         """
 
         url = urljoin(self._base_url, path)
-        kwargs.setdefault('headers', {}).update(**self._headers)
+        kwargs.setdefault("headers", {}).update(**self._headers)
 
         req = requests.Request(method, url, auth=self._auth, **kwargs)
         s = requests.Session()
@@ -63,7 +62,7 @@ class HTTPConnector:
         Return:
             Response.
         """
-        return self._do('GET', path, params=params, **kwargs)
+        return self._do("GET", path, params=params, **kwargs)
 
     def do_post(self, path, json=None, **kwargs) -> requests.Response:
         """Do HTTP POST request.
@@ -75,4 +74,4 @@ class HTTPConnector:
         Return:
             Response.
         """
-        return self._do('POST', path, json=json, **kwargs)
+        return self._do("POST", path, json=json, **kwargs)
