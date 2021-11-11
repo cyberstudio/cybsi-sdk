@@ -21,19 +21,3 @@ class RefView(JsonObjectView):
         Can be used to retrieve complete view of the object.
         """
         return self._get("url")
-
-
-class ErrorView(JsonObjectView):
-    """Error returned by Cybsi API."""
-
-    @property
-    def code(self) -> str:
-        """Error code."""
-
-        return self._get("code")
-
-    @property
-    def message(self) -> str:
-        """Error message."""
-
-        return self._get("message")

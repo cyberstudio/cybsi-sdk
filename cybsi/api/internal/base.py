@@ -6,8 +6,8 @@ import json
 
 from typing import Dict, Optional
 
+from ..error import CybsiError
 from .connector import HTTPConnector
-from .error import CybsiInvalidViewDataError
 
 
 class BaseAPI:
@@ -39,7 +39,7 @@ class JsonObjectView:
             return self._data[key]
         except KeyError as exp:
             msg = f"{self.__class__.__name__} does not have field: {exp}"
-            raise CybsiInvalidViewDataError(msg) from None
+            raise CybsiError(msg) from None
 
     def _get_optional(self, key):
         return self._data.get(key, None)

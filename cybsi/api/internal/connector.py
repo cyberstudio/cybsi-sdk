@@ -5,7 +5,16 @@ from urllib.parse import urljoin
 
 from cybsi.__version__ import __version__
 
-from ..error import CybsiClientConnectionError, CybsiClientHTTPError
+from ..error import (
+    CybsiError,
+    InvalidRequestError,
+    UnauthorizedError,
+    ForbiddenError,
+    NotFoundError,
+    ConflictError,
+    ResourceModifiedError,
+    SemanticError,
+)
 
 requests.packages.urllib3.disable_warnings()
 
@@ -21,6 +30,15 @@ class HTTPConnector:
             "Accept": "application/vnd.ptsecurity.app-v2",
             "User-Agent": f"cybsi-sdk-client/v{__version__}",
         }
+        self._error_mapping = {
+            400: InvalidRequestError,
+            401: UnauthorizedError,
+            403: ForbiddenError,
+            404: NotFoundError,
+            409: ConflictError,
+            412: ResourceModifiedError,
+            422: SemanticError,
+        }
 
     def _do(self, method: str, path: str, **kwargs):
         """Do HTTP request.
@@ -32,8 +50,8 @@ class HTTPConnector:
         Return:
             Response.
         Raise:
-            :class:`CybsiAPIClientConnectorError` on network errors
-            :class:`CybsiAPIClientHTTPError` if response status code is >= 400
+            :class:`~cybsi.api.error.CybsiError`: On connectivity issues.
+            :class:`~cybsi.api.error.APIError`: If response status code is >= 400
         """
 
         url = urljoin(self._base_url, path)
@@ -45,10 +63,9 @@ class HTTPConnector:
         try:
             resp = s.send(req.prepare(), verify=self._verify)
         except Exception as exp:
-            raise CybsiClientConnectionError(exp) from None
+            raise CybsiError("could not send request", exp) from None
 
-        if not resp.ok:
-            raise CybsiClientHTTPError(resp) from None
+        self._raise_for_status(resp)
 
         return resp
 
@@ -75,3 +92,16 @@ class HTTPConnector:
             Response.
         """
         return self._do("POST", path, json=json, **kwargs)
+
+    def _raise_for_status(self, resp: requests.Response) -> None:
+        if resp.ok:
+            return
+
+        err_cls = self._error_mapping.get(resp.status_code, None)
+        if err_cls is not None:
+            raise err_cls(resp.json())
+
+        raise CybsiError(
+            f"unexpected response status code: {resp.status_code}. "
+            f"Request body: {resp.text}"
+        )

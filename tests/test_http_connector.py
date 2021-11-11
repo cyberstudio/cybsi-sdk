@@ -5,6 +5,7 @@ import requests
 
 from unittest.mock import patch
 
+from cybsi.api.error import CybsiError, NotFoundError
 from cybsi.api.internal.connector import HTTPConnector
 from cybsi.__version__ import __version__
 
@@ -17,6 +18,8 @@ class HTTPConnectorTest(unittest.TestCase):
 
     @patch.object(requests.Session, 'send')
     def test_connector_default_headers(self, mock):
+        mock.return_value.status_code = 200
+
         self.connector.do_get('/test')
 
         args, _ = mock.call_args
@@ -31,6 +34,7 @@ class HTTPConnectorTest(unittest.TestCase):
 
     @patch.object(requests.Session, 'send')
     def test_connector_default_ssl_verify(self, mock):
+        mock.return_value.status_code = 200
         connector = HTTPConnector(base_url=self.base_url, auth=None)
         connector.do_get('test')
         _, kwargs = mock.call_args
@@ -38,6 +42,7 @@ class HTTPConnectorTest(unittest.TestCase):
 
     @patch.object(requests.Session, 'send')
     def test_connector_set_ssl_verify(self, mock):
+        mock.return_value.status_code = 200
         connector = HTTPConnector(base_url=self.base_url, ssl_verify=False)
         connector.do_get('test')
         _, kwargs = mock.call_args
@@ -68,3 +73,25 @@ class HTTPConnectorTest(unittest.TestCase):
         self.assertEqual('POST', req.method)
         self.assertEqual(f'{self.base_url}/test', req.url)
         self.assertEqual(body, json.loads(req.body))
+
+    @patch.object(requests.Session, 'send')
+    def test_connector_do_post_503(self, mock):
+        mock.return_value = self._make_response(
+            503, b"Server is busy laying on the floor")
+
+        with self.assertRaises(CybsiError):
+            self.connector.do_post('/test', json={})
+
+    @patch.object(requests.Session, 'send')
+    def test_connector_do_get_404(self, mock):
+        mock.return_value = self._make_response(404, b'{"code": "NotFound"}')
+
+        with self.assertRaises(NotFoundError):
+            self.connector.do_get('/test')
+
+    @staticmethod
+    def _make_response(status_code, content):
+        resp = requests.Response()
+        resp.status_code = status_code
+        resp._content = content
+        return resp

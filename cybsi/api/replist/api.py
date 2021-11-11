@@ -31,8 +31,9 @@ class ReplistsAPI(BaseAPI):
             cursor: Page cursor.
             limit: Page limit.
         Return:
-            Page with entities and cursor
-            allowing to get next batch of changes.
+            Page with entities and cursor allowing to get next batch of changes.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Replist not found.
         """
 
         params = {}
@@ -62,6 +63,21 @@ class ReplistsAPI(BaseAPI):
             limit: Page limit.
         Return:
             Page with changes.
+        Warning:
+            Cursor behaviour differs from other API methods.
+
+            Do not save returned cursor if it's empty.
+            Empty cursor value means that all changes **for this moment** are received.
+            But more changes can arrive later. Pass your previous non-empty ``cursor``
+            value in loop, until non-empty cursor is returned.
+
+            Please wait some time if method returns an empty cursor.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Replist not found.
+            :class:`~cybsi.api.error.SemanticError`: Semantic request error.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.CursorOutOfRange`
         """
 
         params = {"cursor": cursor}

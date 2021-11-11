@@ -35,12 +35,26 @@ class GenericObservationsAPI(BaseAPI):
     def register(self, observation: "GenericObservationForm") -> RefView:
         """Register a generic observation.
 
+        The observation is always registered unless it contains logic errors.
+        Entity key value validation errors are ignored.
+
         Note:
             Calls `POST /enrichment/observations/generics`.
         Args:
             observation: Filled generic observation form.
         Returns:
             Reference to a newly registered observation.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DuplicatedEntityAttribute`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidAttribute`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidAttributeValue`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKeySet`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidRelationship`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTime`
         """
         r = self._connector.do_post(path=self._path, json=observation.json())
         return RefView(r.json())
@@ -55,6 +69,8 @@ class GenericObservationsAPI(BaseAPI):
             observation_uuid: Observation uuid.
         Returns:
             View of the observation.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Generic observation not found.
         """
         path = f"{self._path}/{observation_uuid}"
         r = self._connector.do_get(path)

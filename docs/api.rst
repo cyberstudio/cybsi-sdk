@@ -93,6 +93,7 @@ Exceptions
 
 .. automodule:: cybsi.api.error
     :members:
+    :show-inheritance:
 
 Converters
 ----------

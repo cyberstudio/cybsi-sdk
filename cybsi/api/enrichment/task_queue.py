@@ -58,6 +58,19 @@ class TaskQueueAPI(BaseAPI):
             completed_tasks: List of filled forms of completed tasks.
         Returns:
             None on successful registration of results.
+        Raises:
+            :class:`~cybsi.api.error.ForbiddenError`: Enricher cannot report
+             result of one of tasks.
+            :class:`~cybsi.api.error.SemanticError`: One of forms contains logic errors.
+        Note:
+            ForbiddenError error codes:
+              * :attr:`~cybsi.api.error.ForbiddenErrorCodes.NotOwner`
+                -- Task belongs to other enricher.
+            SemanticError codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTaskStatus`
+                -- Current task status is not ``Executing``.
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTaskResult`
+                -- Result has a broken link to observation, report or artifact.
         """
         path = f"{self._path}/completed-tasks"
         task_jsons = [r.json() for r in completed_tasks]
@@ -72,6 +85,19 @@ class TaskQueueAPI(BaseAPI):
             failed_tasks: List of filled forms of failed tasks.
         Returns:
             None on successful registration of errors.
+        Raises:
+            :class:`~cybsi.api.error.ForbiddenError`: Enricher cannot report
+             result of one of tasks.
+            :class:`~cybsi.api.error.SemanticError`: One of forms contains logic errors.
+        Note:
+            ForbiddenError codes:
+              * :attr:`~cybsi.api.error.ForbiddenErrorCodes.NotOwner`
+                -- Task belongs to other enricher.
+            SemanticError codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTaskStatus`
+                -- Current task status is not ``Executing``.
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidErrorCode`
+                -- Error code is invalid for tasks of such type.
         """
         path = f"{self._path}/failed-tasks"
         task_jsons = [r.json() for r in failed_tasks]

@@ -3,7 +3,7 @@ import requests
 
 from typing import Optional
 
-from ..error import CybsiClientConnectionError
+from ..error import CybsiError
 from ..internal import HTTPConnector
 from .token import TokenView
 
@@ -67,9 +67,7 @@ class APIKeyAuth:
         try:
             _r = r.connection.send(req, **kwargs)
         except Exception as exp:
-            raise CybsiClientConnectionError(
-                f"unable to send authenticated request: {exp}"
-            ) from None
+            raise CybsiError("unable to send authenticated request", exp) from None
 
         _r.history.append(r)
         _r.request = req
