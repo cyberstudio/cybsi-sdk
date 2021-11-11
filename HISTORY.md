@@ -1,6 +1,10 @@
 Release History
 ===============
 
+0.0.11 (2021-11-11)
+------------------
+- Fix URI for API client
+
 0.0.10 (2021-11-10)
 ------------------
 - Fix serialization token for API client

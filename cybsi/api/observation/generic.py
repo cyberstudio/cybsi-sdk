@@ -30,13 +30,13 @@ from ..observable import (
 class GenericObservationsAPI(BaseAPI):
     """Generic observation API."""
 
-    _path = "/enrichment/observation/generics"
+    _path = "/enrichment/observations/generics"
 
     def register(self, observation: "GenericObservationForm") -> RefView:
         """Register a generic observation.
 
         Note:
-            Calls `POST /enrichment/observation/generics`.
+            Calls `POST /enrichment/observations/generics`.
         Args:
             observation: Filled generic observation form.
         Returns:
@@ -49,7 +49,7 @@ class GenericObservationsAPI(BaseAPI):
         """Get a generic observation view.
 
         Note:
-            Calls `GET /enrichment/observation/generics`.
+            Calls `GET /enrichment/observations/generics`.
 
         Args:
             observation_uuid: Observation uuid.
