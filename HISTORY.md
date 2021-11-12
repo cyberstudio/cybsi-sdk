@@ -1,9 +1,14 @@
 Release History
 ===============
 
+0.0.13 (2021-11-16)
+------------------
+- Describe API errors
+- Implement Artifact API
+
 0.0.12 (2021-11-11)
 -------------------
-- Describe API errors 
+- Fix replist route 
 
 0.0.11 (2021-11-11)
 -------------------

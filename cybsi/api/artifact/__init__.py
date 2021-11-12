@@ -3,6 +3,7 @@
 from .api import (
     ArtifactsAPI,
     ArtifactView,
+    ArtifactContent,
     ArtifactContentView,
 )
-from .enums import ArtifactTypes
+from .enums import ArtifactTypes, ArtifactContentDownloadCompressionTypes

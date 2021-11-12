@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
+import shutil
 import time
 import uuid
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from io import BytesIO
 from os import environ
 from typing import cast
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
-from cybsi.api.artifact import ArtifactTypes, ArtifactView
+from cybsi.api.artifact import ArtifactTypes
 from cybsi.api.enrichment import (
     ArtifactAnalysisParamsView,
     AssignedTaskView,
@@ -51,8 +53,7 @@ def main():
 def handle_task(client: CybsiClient, task: AssignedTaskView) -> None:
     try:
         artifact_uuid = get_task_artifact_uuid(task)
-        view, content = fetch_artifact(client, artifact_uuid)
-        result = analyze_artifact(task.uuid, view, content)
+        result = analyze_artifact(client, task.uuid, artifact_uuid)
         register_result(client, result)
     except Exception as ex:
         failure = FileSampleAnalysisTaskFailure(task_id=task.uuid, ex=ex)
@@ -78,20 +79,29 @@ def get_task_artifact_uuid(task_view: AssignedTaskView) -> uuid.UUID:
     return artifact.uuid
 
 
-def fetch_artifact(client: CybsiClient, artifact_uuid: uuid.UUID):
-    artifact_view = client.artifacts.view(artifact_uuid)
-    artifact_content = client.artifacts.get_content(artifact_uuid)
-    return artifact_view, artifact_content
-
-
 def analyze_artifact(
-    task_id: uuid.UUID, view: ArtifactView, content
+    client: CybsiClient,
+    task_id: uuid.UUID,
+    artifact_uuid: uuid.UUID,
 ) -> "FileSampleAnalysisTaskResult":
-    # ... Call external system to analyze artifact.
+    view = client.artifacts.view(artifact_uuid)
+    with client.artifacts.get_content(artifact_uuid) as content:
+        # Here we load the entire artifact content to memory,
+        # but it's also possible to pass stream to it to external system.
+        buffer = copy_artifact_content_to_mem(content.stream)  # noqa: F841
+
+    # Copy content.stream to external system.
+    # Call external system to analyze artifact.
     # This is a canned result.
     return FileSampleAnalysisTaskResult(
         task_id=task_id, file_md5_hash=view.content.md5_hash, is_malicious=True
     )
+
+
+def copy_artifact_content_to_mem(artifact_content) -> BytesIO:
+    buffer = BytesIO()
+    shutil.copyfileobj(artifact_content, buffer, length=1024 * 1024)
+    return buffer
 
 
 def register_failure(client, failure: "FileSampleAnalysisTaskFailure") -> None:

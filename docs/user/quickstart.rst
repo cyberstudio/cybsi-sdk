@@ -53,6 +53,17 @@ The example can be used as a general boilerplate for connectors to analyzers.
 .. literalinclude:: ../../examples/artifact_analysis_enricher.py
 
 
+.. _upload-download-artifact-example:
+
+Upload and download an artifact
+-------------------------------
+Artifacts are regular files with additional attributes. An artifact can be analyzed or unpacked by Cybsi.
+An artifact can be sent for analysis to analyzer (for example, sandbox).
+
+The example shows how to upload and download artifacts.
+
+.. literalinclude:: ../../examples/upload_download_artifact.py
+
 .. _pagination-example:
 
 Pagination

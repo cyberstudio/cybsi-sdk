@@ -40,7 +40,7 @@ class HTTPConnector:
             422: SemanticError,
         }
 
-    def _do(self, method: str, path: str, **kwargs):
+    def _do(self, method: str, path: str, stream=False, **kwargs):
         """Do HTTP request.
 
         Args:
@@ -61,7 +61,7 @@ class HTTPConnector:
         s = requests.Session()
 
         try:
-            resp = s.send(req.prepare(), verify=self._verify)
+            resp = s.send(req.prepare(), verify=self._verify, stream=stream)
         except Exception as exp:
             raise CybsiError("could not send request", exp) from None
 
@@ -69,17 +69,20 @@ class HTTPConnector:
 
         return resp
 
-    def do_get(self, path, params: dict = None, **kwargs) -> requests.Response:
+    def do_get(
+        self, path, params: dict = None, stream=False, **kwargs
+    ) -> requests.Response:
         """Do HTTP GET request.
 
         Args:
             path: URL path.
             params: Query params.
+            stream: Stream response.
             kwargs: Any kwargs supported by request.Request.
         Return:
             Response.
         """
-        return self._do("GET", path, params=params, **kwargs)
+        return self._do("GET", path, params=params, stream=stream, **kwargs)
 
     def do_post(self, path, json=None, **kwargs) -> requests.Response:
         """Do HTTP POST request.
