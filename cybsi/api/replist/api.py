@@ -12,7 +12,7 @@ X_CHANGE_CURSOR = "X-Change-Cursor"
 class ReplistsAPI(BaseAPI):
     """Reputation list API."""
 
-    _replist_base_url = "/replist"
+    _replist_base_url = "/replists"
     _replist_entities_tpl = _replist_base_url + "/{}/entities"
     _replist_changes_tpl = _replist_base_url + "/{}/changes"
 
