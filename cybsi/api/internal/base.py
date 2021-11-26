@@ -4,7 +4,7 @@ Base internal classes, useful to simplify API implementation.
 
 import json
 
-from typing import Dict, Optional
+from typing import Any, Callable, Dict, Optional
 
 from ..error import CybsiError
 from .connector import HTTPConnector
@@ -43,3 +43,15 @@ class JsonObjectView:
 
     def _get_optional(self, key):
         return self._data.get(key, None)
+
+    def _map_optional(self, key, mapper: Callable[[Any], Any]):
+        value = self._get_optional(key)
+        if value is not None:
+            return mapper(value)
+        return None
+
+    def _map_list_optional(self, key, mapper: Callable[[Any], Any]):
+        values = self._get_optional(key)
+        if values is not None:
+            return [mapper(val) for val in values]
+        return None

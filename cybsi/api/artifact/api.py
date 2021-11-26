@@ -161,6 +161,15 @@ def _parse_content_filename(response) -> str:
         raise CybsiError("filename not found in Content-disposition header") from None
 
 
+class ArtifactCommonView(RefView):
+    """Artifact short view, used in ReportView."""
+
+    @property
+    def type(self) -> ArtifactTypes:
+        """Artifact type."""
+        return self._get("type")
+
+
 class ArtifactView(RefView):
     """Artifact view."""
 
@@ -177,8 +186,7 @@ class ArtifactView(RefView):
     @property
     def share_levels(self) -> Optional[List[ShareLevels]]:
         """Artifact share levels, ordered from lowest to highest."""
-        sl = self._get_optional("shareLevels")
-        return None if sl is None else [ShareLevels(s) for s in sl]
+        return self._map_list_optional("shareLevels", ShareLevels)
 
     @property
     def content(self) -> "ArtifactContentView":

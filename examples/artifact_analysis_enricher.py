@@ -10,7 +10,6 @@ from os import environ
 from typing import cast
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
-from cybsi.api.artifact import ArtifactTypes
 from cybsi.api.enrichment import (
     ArtifactAnalysisParamsView,
     AssignedTaskView,
@@ -71,11 +70,6 @@ def get_task_artifact_uuid(task_view: AssignedTaskView) -> uuid.UUID:
     task_params = cast(ArtifactAnalysisParamsView, task_view.params)
     artifact = task_params.artifact
 
-    # Our enricher expects file samples.
-    if artifact.type != ArtifactTypes.FileSample:
-        # Shouldn't happen unless Cybsi enrichment rules are mis-configured.
-        raise Exception("unexpected artifact type")
-
     return artifact.uuid
 
 
@@ -94,7 +88,10 @@ def analyze_artifact(
     # Call external system to analyze artifact.
     # This is a canned result.
     return FileSampleAnalysisTaskResult(
-        task_id=task_id, file_md5_hash=view.content.md5_hash, is_malicious=True
+        task_id=task_id,
+        file_md5_hash=view.content.md5_hash,
+        is_malicious=True,
+        external_id=uuid.uuid4().hex[:8],
     )
 
 
@@ -135,21 +132,23 @@ def register_report(
     # Add facts from result to observation
     file_form = EntityForm(EntityTypes.File)
     file_form.add_key(EntityKeyTypes.MD5, result.file_md5_hash)
+    report_description = "File sample is not malicious"
     if result.is_malicious:
+        report_description = "File sample is malicious"
         observation.add_attribute_fact(
             entity=file_form,
             attribute_name=AttributeNames.IsMalicious,
             value=True,
             confidence=0.9,
         )
-
     observation_ref = client.observations.generics.register(observation)
 
-    report = ReportForm(ShareLevels.Green)
-
-    # ... Add report title, description, external id and other useful meta.
-
-    report.add_observation(observation_ref.uuid)
+    report = ReportForm(
+        ShareLevels.Green,
+        description=report_description,
+        title="File analysis, md5:" + result.file_md5_hash,
+        external_id=result.external_id,
+    ).add_observation(observation_ref.uuid)
 
     report_ref = client.reports.register(report)
     return report_ref.uuid
@@ -160,6 +159,7 @@ class FileSampleAnalysisTaskResult:
     task_id: uuid.UUID
     file_md5_hash: str
     is_malicious: bool
+    external_id: str
 
 
 @dataclass

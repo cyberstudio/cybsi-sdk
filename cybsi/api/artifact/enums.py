@@ -12,7 +12,7 @@ class ArtifactTypes(Enum):
 
 @document_enum
 class ArtifactContentDownloadCompressionTypes(Enum):
-    """Artifact content content compression type.
+    """Artifact content download compression type.
 
     Don't confuse it with compression of original artifact content itself!
     Those values are used only for artifact content downloading.
