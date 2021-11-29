@@ -16,6 +16,14 @@ class EnrichmentTypes(Enum):
 
 
 @document_enum
+class EnrichmentTriggerTypes(Enum):
+    """Enrichment trigger type."""
+
+    OnDemand = "OnDemand"  # noqa: E501 doc: Enrichment starts on manual task creation through API.
+    OnRegistration = "OnRegistration"  # noqa: E501 doc: Enrichment starts automatically on artifact registration or entity mention.
+
+
+@document_enum
 class EnrichmentErrorCodes(Enum):
     """Enrichment task error code."""
 

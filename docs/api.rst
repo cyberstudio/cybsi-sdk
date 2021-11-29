@@ -37,6 +37,11 @@ Enrichment
 .. automodule:: cybsi.api.enrichment.enums
     :members:
 
+Configuration
+"""""""""""""
+.. automodule:: cybsi.api.enrichment.config_rules
+    :members:
+
 Tasks
 """""
 .. automodule:: cybsi.api.enrichment.task

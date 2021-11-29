@@ -3,6 +3,12 @@ enrichment configuration and enrichment results.
 """
 from .api import EnrichmentAPI
 
+from .config_rules import (
+    ConfigRulesAPI,
+    ConfigRuleView,
+    ConfigRuleForm,
+)
+
 from .task_queue import (
     TaskQueueAPI,
     AssignedTaskView,
@@ -20,4 +26,5 @@ from .enums import (
     EnrichmentErrorCodes,
     EnrichmentTaskPriorities,
     EnrichmentTypes,
+    EnrichmentTriggerTypes,
 )
