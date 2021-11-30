@@ -7,6 +7,7 @@ from .internal import HTTPConnector
 from .observation import ObservationsAPI
 from .replist import ReplistsAPI
 from .report import ReportsAPI
+from .search import SearchAPI
 
 
 @dataclass
@@ -85,3 +86,8 @@ class CybsiClient:
     def reports(self) -> ReportsAPI:
         """Reports API handle."""
         return ReportsAPI(self._connector)
+
+    @property
+    def search(self) -> SearchAPI:
+        """Search API handle."""
+        return SearchAPI(self._connector)

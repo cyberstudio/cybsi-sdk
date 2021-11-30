@@ -57,6 +57,10 @@ class APIError(CybsiError):
         )
         super().__init__(f"{self._header}, {self._suffix}")
 
+    @property
+    def content(self) -> JsonObject:
+        return self._view
+
 
 class InvalidRequestError(APIError):
     """Invalid request error. Retry will never work.

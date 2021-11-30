@@ -71,6 +71,12 @@ Generic observations
 .. automodule:: cybsi.api.observation.generic
     :members:
 
+Search
+~~~~~~~~~~~~~~~~
+.. automodule:: cybsi.api.search
+    :members:
+    :imported-members:
+
 Reputation lists
 ~~~~~~~~~~~~~~~~
 .. automodule:: cybsi.api.replist
