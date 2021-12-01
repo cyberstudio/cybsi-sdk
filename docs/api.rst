@@ -52,6 +52,11 @@ Task queue
 .. automodule:: cybsi.api.enrichment.task_queue
     :members:
 
+External databases
+""""""""""""""""""
+.. automodule:: cybsi.api.enrichment.external_dbs
+    :members:
+
 Observable entities
 ~~~~~~~~~~~~~~~~~~~
 .. automodule:: cybsi.api.observable

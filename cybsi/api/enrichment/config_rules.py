@@ -1,10 +1,10 @@
-"""Use this section of API operate config rules.
+"""Use this section of API to operate config rules.
 """
 from typing import List, Optional
 import uuid
 
 from ..common import RefView
-from ..internal import BaseAPI, JsonObjectView, JsonObjectForm
+from ..internal import BaseAPI, JsonObjectForm
 from ..artifact import ArtifactTypes
 from ..observable import EntityTypes
 from .enums import EnrichmentTypes, EnrichmentTriggerTypes
@@ -16,14 +16,14 @@ class ConfigRulesAPI(BaseAPI):
     _path = "/enrichment/config/rules"
 
     def view(self, rule_uuid: uuid.UUID) -> "ConfigRuleView":
-        """Get an config rule view.
+        """Get the config rule view.
 
         Note:
             Calls `GET /enrichment/config/rules/{rule_uuid}`.
         Args:
             rule_uuid: config rule uuid.
         Returns:
-            View of the config rule .
+            View of the config rule.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Config rule not found.
         """
@@ -52,7 +52,7 @@ class ConfigRulesAPI(BaseAPI):
         return RefView(r.json())
 
 
-class ConfigRuleView(JsonObjectView):
+class ConfigRuleView(RefView):
     """Config rule view."""
 
     @property

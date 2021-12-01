@@ -22,6 +22,12 @@ from .task_queue import (
     TaskResultObservationForm,
 )
 
+from .external_dbs import (
+    ExternalDBsAPI,
+    ExternalDBView,
+    ExternalDBForm,
+)
+
 from .enums import (
     EnrichmentErrorCodes,
     EnrichmentTaskPriorities,
