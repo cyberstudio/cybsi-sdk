@@ -23,6 +23,7 @@ from .task import (
     EnrichmentTaskParamsView,
     ExternalDBLookupParamsView,
 )
+from ..data_source import DataSourceCommonView
 
 
 class TaskQueueAPI(BaseAPI):
@@ -128,9 +129,9 @@ class AssignedTaskView(RefView):
         return parse_rfc3339_timestamp(self._get("updatedAt"))
 
     @property
-    def data_source(self) -> RefView:
+    def data_source(self) -> DataSourceCommonView:
         """Data source associated with enricher."""
-        return RefView(self._get("dataSource"))
+        return DataSourceCommonView(self._get("dataSource"))
 
     @property
     def type(self) -> "EnrichmentTypes":

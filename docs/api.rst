@@ -66,6 +66,12 @@ External databases
     :members:
     :inherited-members:
 
+Analyzers
+"""""""""
+.. automodule:: cybsi.api.enrichment.analyzers
+    :members:
+    :inherited-members:
+
 Observable entities
 ~~~~~~~~~~~~~~~~~~~
 .. automodule:: cybsi.api.observable
@@ -93,15 +99,15 @@ Data sources
 ~~~~~~~~~~~~
 Types
 """""
-.. automodule:: cybsi.api.data_source_types
+.. automodule:: cybsi.api.data_source.api_types
     :members:
-    :imported-members:
+    :inherited-members:
 
 Instances
 """""""""
-.. automodule:: cybsi.api.data_sources
+.. automodule:: cybsi.api.data_source.api
     :members:
-    :imported-members:
+    :inherited-members:
 
 Search
 ~~~~~~~~~~~~~~~~

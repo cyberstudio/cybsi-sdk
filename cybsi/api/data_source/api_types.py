@@ -16,7 +16,7 @@ class DataSourceTypesAPI(BaseAPI):
         Note:
             Calls `POST /data-source-types`.
         Args:
-            datasource_type: Filled datasource type form.
+            form: Filled datasource type form.
         Raises:
             :class:`~cybsi.api.error.DuplicateDataSourceType`: DataSourceType
                 already exist.
@@ -93,3 +93,17 @@ class DataSourceTypesView(RefView):
         Overrides confidence of the data source type.
         """
         return self._get_optional("manualConfidence")
+
+
+class DataSourceTypeCommonView(RefView):
+    """Data source type short view"""
+
+    @property
+    def long_name(self) -> str:
+        """Human-readable data source type name."""
+        return self._get("longName")
+
+    @property
+    def confidence(self) -> float:
+        """Confidence of data source type."""
+        return self._get("confidence")

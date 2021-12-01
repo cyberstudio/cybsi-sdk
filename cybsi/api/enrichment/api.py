@@ -3,6 +3,7 @@ from ..internal import BaseAPI
 from .task_queue import TaskQueueAPI
 from .config_rules import ConfigRulesAPI
 from .external_dbs import ExternalDBsAPI
+from .analyzers import AnalyzersAPI
 
 
 class EnrichmentAPI(BaseAPI):
@@ -22,3 +23,8 @@ class EnrichmentAPI(BaseAPI):
     def external_dbs(self) -> "ExternalDBsAPI":
         """Get external databases route."""
         return ExternalDBsAPI(self._connector)
+
+    @property
+    def analyzers(self) -> "AnalyzersAPI":
+        """Get analyzers route."""
+        return AnalyzersAPI(self._connector)

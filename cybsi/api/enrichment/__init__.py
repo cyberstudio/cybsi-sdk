@@ -28,6 +28,12 @@ from .external_dbs import (
     ExternalDBForm,
 )
 
+from .analyzers import (
+    AnalyzersAPI,
+    AnalyzerView,
+    AnalyzerForm,
+)
+
 from .enums import (
     EnrichmentErrorCodes,
     EnrichmentTaskPriorities,

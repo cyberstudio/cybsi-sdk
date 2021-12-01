@@ -7,7 +7,7 @@ from ..internal import (
     JsonObjectForm,
 )
 
-from .api_types import DataSourceTypesView
+from .api_types import DataSourceTypesView, DataSourceTypeCommonView
 
 
 class DataSourcesAPI(BaseAPI):
@@ -47,7 +47,7 @@ class DataSourcesAPI(BaseAPI):
         Note:
             Calls `POST /data-sources`.
         Args:
-            datasource: Filled data source form.
+            form: Filled data source form.
         Raises:
             :class:`~cybsi.api.error.DuplicateDataSource`: Data source already exist.
             :class:`~cybsi.api.error.SemanticErrorCodes.DataSourceTypeNotFound`:
@@ -115,3 +115,28 @@ class DataSourcesView(RefView):
         """Manually set confidence of the data source. Overrides
         confidence of the data source type."""
         return self._get_optional("manualConfidence")
+
+
+class DataSourceCommonView(RefView):
+    """Data source short view."""
+
+    @property
+    def long_name(self) -> str:
+        """Human-readable data source name."""
+        return self._get("longName")
+
+    @property
+    def unique_name(self) -> str:
+        """The unique identifier contains of the type `ShortName` and
+        the source `Name` (ShortName/Name)."""
+        return self._get("uniqueName")
+
+    @property
+    def confidence(self) -> float:
+        """Confidence of data source."""
+        return self._get("confidence")
+
+    @property
+    def type(self) -> "DataSourceTypeCommonView":
+        """Data source type short view."""
+        return DataSourceTypeCommonView(self._get("type"))
