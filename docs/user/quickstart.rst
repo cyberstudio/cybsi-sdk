@@ -13,6 +13,16 @@ First, make sure that:
 
 Let's get started with some simple examples.
 
+.. _register-data-source-example:
+
+Register custom data source
+---------------------------
+Data source describes software or identity who makes observation, describes objects, artifacts or reports.
+
+In the example below we registering our own data source type CIRCL and data source MISP.
+
+.. literalinclude:: ../../examples/register_data_sources.py
+
 .. _register-generic-observation-example:
 
 Register a generic observation

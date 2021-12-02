@@ -89,6 +89,20 @@ Generic observations
     :members:
     :inherited-members:
 
+Data sources
+~~~~~~~~~~~~
+Types
+"""""
+.. automodule:: cybsi.api.data_source_types
+    :members:
+    :imported-members:
+
+Instances
+"""""""""
+.. automodule:: cybsi.api.data_sources
+    :members:
+    :imported-members:
+
 Search
 ~~~~~~~~~~~~~~~~
 .. automodule:: cybsi.api.search

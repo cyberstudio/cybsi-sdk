@@ -8,6 +8,10 @@ from .observation import ObservationsAPI
 from .replist import ReplistsAPI
 from .report import ReportsAPI
 from .search import SearchAPI
+from .data_source import (
+    DataSourcesAPI,
+    DataSourceTypesAPI,
+)
 
 
 @dataclass
@@ -66,6 +70,16 @@ class CybsiClient:
     def artifacts(self) -> ArtifactsAPI:
         """Artifacts API handle."""
         return ArtifactsAPI(self._connector)
+
+    @property
+    def data_sources(self) -> DataSourcesAPI:
+        """Data sources API handle."""
+        return DataSourcesAPI(self._connector)
+
+    @property
+    def data_source_types(self) -> DataSourceTypesAPI:
+        """Data source types API handle."""
+        return DataSourceTypesAPI(self._connector)
 
     @property
     def enrichment(self) -> EnrichmentAPI:

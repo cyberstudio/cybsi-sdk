@@ -2,6 +2,8 @@ DOCKER_FLAGS := --rm=true $(DOCKER_NOROOT) --network=none
 DOCKER_IMAGE := cybsi/cybsi-sdk
 DOCKER_TAG ?= latest
 DOCKER_NOROOT := -u $$(id -u):$$(id -g)
+SPHINXOPTS    = -W
+
 
 lint:
 	black cybsi examples && flake8 && mypy cybsi
