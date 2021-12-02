@@ -1,8 +1,15 @@
 Release History
 ===============
 
+0.0.14 (2021-12-02)
+-------------------
+- Add API for external databases
+- Add API for stored queries
+- Add API for enrichment config rules
+- Add API for reports
+
 0.0.13 (2021-11-16)
-------------------
+-------------------
 - Describe API errors
 - Implement Artifact API
 
