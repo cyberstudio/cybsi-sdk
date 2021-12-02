@@ -17,6 +17,7 @@ setup(
       version=__version__,
       description=__description__,
       packages=find_packages(),
+      package_data={"cybsi": ["py.typed"]},
       install_requires=[
             'requests~=2.26',
             'enum-tools==0.6.4'
