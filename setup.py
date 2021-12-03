@@ -20,7 +20,7 @@ setup(
       package_data={"cybsi": ["py.typed"]},
       install_requires=[
             'requests~=2.26',
-            'enum-tools==0.6.4'
+            'enum-tools==0.6.5'
       ],
       python_requires='~=3.7',
 )
