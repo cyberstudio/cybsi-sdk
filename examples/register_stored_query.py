@@ -5,7 +5,6 @@ from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.error import SemanticError, SemanticErrorCodes
 from cybsi.api.search.enums import QueryCompatibility
 from cybsi.api.search.stored_queries import (
-    StoredQueryValidationForm,
     StoredQueryForm,
     CybsiLangErrorView,
 )
@@ -19,8 +18,7 @@ if __name__ == "__main__":
     client = CybsiClient(config)
 
     text = "ENT { IsMalicious }"
-    query = StoredQueryValidationForm(text, QueryCompatibility.Replist)
-    view = client.search.stored_queries.validate(query)
+    view = client.search.stored_queries.validate(text, QueryCompatibility.Replist)
     if len(view.errors) > 0:
         # erroneous query
         exit(1)  # handle errors here
