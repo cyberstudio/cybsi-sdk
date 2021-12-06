@@ -9,6 +9,7 @@ import requests
 
 from typing import TypeVar, Callable, Iterator, List, Generic, Optional
 
+Cursor = str
 
 DEFAULT_PAGE_LIMIT = 30
 X_CURSOR_HEADER = "X-Cursor"
@@ -41,7 +42,7 @@ class Page(Generic[T]):
         return self._resp.links.get("next", {}).get("url")
 
     @property
-    def cursor(self) -> str:
+    def cursor(self) -> Cursor:
         """Page cursor"""
         return self._resp.headers.get(X_CURSOR_HEADER, "")
 

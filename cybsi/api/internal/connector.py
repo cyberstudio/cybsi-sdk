@@ -96,6 +96,18 @@ class HTTPConnector:
         """
         return self._do("POST", path, json=json, **kwargs)
 
+    def do_patch(self, path, json=None, **kwargs) -> requests.Response:
+        """Do HTTP PATCH request.
+
+        Args:
+            path: URL path.
+            json: JSON body.
+            kwargs: Any kwargs supported by request.Request.
+        Return:
+            Response.
+        """
+        return self._do("PATCH", path, json=json, **kwargs)
+
     def do_put(self, path, json=None, **kwargs) -> requests.Response:
         """Do HTTP PUT request.
 

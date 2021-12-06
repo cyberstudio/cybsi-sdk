@@ -176,15 +176,19 @@ class ErrorPosition(JsonObjectView):
         return self._get("offset")
 
 
-class StoredQueryView(RefView):
-    """View of a stored query,
-    as retrieved by :meth:`StoredQueriesAPI.view`."""
+class StoredQueryCommonView(RefView):
+    """Stored query short view,
+    as retrieved by :meth:`ReplistsAPI.view`."""
 
     @property
     def name(self) -> str:
-        """Name."""
-
+        """Query name."""
         return self._get("name")
+
+
+class StoredQueryView(StoredQueryCommonView):
+    """View of a stored query,
+    as retrieved by :meth:`StoredQueriesAPI.view`."""
 
     @property
     def text(self) -> str:

@@ -13,26 +13,31 @@ Low-level client
     :members:
     :imported-members:
     :exclude-members: APIKeyAuth
+    :inherited-members:
 
 Artifacts
 ~~~~~~~~~
 .. automodule:: cybsi.api.artifact
     :members:
     :imported-members:
+    :inherited-members:
 
 Auth
 ~~~~
 .. automodule:: cybsi.api.auth
     :members:
     :imported-members:
+    :inherited-members:
 
 Enrichment
 ~~~~~~~~~~
 .. automodule:: cybsi.api.enrichment
     :members:
+    :inherited-members:
 
 .. automodule:: cybsi.api.enrichment.api
     :members:
+    :inherited-members:
 
 .. automodule:: cybsi.api.enrichment.enums
     :members:
@@ -41,58 +46,69 @@ Configuration
 """""""""""""
 .. automodule:: cybsi.api.enrichment.config_rules
     :members:
+    :inherited-members:
 
 Tasks
 """""
 .. automodule:: cybsi.api.enrichment.task
     :members:
+    :inherited-members:
 
 Task queue
 """"""""""
 .. automodule:: cybsi.api.enrichment.task_queue
     :members:
+    :inherited-members:
 
 External databases
 """"""""""""""""""
 .. automodule:: cybsi.api.enrichment.external_dbs
     :members:
+    :inherited-members:
 
 Observable entities
 ~~~~~~~~~~~~~~~~~~~
 .. automodule:: cybsi.api.observable
     :members:
     :imported-members:
+    :inherited-members:
 
 Observations
 ~~~~~~~~~~~~
 .. automodule:: cybsi.api.observation
     :members:
+    :inherited-members:
 
 .. automodule:: cybsi.api.observation.api
     :members:
+    :inherited-members:
 
 Generic observations
 """"""""""""""""""""
 .. automodule:: cybsi.api.observation.generic
     :members:
+    :inherited-members:
 
 Search
 ~~~~~~~~~~~~~~~~
 .. automodule:: cybsi.api.search
     :members:
     :imported-members:
+    :inherited-members:
 
 Reputation lists
 ~~~~~~~~~~~~~~~~
 .. automodule:: cybsi.api.replist
     :members:
     :imported-members:
+    :inherited-members:
 
 Reports
 ~~~~~~~
 .. automodule:: cybsi.api.report
     :members:
     :imported-members:
+    :inherited-members:
 
 Pagination
 ~~~~~~~~~~
@@ -103,6 +119,7 @@ Common views
 ~~~~~~~~~~~~
 .. automodule:: cybsi.api.common
     :members:
+    :inherited-members:
 
 Exceptions
 ----------
