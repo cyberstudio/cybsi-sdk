@@ -4,10 +4,12 @@ Base internal classes, useful to simplify API implementation.
 
 import json
 
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, TypeVar, List
 
 from ..error import CybsiError
 from .connector import HTTPConnector
+
+JsonObject = Dict[str, Any]
 
 
 class BaseAPI:
@@ -28,7 +30,7 @@ class JsonObjectForm:
 
 
 class JsonObjectView:
-    def __init__(self, data: Optional[Dict] = None):
+    def __init__(self, data: Optional[JsonObject] = None):
         self._data = data or {}
 
     def __str__(self):
@@ -55,3 +57,13 @@ class JsonObjectView:
         if values is not None:
             return [mapper(val) for val in values]
         return None
+
+
+T = TypeVar("T")
+
+
+def list_mapper(item_creator: Callable[..., T]) -> Callable[..., List[T]]:
+    def _create_typed_list(items: List) -> List[T]:
+        return [item_creator(item) for item in items]
+
+    return _create_typed_list

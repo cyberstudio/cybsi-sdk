@@ -4,6 +4,7 @@ from typing import Callable
 from .artifact import ArtifactsAPI
 from .enrichment import EnrichmentAPI
 from .internal import HTTPConnector
+from .observable import ObservableAPI
 from .observation import ObservationsAPI
 from .replist import ReplistsAPI
 from .report import ReportsAPI
@@ -85,6 +86,11 @@ class CybsiClient:
     def enrichment(self) -> EnrichmentAPI:
         """Enrichment API handle."""
         return EnrichmentAPI(self._connector)
+
+    @property
+    def observable(self) -> ObservableAPI:
+        """Observable API handle."""
+        return ObservableAPI(self._connector)
 
     @property
     def observations(self) -> ObservationsAPI:

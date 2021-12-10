@@ -77,3 +77,24 @@ class RelationshipKinds(Enum):
     Hosts = "Hosts"
     Serves = "Serves"
     Locates = "Locates"
+
+
+@document_enum
+class EntityAggregateSections(Enum):
+    """Entity aggregation section."""
+
+    AssociatedAttributes = "AssociatedAttributes"
+    NaturalAttributes = "NaturalAttributes"
+    Threat = "Threat"
+    AVScanStatistics = "AVScanStatistics"
+    GeoIP = "GeoIP"
+    Labels = "Labels"
+
+
+@document_enum
+class ThreatStatus(Enum):
+    """Threat status."""
+
+    Unknown = "Unknown"
+    Malicious = "Malicious"
+    NonMalicious = "NonMalicious"

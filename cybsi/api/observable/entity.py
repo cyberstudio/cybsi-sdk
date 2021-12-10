@@ -1,5 +1,6 @@
-from typing import Any, List
+from typing import List
 
+from .aggregate_section import SectionsView
 from ..common import RefView
 from ..internal import JsonObjectForm, JsonObjectView
 
@@ -17,12 +18,12 @@ class EntityForm(JsonObjectForm):
         super().__init__()
         self._data["type"] = ent_type.value
 
-    def add_key(self, key_type: EntityKeyTypes, value: Any) -> "EntityForm":
+    def add_key(self, key_type: EntityKeyTypes, value: str) -> "EntityForm":
         """Add natural key to the list of entity keys.
 
         Args:
             key_type: Key type. Valid values depend on entity type.
-            value: Key value. Must be JSON serializable.
+            value: Key value.
         Return:
             Updated entity form.
         """
@@ -40,7 +41,7 @@ class EntityKeyView(JsonObjectView):
         return EntityKeyTypes(self._get("type"))
 
     @property
-    def value(self) -> Any:
+    def value(self) -> str:
         """Entity key value.
         Type depends on key type.
         """
@@ -59,3 +60,12 @@ class EntityView(RefView):
     def keys(self) -> List[EntityKeyView]:
         """Entity natural keys."""
         return [EntityKeyView(x) for x in self._get("keys")]
+
+
+class EntityAggregateView(EntityView):
+    """Entity aggregated view."""
+
+    @property
+    def sections(self) -> SectionsView:
+        """Entity aggregated sections."""
+        return SectionsView(self._get("sections"))
