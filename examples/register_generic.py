@@ -9,6 +9,7 @@ from cybsi.api.observable import (
     EntityKeyTypes,
     EntityTypes,
     ShareLevels,
+    RelationshipKinds,
 )
 from cybsi.api.observation import GenericObservationForm
 
@@ -16,6 +17,9 @@ from cybsi.api.observation import GenericObservationForm
 def create_generic_observation():
     domain = EntityForm(EntityTypes.DomainName)
     domain.add_key(EntityKeyTypes.String, "test.com")
+
+    ip_address = EntityForm(EntityTypes.IPAddress)
+    ip_address.add_key(EntityKeyTypes.String, "8.8.8.8")
 
     observation = (
         GenericObservationForm(
@@ -32,6 +36,12 @@ def create_generic_observation():
             attribute_name=AttributeNames.IsMalicious,
             value=True,
             confidence=0.9,
+        )
+        .add_entity_relationship(
+            source=domain,
+            kind=RelationshipKinds.Resolves,
+            target=ip_address,
+            confidence=0.5,
         )
     )
     return observation

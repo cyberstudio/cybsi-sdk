@@ -8,7 +8,7 @@ See Also:
 import datetime
 import uuid
 
-from typing import Any, cast, List, Optional
+from typing import Any, cast, List, Optional, Union
 
 from ..common import RefView
 from ..internal import (
@@ -60,11 +60,10 @@ class GenericObservationsAPI(BaseAPI):
         return RefView(r.json())
 
     def view(self, observation_uuid: uuid.UUID) -> "GenericObservationView":
-        """Get a generic observation view.
+        """Get the generic observation view.
 
         Note:
-            Calls `GET /enrichment/observations/generics`.
-
+            Calls `GET /enrichment/observations/generics/{observation_uuid}`.
         Args:
             observation_uuid: Observation uuid.
         Returns:
@@ -92,11 +91,14 @@ class GenericObservationForm(JsonObjectForm):
         >>> from datetime import datetime, timezone
         >>> from cybsi.api.observable import (
         >>>     AttributeNames, EntityForm,
-        >>>     EntityKeyTypes, EntityTypes, ShareLevels
+        >>>     EntityKeyTypes, EntityTypes,
+        >>>     ShareLevels, RelationshipKinds
         >>> )
         >>> from cybsi.api.observation import GenericObservationForm
         >>> domain = EntityForm(EntityTypes.DomainName)
         >>> domain.add_key(EntityKeyTypes.String, "test.com")
+        >>> ip_address = EntityForm(EntityTypes.IPAddress)
+        >>> ip_address.add_key(EntityKeyTypes.String, "8.8.8.8")
         >>> observation = GenericObservationForm(
         >>>    share_level=ShareLevels.Green,
         >>>    seen_at=datetime.now(timezone.utc)
@@ -105,7 +107,12 @@ class GenericObservationForm(JsonObjectForm):
         >>>     attribute_name=AttributeNames.IsIoC,
         >>>     value=True,
         >>>     confidence=0.9
-        >>> )
+        >>> ).add_entity_relationship(
+        >>>     source=domain,
+        >>>     kind=RelationshipKinds.Resolves,
+        >>>     target=ip_address,
+        >>>     confidence=0.5,
+        >>>)
     """
 
     def __init__(self, share_level: ShareLevels, seen_at: datetime.datetime):
@@ -125,7 +132,7 @@ class GenericObservationForm(JsonObjectForm):
 
     def add_attribute_fact(
         self,
-        entity: EntityForm,
+        entity: Union[uuid.UUID, EntityForm],
         attribute_name: AttributeNames,
         value: Any,
         confidence: Optional[float] = None,
@@ -133,17 +140,25 @@ class GenericObservationForm(JsonObjectForm):
         """Add attribute value fact to the observation.
 
         Args:
-            entity: Filled form of entity.
+            entity: Filled form of entity or passed uuid of entity.
+                Entity with passed UUID must be registered in system.
             attribute_name: Attribute name.
-            value: Attribute value.
-            confidence: Fact confidence.
+            value: Attribute value. Type depends on attribute name and entity type.
+            confidence: Fact confidence. Confidence must be in range (0;1].
+                Empty value means default value (1)
         Return:
             Updated observation form.
         """
         attribute_facts = self._content.setdefault("entityAttributeValues", [])
+
+        if isinstance(entity, uuid.UUID):
+            ent = {"uuid": str(entity)}
+        else:
+            ent = entity.json()
+
         attribute_facts.append(
             {
-                "entity": entity.json(),
+                "entity": ent,
                 "attributeName": attribute_name.value,
                 "value": value,
                 "confidence": confidence,
@@ -153,39 +168,62 @@ class GenericObservationForm(JsonObjectForm):
 
     def add_entity_relationship(
         self,
-        source: EntityForm,
+        source: Union[uuid.UUID, EntityForm],
         kind: RelationshipKinds,
-        target: EntityForm,
+        target: Union[uuid.UUID, EntityForm],
         confidence: Optional[float] = None,
     ) -> "GenericObservationForm":
         """Add entity relationship to observation.
 
         Args:
-            source: Filled form of source entity in the relationship.
+            source: Filled form of source entity in the relationship or
+                passed uuid of source entity.
+                Entity with passed UUID must be registered in system.
             kind: Kind of relationship.
-            target: Filled form of target entity in the relationship.
-            confidence: Relationship confidence.
+            target: Filled form of target entity in the relationship or
+                passed uuid of target entity.
+                Entity with passed UUID must be registered in system.
+            confidence: Relationship confidence. Confidence must be in range (0;1].
+                Empty value means default value (1)
         Returns:
             Updated observation form.
-        Warning:
-            Not implemented yet.
         """
-        raise NotImplementedError()
+        entity_relationship = self._content.setdefault("entityRelationships", [])
+
+        if isinstance(source, uuid.UUID):
+            source_ent = {"uuid": str(source)}
+        else:
+            source_ent = source.json()
+
+        if isinstance(target, uuid.UUID):
+            target_ent = {"uuid": str(target)}
+        else:
+            target_ent = target.json()
+
+        entity_relationship.append(
+            {
+                "source": source_ent,
+                "kind": kind.value,
+                "target": target_ent,
+                "confidence": confidence,
+            }
+        )
+        return self
 
 
 class GenericObservationView(JsonObjectView):
-    """View of a generic observation,
+    """Generic observation view,
     as retrieved by :meth:`GenericObservationAPI.view`."""
 
     @property
     def reporter(self) -> RefView:
-        """Reporter."""
+        """Source reporting the observation."""
 
         return RefView(self._get("reporter"))
 
     @property
     def data_source(self) -> RefView:
-        """Data source."""
+        """Observation data source."""
 
         return RefView(self._get("dataSource"))
 
@@ -214,25 +252,25 @@ class GenericObservationView(JsonObjectView):
         return GenericObservationContentView(self._get("content"))
 
 
-class GenericObservationContentView(dict):
+class GenericObservationContentView(JsonObjectView):
     """Generic observation content."""
 
     @property
     def entity_relationships(self) -> List["RelationshipView"]:
         """Entity relationships."""
 
-        relationships = self.get("entityRelationships", [])
+        relationships = self._get("entityRelationships")
         return [RelationshipView(x) for x in relationships]
 
     @property
     def entity_attribute_values(self) -> List["AttributeValueView"]:
         """Entity attribute values."""
 
-        attributes = self.get("entityAttributeValues", [])
+        attributes = self._get("entityAttributeValues")
         return [AttributeValueView(x) for x in attributes]
 
 
-class RelationshipView(dict):
+class RelationshipView(JsonObjectView):
     """Relationship fact view."""
 
     @property
@@ -244,13 +282,13 @@ class RelationshipView(dict):
             if source entity keys were invalid during registration.
         """
 
-        return EntityView(self.get("source"))
+        return EntityView(self._get("source"))
 
     @property
     def kind(self) -> RelationshipKinds:
         """Kind of the relationship."""
 
-        return RelationshipKinds(self.get("kind"))
+        return RelationshipKinds(self._get("kind"))
 
     @property
     def target(self) -> EntityView:
@@ -261,16 +299,16 @@ class RelationshipView(dict):
             if source entity keys were invalid during registration.
         """
 
-        return EntityView(self.get("target"))
+        return EntityView(self._get("target"))
 
     @property
     def confidence(self) -> float:
         """Relationship fact confidence."""
 
-        return float(cast(float, self.get("confidence")))
+        return float(cast(float, self._get("confidence")))
 
 
-class AttributeValueView(dict):
+class AttributeValueView(JsonObjectView):
     """Attribute value fact view."""
 
     @property
@@ -282,13 +320,13 @@ class AttributeValueView(dict):
             if entity keys were invalid during registration.
         """
 
-        return EntityView(self.get("entity"))
+        return EntityView(self._get("entity"))
 
     @property
     def attribute_name(self) -> AttributeNames:
         """Attribute name."""
 
-        return AttributeNames(self.get("attributeName"))
+        return AttributeNames(self._get("attributeName"))
 
     @property
     def value(self) -> Any:
@@ -297,10 +335,10 @@ class AttributeValueView(dict):
         Return type depends on attribute name and entity type.
         """
 
-        return self.get("value")
+        return self._get("value")
 
     @property
     def confidence(self) -> float:
         """Fact confidence."""
 
-        return float(cast(float, self.get("confidence")))
+        return float(cast(float, self._get("confidence")))
