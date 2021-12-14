@@ -46,4 +46,4 @@ docker-test:
 docker-build-docs:
 	mkdir -p docs/_build
 	docker run -iv ${PWD}:/cybsi/ $(DOCKER_FLAGS) "$(DOCKER_IMAGE):$(DOCKER_TAG)" \
-		sh -c "trap \"chown -R $$(id -u):$$(id -g) /cybsi/docs/_build\" EXIT; make build-docs"
+		sh -c "trap \"chown -R $$(id -u):$$(id -g) /cybsi/docs/_build\" EXIT; BUILDDIR=/cybsi/docs/_build make build-docs"
