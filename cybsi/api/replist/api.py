@@ -4,7 +4,9 @@ from typing import Optional, Tuple
 import uuid
 
 from .enums import EntitySetOperations, ReplistStatus
-from ..common import RefView, TaggedRefView, IF_MATCH, Tag
+from ..api import Tag
+from ..view import _TaggedRefView
+from .. import RefView
 from ..internal import (
     BaseAPI,
     JsonObjectForm,
@@ -68,20 +70,20 @@ class ReplistsAPI(BaseAPI):
         query_uuid: Optional[uuid.UUID] = None,
         share_level: Optional[ShareLevels] = None,
     ) -> None:
-        """Edit current reputation list.
+        """Edit the reputation list.
 
         Note:
             Calls `PATCH /replists/{replist_uuid}`.
         Args:
             replist_uuid: Replist uuid.
-            etag: ETag header value obataned from replist view method.
+            tag: :attr:`ReplistView.tag` value. Use :meth:`view` to retrieve it.
             query_uuid: Search query UUID attached to replist.
             share_level: Replist share level.
-            is_enabled: Replist initial status.
+            is_enabled: Replist status toggle.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
             :class:`~cybsi.api.error.ResourceModifiedError`:
-                Replist changed since last request. Update ETag and retry.
+                Replist changed since last request. Update tag and retry.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
         Note:
             Semantic error codes specific for this method:
@@ -96,11 +98,7 @@ class ReplistsAPI(BaseAPI):
         if is_enabled is not None:
             form["isEnabled"] = is_enabled  # type: ignore
         path = f"{self._replist_base_url}/{replist_uuid}"
-        self._connector.do_patch(
-            path=path,
-            json=form,
-            headers={IF_MATCH: tag},
-        )
+        self._connector.do_patch(path=path, tag=tag, json=form)
 
     def filter(
         self,
@@ -207,7 +205,7 @@ class ReplistForm(JsonObjectForm):
     Args:
         query_uuid: Search query UUID attached to replist.
         share_level: Replist share level.
-        is_enabled: Replist initial status.
+        is_enabled: Replist status toggle.
     """
 
     def __init__(
@@ -247,7 +245,7 @@ class ReplistCommonView(RefView):
         return self._get("isEnabled")
 
 
-class ReplistView(TaggedRefView, ReplistCommonView):
+class ReplistView(_TaggedRefView, ReplistCommonView):
     """Reputation list full view."""
 
     @property

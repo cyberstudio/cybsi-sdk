@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, List, TypeVar, Generic, Callable, Optional
 from typing import Dict
 
-from ..common import RefView
+from .. import RefView
 from ..internal import JsonObject, JsonObjectView, list_mapper, parse_rfc3339_timestamp
 
 from .enums import EntityAggregateSections, ThreatStatus, ShareLevels

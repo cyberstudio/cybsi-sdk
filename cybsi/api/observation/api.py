@@ -1,4 +1,4 @@
-from ..common import RefView
+from .. import RefView
 from ..internal import BaseAPI
 from .enums import ObservationTypes
 from .generic import GenericObservationsAPI

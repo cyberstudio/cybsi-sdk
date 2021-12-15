@@ -9,11 +9,10 @@ This part of the documentation covers all the public interfaces of Cybsi SDK.
 
 Low-level client
 ----------------
-.. automodule:: cybsi.api
+.. autoclass:: cybsi.api.CybsiClient
     :members:
-    :imported-members:
-    :exclude-members: APIKeyAuth
-    :inherited-members:
+.. autoclass:: cybsi.api.Config
+    :members:
 
 Artifacts
 ~~~~~~~~~
@@ -130,16 +129,19 @@ Reports
     :imported-members:
     :inherited-members:
 
+Common views and data types
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: cybsi.api.Null
+.. autoclass:: cybsi.api.Nullable
+.. autoclass:: cybsi.api.NullType
+.. autoclass:: cybsi.api.Tag
+.. autoclass:: cybsi.api.RefView
+    :members:
+
 Pagination
 ~~~~~~~~~~
 .. automodule:: cybsi.api.pagination
     :members:
-
-Common views
-~~~~~~~~~~~~
-.. automodule:: cybsi.api.common
-    :members:
-    :inherited-members:
 
 Exceptions
 ----------

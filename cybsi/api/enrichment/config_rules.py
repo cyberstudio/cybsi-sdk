@@ -3,7 +3,7 @@
 from typing import List, Optional
 import uuid
 
-from ..common import RefView
+from .. import RefView
 from ..internal import BaseAPI, JsonObjectForm
 from ..artifact import ArtifactTypes
 from ..observable import EntityTypes

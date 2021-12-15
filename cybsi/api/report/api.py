@@ -7,7 +7,7 @@ import uuid
 from cybsi.api.artifact.api import ArtifactCommonView
 from cybsi.api.observation.api import ObservationCommonView
 
-from ..common import RefView
+from .. import RefView
 from ..internal import (
     BaseAPI,
     JsonObjectForm,

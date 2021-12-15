@@ -4,7 +4,7 @@ from typing import Callable
 from urllib.parse import urljoin
 
 from cybsi.__version__ import __version__
-
+from ..api import Tag
 from ..error import (
     CybsiError,
     InvalidRequestError,
@@ -21,6 +21,8 @@ requests.packages.urllib3.disable_warnings()
 
 class HTTPConnector:
     """Connector performing round trips to Cybsi."""
+
+    _if_match_header = "If-Match"
 
     def __init__(self, base_url: str, auth: Callable = None, ssl_verify=True):
         self._base_url = base_url
@@ -96,16 +98,19 @@ class HTTPConnector:
         """
         return self._do("POST", path, json=json, **kwargs)
 
-    def do_patch(self, path, json=None, **kwargs) -> requests.Response:
+    def do_patch(self, path, tag: Tag, json=None, **kwargs) -> requests.Response:
         """Do HTTP PATCH request.
 
         Args:
             path: URL path.
+            tag: ETag value.
             json: JSON body.
             kwargs: Any kwargs supported by request.Request.
         Return:
             Response.
         """
+        headers = kwargs.setdefault("headers", {})
+        headers[self._if_match_header] = tag
         return self._do("PATCH", path, json=json, **kwargs)
 
     def do_put(self, path, json=None, **kwargs) -> requests.Response:

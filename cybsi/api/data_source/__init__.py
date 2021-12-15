@@ -3,14 +3,14 @@
 
 from .api import (
     DataSourcesAPI,
-    DataSourcesView,
-    DataSourcesForm,
+    DataSourceView,
+    DataSourceForm,
     DataSourceCommonView,
 )
 
 from .api_types import (
     DataSourceTypesAPI,
-    DataSourceTypesView,
-    DataSourceTypesForm,
+    DataSourceTypeView,
+    DataSourceTypeForm,
     DataSourceTypeCommonView,
 )

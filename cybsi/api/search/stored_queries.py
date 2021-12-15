@@ -1,10 +1,12 @@
 import uuid
 
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from .enums import QueryCompatibility
 from .error import CybsiLangErrorCodes
-from ..common import RefView
+from ..api import Tag
+from ..view import _TaggedRefView
+from .. import RefView
 from ..error import SemanticError, SemanticErrorCodes, CybsiError
 from ..internal import (
     BaseAPI,
@@ -42,7 +44,6 @@ class StoredQueriesAPI(BaseAPI):
 
         Note:
             Calls `GET /search/stored-queries/{query_uuid}`.
-
         Args:
             query_uuid: Stored query uuid.
         Returns:
@@ -52,7 +53,7 @@ class StoredQueriesAPI(BaseAPI):
         """
         path = f"{self._path}/{query_uuid}"
         r = self._connector.do_get(path)
-        return StoredQueryView(r.json())
+        return StoredQueryView(r)
 
     def validate(
         self, text: str, compatibility: QueryCompatibility
@@ -61,7 +62,6 @@ class StoredQueriesAPI(BaseAPI):
 
         Note:
             Calls `PUT /search/query`.
-
         Args:
             text: Text of the query.
             compatibility: Compatibility scope for query text.
@@ -72,6 +72,41 @@ class StoredQueriesAPI(BaseAPI):
         r = self._connector.do_put(self._validate_path, data)
         return StoredQueryValidationView(r.json())
 
+    def edit(
+        self,
+        query_uuid: uuid.UUID,
+        tag: Tag,
+        name: Optional[str] = None,
+        text: Optional[str] = None,
+    ) -> None:
+        """Edit the stored query.
+
+        Note:
+            Calls `PATCH /search/stored-queries/{query_uuid}`.
+        Args:
+            query_uuid: Stored query uuid.
+            tag: :attr:`StoredQueryView.tag` value. Use :meth:`view` to retrieve it.
+            name: New stored query name, non-empty if not :data:`None`.
+            text: New stored query text, non-empty if not :data:`None`.
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
+            :class:`~cybsi.api.error.NotFoundError`: Stored query not found.
+            :class:`~cybsi.api.error.ResourceModifiedError`:
+                Stored query changed since last request. Update tag and retry.
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidQueryText`
+        """
+        form: Dict[str, Any] = {}
+        if name is not None:
+            form["name"] = name
+        if text is not None:
+            form["text"] = text
+        path = f"{self._path}/{query_uuid}"
+        self._connector.do_patch(path=path, tag=tag, json=form)
+
 
 class StoredQueryForm(JsonObjectForm):
     """Stored query form.
@@ -79,8 +114,8 @@ class StoredQueryForm(JsonObjectForm):
     This is the form you need to fill to register stored query.
 
     Args:
-        name: Name of the stored query.
-        text: Text of the stored query.
+        name: Name of the stored query, non-empty.
+        text: Text of the stored query, non-empty.
     """
 
     def __init__(self, name: str, text: str):
@@ -186,7 +221,7 @@ class StoredQueryCommonView(RefView):
         return self._get("name")
 
 
-class StoredQueryView(StoredQueryCommonView):
+class StoredQueryView(_TaggedRefView, StoredQueryCommonView):
     """View of a stored query,
     as retrieved by :meth:`StoredQueriesAPI.view`."""
 

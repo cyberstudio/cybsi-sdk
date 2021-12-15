@@ -8,13 +8,16 @@ import uuid
 
 from typing import Optional, Union, cast, Dict, Any
 
-from ..common import RefView
-from ..internal import BaseAPI, JsonObjectForm, JsonObjectView, parse_rfc3339_timestamp
+from ..internal import BaseAPI, JsonObjectForm, parse_rfc3339_timestamp
 from ..pagination import Page
-from ..observable import EntityView, ShareLevels
-from ..observation import ObservationCommonView
+
+from .. import RefView
 from ..artifact import ArtifactTypes
 from ..data_source import DataSourceCommonView
+from ..internal import JsonObjectView
+from ..observable import EntityView, ShareLevels
+from ..observation import ObservationCommonView
+
 from .enums import (
     EnrichmentTypes,
     EnrichmentTaskPriorities,

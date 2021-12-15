@@ -1,7 +1,7 @@
 from typing import List
 
 from .aggregate_section import SectionsView
-from ..common import RefView
+from .. import RefView
 from ..internal import JsonObjectForm, JsonObjectView
 
 from .enums import EntityKeyTypes, EntityTypes

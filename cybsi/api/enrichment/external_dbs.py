@@ -6,10 +6,12 @@ The observation typically provides new attributes for the requested entity and
 relationships of the requested entity with other entities.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 import uuid
 
-from ..common import RefView
+from ..api import Nullable, _unwrap_nullable, Tag
+from ..view import _TaggedRefView
+from .. import RefView
 from ..internal import BaseAPI, JsonObjectForm
 from ..observable import EntityTypes
 
@@ -33,7 +35,7 @@ class ExternalDBsAPI(BaseAPI):
         """
         path = f"{self._path}/{db_uuid}"
         r = self._connector.do_get(path=path)
-        return ExternalDBView(r.json())
+        return ExternalDBView(r)
 
     def register(self, form: "ExternalDBForm") -> RefView:
         """Register external database.
@@ -45,6 +47,8 @@ class ExternalDBsAPI(BaseAPI):
         Returns:
             Reference to external database in API.
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided values are invalid (see form value requirements).
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
             :class:`~cybsi.api.error.ConflictError`:
                 An external database with such data source is already registered.
@@ -55,8 +59,58 @@ class ExternalDBsAPI(BaseAPI):
         r = self._connector.do_post(path=self._path, json=form.json())
         return RefView(r.json())
 
+    def edit(
+        self,
+        db_uuid: uuid.UUID,
+        tag: Tag,
+        entity_types: Optional[List[EntityTypes]] = None,
+        web_page_url: Nullable[str] = None,
+        task_execution_timeout: Nullable[int] = None,
+        task_execution_attempts_count: Nullable[int] = None,
+    ) -> None:
+        """Edit the external database.
 
-class ExternalDBView(RefView):
+        Note:
+            Calls `PATCH /enrichment/external-dbs/{db_uuid}`.
+        Args:
+            db_uuid: External database uuid.
+            tag: :attr:`ExternalDBView.tag` value. Use :meth:`view` to retrieve it.
+            entity_types: Entity types list. Non-empty if not :data:`None`.
+            web_page_url: Link to the public page of the external database.
+                :data:`~cybsi.api.common.Null` resets URL to empty value.
+                :data:`None` means URL is left unchanged.
+            task_execution_timeout: Enricher task execution timeout, sec.
+                Timeout must be in range [1;864000].
+                :data:`~cybsi.api.common.Null` means that Cybsi can use default timeout.
+                :data:`None` means timeout is left unchanged.
+            task_execution_attempts_count:
+                The maximum number of attempts to complete the task by the enricher.
+                Count must be in range [1;1000].
+                :data:`~cybsi.api.common.Null` means that Cybsi can use default count.
+                :data:`None` means that count is left unchanged.
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
+            :class:`~cybsi.api.error.NotFoundError`: External database not found.
+            :class:`~cybsi.api.error.ResourceModifiedError`:
+                External database changed since last request. Update tag and retry.
+        """
+        form: Dict[str, Any] = {}
+        if entity_types is not None:
+            form["entityTypes"] = [t.value for t in entity_types]
+        if web_page_url is not None:
+            form["webPageURL"] = _unwrap_nullable(web_page_url)
+        if task_execution_timeout is not None:
+            form["taskExecutionTimeout"] = _unwrap_nullable(task_execution_timeout)
+        if task_execution_attempts_count is not None:
+            form["taskExecutionAttemptsCount"] = _unwrap_nullable(
+                task_execution_attempts_count
+            )
+        path = f"{self._path}/{db_uuid}"
+        self._connector.do_patch(path=path, tag=tag, json=form)
+
+
+class ExternalDBView(_TaggedRefView):
     @property
     def data_source(self) -> RefView:
         """Data source reference representing external database."""

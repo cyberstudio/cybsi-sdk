@@ -2,7 +2,7 @@ import cgi
 import uuid
 from typing import List, cast, Any, Dict, Optional
 
-from ..common import RefView
+from .. import RefView
 from ..error import CybsiError
 from ..internal import BaseAPI, JsonObjectView
 from ..observable import ShareLevels, EntityView

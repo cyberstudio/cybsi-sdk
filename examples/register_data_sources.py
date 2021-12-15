@@ -4,8 +4,8 @@ from os import environ
 from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.error import DuplicateDataSourceType
 from cybsi.api.data_source import (
-    DataSourcesForm,
-    DataSourceTypesForm,
+    DataSourceForm,
+    DataSourceTypeForm,
 )
 
 if __name__ == "__main__":
@@ -17,12 +17,12 @@ if __name__ == "__main__":
     client = CybsiClient(config)
 
     try:  # store datasource_type
-        circle_type = DataSourceTypesForm(
+        circle_type = DataSourceTypeForm(
             short_name="CIRCL",
             long_name="Computer Incident Response Center Luxembourg",
         )
         ds_type_ref = client.data_source_types.register(circle_type)
-        datasource_form = DataSourcesForm(
+        datasource_form = DataSourceForm(
             type_uuid=ds_type_ref.uuid,
             name="MISP",
             long_name="MISP",

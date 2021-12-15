@@ -15,7 +15,7 @@ import uuid
 
 from typing import List, Union, cast
 
-from ..common import RefView
+from .. import RefView
 from ..internal import BaseAPI, JsonObjectForm, parse_rfc3339_timestamp
 from .enums import (
     EnrichmentErrorCodes,

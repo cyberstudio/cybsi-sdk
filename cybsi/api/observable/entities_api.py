@@ -6,7 +6,7 @@ from cybsi.api.error import JsonObject
 from .entity import EntityForm, EntityAggregateView, EntityKeyView
 
 from .enums import EntityTypes, EntityAggregateSections, EntityKeyTypes
-from ..common import RefView
+from .. import RefView
 from ..internal import BaseAPI, rfc3339_timestamp
 from ..pagination import Page
 

@@ -6,13 +6,15 @@ The reports can contain observations and artifacts. The artifact is a regular fi
 with additional attributes that can be analyzed or unpacked by the system.
 The observation typically provides group of facts obtained after analyzing an artifact.
 """
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 import uuid
 
-from ..common import RefView, TaggedRefView
-from ..internal import BaseAPI, JsonObjectForm
+from ..api import Nullable, _unwrap_nullable, Tag
+from ..view import _TaggedRefView
+from .. import RefView
 from ..artifact import ArtifactTypes
 from ..data_source import DataSourceCommonView
+from ..internal import BaseAPI, JsonObjectForm
 
 
 class AnalyzersAPI(BaseAPI):
@@ -56,14 +58,71 @@ class AnalyzersAPI(BaseAPI):
         r = self._connector.do_post(path=self._path, json=form.json())
         return RefView(r.json())
 
+    def edit(
+        self,
+        analyzer_uuid: uuid.UUID,
+        tag: Tag,
+        artifact_types: Optional[List[ArtifactTypes]] = None,
+        artifact_size_limit: Nullable[int] = None,
+        dashboard_url: Nullable[str] = None,
+        task_execution_timeout: Nullable[int] = None,
+        task_execution_attempts_count: Nullable[int] = None,
+    ) -> None:
+        """Edit the analyzer.
 
-class AnalyzerView(TaggedRefView):
+        Note:
+            Calls `PATCH /enrichment/analyzers/{analyzer_uuid}`.
+        Args:
+            analyzer_uuid: Analyzer uuid.
+            tag: :attr:`AnalyzerView.tag` value. Use :meth:`view` to retrieve it.
+            artifact_types: Non-empty artifact types list, if not :data:`None`.
+            artifact_size_limit:
+                Maximum allowable size of an artifact for analysis, bytes.
+                :data:`~cybsi.api.common.Null` means there is no limit.
+                :data:`None` means limit is left unchanged.
+            dashboard_url: Analyzer panel link.
+                :data:`~cybsi.api.common.Null` resets dashboard URL to empty value.
+                :data:`None` means URL is left unchanged.
+            task_execution_timeout: Enricher task execution timeout, sec.
+                Timeout must be in range [1;864000].
+                :data:`~cybsi.api.common.Null` means that Cybsi can use default timeout.
+                :data:`None` means timeout is left unchanged.
+            task_execution_attempts_count:
+                The maximum number of attempts to complete the task by the enricher.
+                Count must be in range [1;1000].
+                :data:`~cybsi.api.common.Null` means that Cybsi can use default count.
+                :data:`None` means that count is left unchanged.
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
+            :class:`~cybsi.api.error.NotFoundError`: Analyzer not found.
+            :class:`~cybsi.api.error.ResourceModifiedError`:
+                Analyzer changed since last request. Update tag and retry.
+        """
+        form: Dict[str, Any] = {}
+        if artifact_types is not None:
+            form["artifactTypes"] = [t.value for t in artifact_types]
+        if artifact_size_limit is not None:
+            form["artifactSizeLimit"] = _unwrap_nullable(artifact_size_limit)
+        if dashboard_url is not None:
+            form["dashboardURL"] = _unwrap_nullable(dashboard_url)
+        if task_execution_timeout is not None:
+            form["taskExecutionTimeout"] = _unwrap_nullable(task_execution_timeout)
+        if task_execution_attempts_count is not None:
+            form["taskExecutionAttemptsCount"] = _unwrap_nullable(
+                task_execution_attempts_count
+            )
+        path = f"{self._path}/{analyzer_uuid}"
+        self._connector.do_patch(path=path, tag=tag, json=form)
+
+
+class AnalyzerView(_TaggedRefView):
     """Analyzer view"""
 
     @property
     def artifact_types(self) -> List[ArtifactTypes]:
         """Artifact types we can enrich in the analyzer."""
-        return [ArtifactTypes(type) for typ in self._get("artifactTypes")]
+        return [ArtifactTypes(typ) for typ in self._get("artifactTypes")]
 
     @property
     def artifact_size_limit(self) -> Optional[int]:

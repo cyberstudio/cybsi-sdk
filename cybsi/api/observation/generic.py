@@ -10,7 +10,7 @@ import uuid
 
 from typing import Any, cast, List, Optional, Union
 
-from ..common import RefView
+from .. import RefView
 from ..internal import (
     BaseAPI,
     JsonObjectForm,
