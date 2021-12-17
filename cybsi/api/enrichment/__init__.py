@@ -9,12 +9,31 @@ from .config_rules import (
     ConfigRuleForm,
 )
 
+from .task import (
+    TaskAPI,
+    TaskView,
+    TaskForm,
+    ArtifactAnalysisParamsView,
+    ArtifactDownloadParamsView,
+    ArchiveUnpackParamsView,
+    ExternalDBLookupParamsView,
+    WhoisLookupParamsView,
+    DNSLookupParamsView,
+    ArtifactAnalysisParamsForm,
+    ArtifactDownloadParamsForm,
+    ArchiveUnpackParamsForm,
+    ExternalDBLookupParamsForm,
+    WhoisLookupParamsForm,
+    DNSLookupParamsForm,
+    ArtifactTaskResultView,
+    ReportTaskResultView,
+    ObservationTaskResultView,
+    EnrichmentTaskErrorView,
+)
+
 from .task_queue import (
     TaskQueueAPI,
     AssignedTaskView,
-    EnrichmentTaskParamsView,  # TODO: implement TaskAPI, import from .tasks
-    ArtifactAnalysisParamsView,  # TODO: implement TaskAPI, import from .tasks
-    ExternalDBLookupParamsView,  # TODO: implement TaskAPI, import from .tasks
     FailedTaskForm,
     CompletedTaskForm,
     TaskResultReportForm,
@@ -39,4 +58,5 @@ from .enums import (
     EnrichmentTaskPriorities,
     EnrichmentTypes,
     EnrichmentTriggerTypes,
+    EnrichmentTaskStatuses,
 )

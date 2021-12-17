@@ -167,7 +167,7 @@ class ConfigRuleForm(JsonObjectForm):
         triggers: List[EnrichmentTriggerTypes],
         data_source_uuids: List[uuid.UUID],
         enrichment: EnrichmentTypes,
-        is_disabled: bool = False,
+        is_disabled: Optional[bool] = False,
         trigger_data_source_uuids: Optional[List[uuid.UUID]] = None,
         artifact_types: Optional[List[ArtifactTypes]] = None,
         entity_types: Optional[List[ArtifactTypes]] = None,

@@ -17,10 +17,13 @@ from typing import List, Union, cast
 
 from ..common import RefView
 from ..internal import BaseAPI, JsonObjectForm, parse_rfc3339_timestamp
-from .enums import EnrichmentErrorCodes, EnrichmentTaskPriorities, EnrichmentTypes
+from .enums import (
+    EnrichmentErrorCodes,
+    EnrichmentTaskPriorities,
+    EnrichmentTypes,
+)
 from .task import (
     ArtifactAnalysisParamsView,
-    EnrichmentTaskParamsView,
     ExternalDBLookupParamsView,
 )
 from ..data_source import DataSourceCommonView
@@ -105,6 +108,11 @@ class TaskQueueAPI(BaseAPI):
         self._connector.do_post(path=path, json={"tasks": task_jsons})
 
 
+EnrichmentTaskQueueParamsView = Union[
+    ArtifactAnalysisParamsView, ExternalDBLookupParamsView
+]
+
+
 class AssignedTaskView(RefView):
     """Task assigned to enricher for execution."""
 
@@ -145,7 +153,7 @@ class AssignedTaskView(RefView):
         return EnrichmentTypes(self._get("type"))
 
     @property
-    def params(self) -> "EnrichmentTaskParamsView":
+    def params(self) -> EnrichmentTaskQueueParamsView:
         """Parameters of task. Determine exact type of parameters
         using property :attr:`type`.
 
@@ -163,7 +171,7 @@ class AssignedTaskView(RefView):
             >>>     print(lookup.entity)
         """
         params = self._param_types[self.type](self._get("params"))
-        return cast(EnrichmentTaskParamsView, params)
+        return cast(EnrichmentTaskQueueParamsView, params)
 
 
 class CompletedTaskForm(JsonObjectForm):
@@ -243,12 +251,15 @@ class FailedTaskForm(JsonObjectForm):
     """
 
     def __init__(
-        self, task_uuid: uuid.UUID, error_code: "EnrichmentErrorCodes", message: str
+        self,
+        task_uuid: uuid.UUID,
+        error_code: "EnrichmentErrorCodes",
+        message: str,
     ) -> None:
 
         super().__init__()
         self._data["uuid"] = str(task_uuid)
         self._data["error"] = {
-            "code": str(error_code),
+            "code": error_code.value,
             "message": message,
         }
