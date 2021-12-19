@@ -191,7 +191,7 @@ class SectionsView:
         """Associated with the entity attributes.
 
         Raises:
-            :class:`~cybsi.api.observable.SectionNotFoundError`:
+            :class:`KeyError`:
                 Section is absent in the :class:`~cybsi.api.observable.SectionsView`.
         """
         val = self._sections[EntityAggregateSections.AssociatedAttributes]
@@ -202,7 +202,7 @@ class SectionsView:
         """Natural attributes of the entity.
 
         Raises:
-            :class:`~cybsi.api.observable.SectionNotFoundError`:
+            :class:`KeyError`:
                 Section is absent in the :class:`~cybsi.api.observable.SectionsView`.
         """
         val = self._sections[EntityAggregateSections.NaturalAttributes]
@@ -213,7 +213,7 @@ class SectionsView:
         """Entity threat status.
 
         Raises:
-            :class:`~cybsi.api.observable.SectionNotFoundError`:
+            :class:`KeyError`:
                 Section is absent in the :class:`~cybsi.api.observable.SectionsView`.
         """
         return self._sections[EntityAggregateSections.Threat]  # type: ignore
@@ -223,7 +223,7 @@ class SectionsView:
         """AV scanning statistics.
 
         Raises:
-            :class:`~cybsi.api.observable.SectionNotFoundError`:
+            :class:`KeyError`:
                 Section is absent in the :class:`~cybsi.api.observable.SectionsView`.
         """
         val = self._sections[EntityAggregateSections.AVScanStatistics]
@@ -234,7 +234,7 @@ class SectionsView:
         """GeoIP information.
 
         Raises:
-            :class:`~cybsi.api.observable.SectionNotFoundError`:
+            :class:`KeyError`:
                 Section is absent in the :class:`~cybsi.api.observable.SectionsView`.
         """
         return self._sections[EntityAggregateSections.GeoIP]  # type: ignore
@@ -244,7 +244,7 @@ class SectionsView:
         """Labels of the entity.
 
         Raises:
-            :class:`~cybsi.api.observable.SectionNotFoundError`:
+            :class:`KeyError`:
                 Section is absent in the :class:`~cybsi.api.observable.SectionsView`.
         """
         return self._sections[EntityAggregateSections.Labels]  # type: ignore
