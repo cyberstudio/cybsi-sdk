@@ -98,3 +98,11 @@ class ThreatStatus(Enum):
     Unknown = "Unknown"
     Malicious = "Malicious"
     NonMalicious = "NonMalicious"
+
+
+@document_enum
+class LinkDirection(Enum):
+    """Direction of links."""
+
+    Forward = "Forward"
+    Reverse = "Reverse"

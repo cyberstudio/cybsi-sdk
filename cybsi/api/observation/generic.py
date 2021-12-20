@@ -22,6 +22,7 @@ from ..observable import (
     EntityView,
     RelationshipKinds,
     ShareLevels,
+    RelationshipView,
 )
 from ..pagination import Page
 
@@ -280,44 +281,6 @@ class GenericObservationContentView(JsonObjectView):
 
         attributes = self._get("entityAttributeValues")
         return [AttributeValueView(x) for x in attributes]
-
-
-class RelationshipView(JsonObjectView):
-    """Relationship fact view."""
-
-    @property
-    def source(self) -> EntityView:
-        """Relationship's source entity.
-
-        Warning:
-            Ref uuid may be zero uuid,
-            if source entity keys were invalid during registration.
-        """
-
-        return EntityView(self._get("source"))
-
-    @property
-    def kind(self) -> RelationshipKinds:
-        """Kind of the relationship."""
-
-        return RelationshipKinds(self._get("kind"))
-
-    @property
-    def target(self) -> EntityView:
-        """Target entity.
-
-        Warning:
-            Ref uuid may be zero uuid,
-            if source entity keys were invalid during registration.
-        """
-
-        return EntityView(self._get("target"))
-
-    @property
-    def confidence(self) -> float:
-        """Relationship fact confidence."""
-
-        return float(cast(float, self._get("confidence")))
 
 
 class AttributeValueView(JsonObjectView):

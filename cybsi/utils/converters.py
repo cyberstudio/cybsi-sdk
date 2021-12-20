@@ -4,7 +4,7 @@ a string to a valid value of a chosen type.
 """
 from typing import Any, Callable, Dict
 
-from cybsi.api.observable import EntityKeyTypes, AttributeNames
+from cybsi.api.observable.enums import EntityKeyTypes, AttributeNames, RelationshipKinds
 
 
 def _str_converter(val: str):
@@ -99,3 +99,58 @@ def convert_attribute_value(attribute_name: AttributeNames, val: Any) -> Any:
             f'"{val}" is not convertible to {attribute_name} value'
         ) from None
     return result
+
+
+def convert_attribute_name_kebab(attribute_name: AttributeNames) -> str:
+    """Convert attribute name value to kebab-case.
+
+        Args:
+        attribute_name: attribute name, such of 'DomainName'.
+    Return:
+        Attribute name on kebab-case, such of `domain-name`.
+    """
+    return _attr_value_kebab_converters[attribute_name]
+
+
+def convert_relationship_kind_kebab(kind: RelationshipKinds) -> str:
+    """Convert relationship kind value to kebab-case.
+
+        Args:
+        kind: relationship kind, such of 'ResolvesTo'.
+    Return:
+        Relationship kind on kebab-case, such of `resolves-to`.
+    """
+    return _rel_kind_kebab_converters[kind]
+
+
+_attr_value_kebab_converters: Dict[AttributeNames, str] = {
+    AttributeNames.Size: "size",
+    AttributeNames.Class: "class",
+    AttributeNames.Sectors: "sectors",
+    AttributeNames.DisplayNames: "display-names",
+    AttributeNames.Names: "names",
+    AttributeNames.NodeRoles: "node-roles",
+    AttributeNames.MalwareFamilyAliases: "malware-family-aliases",
+    AttributeNames.IsIoC: "is-ioc",
+    AttributeNames.IsTrusted: "is-trusted",
+    AttributeNames.IsMalicious: "is-malicious",
+    AttributeNames.IsDGA: "is-dga",
+}
+
+_rel_kind_kebab_converters: Dict[RelationshipKinds, str] = {
+    RelationshipKinds.Has: "has",
+    RelationshipKinds.Contains: "contains",
+    RelationshipKinds.BelongsToDeprecated: "belongs-to",
+    RelationshipKinds.ConnectsTo: "connects-to",
+    RelationshipKinds.Drops: "drops",
+    RelationshipKinds.Uses: "uses",
+    RelationshipKinds.Owns: "owns",
+    RelationshipKinds.Supports: "supports",
+    RelationshipKinds.Resolves: "resolves-to",
+    RelationshipKinds.VariantOfDeprecated: "variant-of",
+    RelationshipKinds.Targets: "targets",
+    RelationshipKinds.Exploits: "exploits",
+    RelationshipKinds.Hosts: "hosts",
+    RelationshipKinds.Serves: "serves",
+    RelationshipKinds.Locates: "locates",
+}

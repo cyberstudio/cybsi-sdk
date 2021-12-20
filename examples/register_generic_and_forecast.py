@@ -14,33 +14,27 @@ from cybsi.api.observable import (
 from cybsi.api.observation import GenericObservationForm
 
 
-def create_generic_observation():
-    domain = EntityForm(EntityTypes.DomainName)
-    domain.add_key(EntityKeyTypes.String, "test.com")
-
-    ip_address = EntityForm(EntityTypes.IPAddress)
-    ip_address.add_key(EntityKeyTypes.String, "8.8.8.8")
-
+def create_generic_observation(source_entity: EntityForm, target_entity: EntityForm):
     observation = (
         GenericObservationForm(
             share_level=ShareLevels.Green, seen_at=datetime.now(timezone.utc)
         )
         .add_attribute_fact(
-            entity=domain,
+            entity=source_entity,
             attribute_name=AttributeNames.IsIoC,
             value=True,
             confidence=0.9,
         )
         .add_attribute_fact(
-            entity=domain,
+            entity=target_entity,
             attribute_name=AttributeNames.IsMalicious,
             value=True,
             confidence=0.9,
         )
         .add_entity_relationship(
-            source=domain,
+            source=source_entity,
             kind=RelationshipKinds.Resolves,
-            target=ip_address,
+            target=target_entity,
             confidence=0.5,
         )
     )
@@ -55,6 +49,27 @@ if __name__ == "__main__":
     config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
 
-    generic_observation = create_generic_observation()
+    domain = EntityForm(EntityTypes.DomainName)
+    domain.add_key(EntityKeyTypes.String, "test.com")
+    domain_ref = client.observable.entities.register(domain)
+
+    ip_address = EntityForm(EntityTypes.IPAddress)
+    ip_address.add_key(EntityKeyTypes.String, "8.8.8.8")
+    ip_address_ref = client.observable.entities.register(ip_address)
+
+    generic_observation = create_generic_observation(domain, ip_address)
     ref = client.observations.generics.register(generic_observation)
     view = client.observations.generics.view(ref.uuid)
+
+    attribute_forecast = client.observable.entities.forecast_attribute_values(
+        ip_address_ref.uuid, AttributeNames.IsMalicious
+    )
+    print(attribute_forecast)
+
+    link_forecast = client.observable.entities.forecast_links(ip_address_ref.uuid)
+    print(link_forecast.data()[0])
+
+    relationship_forecast = client.observable.relationships.forecast(
+        domain_ref.uuid, ip_address_ref.uuid, RelationshipKinds.Resolves
+    )
+    print(relationship_forecast)
