@@ -22,7 +22,7 @@ from .enums import (
     EnrichmentTaskPriorities,
     EnrichmentTypes,
 )
-from .task import (
+from .tasks import (
     ArtifactAnalysisParamsView,
     ExternalDBLookupParamsView,
 )

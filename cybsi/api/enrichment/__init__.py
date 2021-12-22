@@ -9,8 +9,8 @@ from .config_rules import (
     ConfigRuleForm,
 )
 
-from .task import (
-    TaskAPI,
+from .tasks import (
+    TasksAPI,
     TaskView,
     TaskForm,
     ArtifactAnalysisParamsView,

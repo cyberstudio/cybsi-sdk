@@ -1,7 +1,7 @@
 from ..internal import BaseAPI
 
 from .task_queue import TaskQueueAPI
-from .task import TaskAPI
+from .tasks import TasksAPI
 from .config_rules import ConfigRulesAPI
 from .external_dbs import ExternalDBsAPI
 from .analyzers import AnalyzersAPI
@@ -16,9 +16,9 @@ class EnrichmentAPI(BaseAPI):
         return ConfigRulesAPI(self._connector)
 
     @property
-    def task(self) -> "TaskAPI":
+    def tasks(self) -> "TasksAPI":
         """Get enrichment tasks route."""
-        return TaskAPI(self._connector)
+        return TasksAPI(self._connector)
 
     @property
     def task_queue(self) -> "TaskQueueAPI":

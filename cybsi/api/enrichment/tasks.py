@@ -26,7 +26,7 @@ from .enums import (
 )
 
 
-class TaskAPI(BaseAPI):
+class TasksAPI(BaseAPI):
     """Enrichment task API."""
 
     _path = "/enrichment/tasks"
