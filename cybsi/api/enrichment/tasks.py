@@ -460,12 +460,12 @@ class TaskView(RefView):
         return self._map_optional("dataSource", DataSourceCommonView)
 
     @property
-    def type(self) -> "EnrichmentTypes":
+    def type(self) -> EnrichmentTypes:
         """Enrichment type."""
         return EnrichmentTypes(self._get("type"))
 
     @property
-    def params(self) -> "EnrichmentTaskParamsView":
+    def params(self) -> EnrichmentTaskParamsView:
         """Parameters of task. Determine exact type of parameters
         using property :attr:`type`.
 
@@ -491,7 +491,7 @@ class TaskView(RefView):
         return EnrichmentTaskStatuses(self._get("status"))
 
     @property
-    def error(self) -> Optional["EnrichmentTaskErrorView"]:
+    def error(self) -> Optional[EnrichmentTaskErrorView]:
         """Enrichment task error.
 
         Can be filled only if the enrichment task status is Failed or Aborted.
@@ -499,7 +499,7 @@ class TaskView(RefView):
         return self._map_optional("error", EnrichmentTaskErrorView)
 
     @property
-    def result(self) -> "EnrichmentTaskResultView":
+    def result(self) -> EnrichmentTaskResultView:
         """Result of task. Determine exact type of result
         using property :attr:`type`.
 

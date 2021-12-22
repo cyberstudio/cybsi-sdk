@@ -4,4 +4,8 @@ from .api import (
     ReportsAPI,
     ReportForm,
     ReportView,
+    ReportHeaderView,
+    SimilarReportView,
+    SimilarReportCorrelationView,
+    MatchedEntitiesView,
 )

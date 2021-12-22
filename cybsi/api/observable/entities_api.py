@@ -58,7 +58,7 @@ class EntitiesAPI(BaseAPI):
         """Get an entity view.
 
         Note:
-            Calls `GET /observable/entities/{query_uuid}`.
+            Calls `GET /observable/entities/{entity_uuid}`.
         Args:
             entity_uuid: Entity uuid.
             sections: Sections to be aggregated.
