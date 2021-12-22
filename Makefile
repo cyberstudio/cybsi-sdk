@@ -25,7 +25,7 @@ venv-update: $(VENV_DIR) requirements.txt docs/requirements.txt
 	$(VENV_DIR)/bin/pip install -r docs/requirements.txt
 
 include docs/Makefile
-build-docs: html dirhtml
+build-docs: html
 
 .PHONY: image-clean
 image-build:
