@@ -1,6 +1,15 @@
 Release History
 ===============
 
+0.0.15 (2021-12-22)
+-------------------
+- Extend ReportForm constructor paramters
+- Add entity relationships to generic observations form
+- Add Data source API
+- Add functions to edit data sources, replists, search queries, analyzers, external databases
+- Add Task API
+- Add entity registration and aggregation APIs
+
 0.0.14 (2021-12-02)
 -------------------
 - Add API for external databases

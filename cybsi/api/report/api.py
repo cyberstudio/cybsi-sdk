@@ -77,6 +77,8 @@ class ReportForm(JsonObjectForm):
         external_refs: List of external references associated with report.
         labels: List of report labels.
         data_source: UUID of report's associated datasource.
+        observation_uuids: List of report's observations.
+        artifact_uuids: List of report's artifacts.
     """
 
     def __init__(
@@ -90,6 +92,8 @@ class ReportForm(JsonObjectForm):
         external_refs: Optional[List[str]] = None,
         labels: Optional[List[str]] = None,
         data_source: Optional[uuid.UUID] = None,
+        observation_uuids: Optional[List[uuid.UUID]] = None,
+        artifact_uuids: Optional[List[uuid.UUID]] = None,
     ):
         super().__init__()
         self._data["shareLevel"] = share_level.value
@@ -109,6 +113,10 @@ class ReportForm(JsonObjectForm):
             self._data["labels"] = labels
         if data_source is not None:
             self._data["dataSource"] = str(data_source)
+        if observation_uuids is not None:
+            self._data["observations"] = [str(u) for u in observation_uuids]
+        if artifact_uuids is not None:
+            self._data["artifacts"] = [str(u) for u in artifact_uuids]
 
     def add_observation(self, observation_uuid: uuid.UUID) -> "ReportForm":
         """Add observation to report.
