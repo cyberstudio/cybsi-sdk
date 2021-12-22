@@ -14,9 +14,9 @@ class ObservationsAPI(BaseAPI):
 
 
 class ObservationCommonView(RefView):
-    """Observation short view, used in ReportView"""
+    """Observation short view."""
 
     @property
-    def type(self) -> ObservationTypes:
+    def type(self) -> "ObservationTypes":
         """Observation type."""
-        return self._get("type")
+        return ObservationTypes(self._get("type"))

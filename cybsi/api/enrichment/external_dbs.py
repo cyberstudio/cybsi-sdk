@@ -77,16 +77,16 @@ class ExternalDBsAPI(BaseAPI):
             tag: :attr:`ExternalDBView.tag` value. Use :meth:`view` to retrieve it.
             entity_types: Entity types list. Non-empty if not :data:`None`.
             web_page_url: Link to the public page of the external database.
-                :data:`~cybsi.api.common.Null` resets URL to empty value.
+                :data:`~cybsi.api.Null` resets URL to empty value.
                 :data:`None` means URL is left unchanged.
             task_execution_timeout: Enricher task execution timeout, sec.
                 Timeout must be in range [1;864000].
-                :data:`~cybsi.api.common.Null` means that Cybsi can use default timeout.
+                :data:`~cybsi.api.Null` means that Cybsi can use default timeout.
                 :data:`None` means timeout is left unchanged.
             task_execution_attempts_count:
                 The maximum number of attempts to complete the task by the enricher.
                 Count must be in range [1;1000].
-                :data:`~cybsi.api.common.Null` means that Cybsi can use default count.
+                :data:`~cybsi.api.Null` means that Cybsi can use default count.
                 :data:`None` means that count is left unchanged.
         Raises:
             :class:`~cybsi.api.error.InvalidRequestError`:

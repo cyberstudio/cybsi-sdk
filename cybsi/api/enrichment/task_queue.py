@@ -146,9 +146,9 @@ class AssignedTaskView(RefView):
         """Enrichment type.
 
         Note:
-            Possible values are subset of :class:`EnrichmentTypes` values.
-            Only :attr:`~cybsi.api.enrichment.EnrichmentTypes.ArtifactAnalysis` and
-            :attr:`~cybsi.api.enrichment.EnrichmentTypes.ExternalDBLookup` are possible here.
+            Possible values are subset of :class:`.enums.EnrichmentTypes` values.
+            Only :attr:`.enums.EnrichmentTypes.ArtifactAnalysis` and
+            :attr:`.enums.EnrichmentTypes.ExternalDBLookup` are possible here.
         """  # noqa: E501
         return EnrichmentTypes(self._get("type"))
 
@@ -181,9 +181,9 @@ class CompletedTaskForm(JsonObjectForm):
         task_uuid: Assigned task uuid.
         result: Task result, type depends on enrichment type.
 
-          * For :attr:`~cybsi.api.enrichment.EnrichmentTypes.ExternalDBLookup`
+          * For :attr:`.enums.EnrichmentTypes.ExternalDBLookup`
             provide :class:`TaskResultObservationForm`.
-          * For :attr:`~cybsi.api.enrichment.EnrichmentTypes.ArtifactAnalysis`
+          * For :attr:`.enums.EnrichmentTypes.ArtifactAnalysis`
             provide :class:`TaskResultReportForm`.
 
     """  # noqa: E501

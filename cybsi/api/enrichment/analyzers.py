@@ -78,19 +78,19 @@ class AnalyzersAPI(BaseAPI):
             artifact_types: Non-empty artifact types list, if not :data:`None`.
             artifact_size_limit:
                 Maximum allowable size of an artifact for analysis, bytes.
-                :data:`~cybsi.api.common.Null` means there is no limit.
+                :data:`~cybsi.api.Null` means there is no limit.
                 :data:`None` means limit is left unchanged.
             dashboard_url: Analyzer panel link.
-                :data:`~cybsi.api.common.Null` resets dashboard URL to empty value.
+                :data:`~cybsi.api.Null` resets dashboard URL to empty value.
                 :data:`None` means URL is left unchanged.
             task_execution_timeout: Enricher task execution timeout, sec.
                 Timeout must be in range [1;864000].
-                :data:`~cybsi.api.common.Null` means that Cybsi can use default timeout.
+                :data:`~cybsi.api.Null` means that Cybsi can use default timeout.
                 :data:`None` means timeout is left unchanged.
             task_execution_attempts_count:
                 The maximum number of attempts to complete the task by the enricher.
                 Count must be in range [1;1000].
-                :data:`~cybsi.api.common.Null` means that Cybsi can use default count.
+                :data:`~cybsi.api.Null` means that Cybsi can use default count.
                 :data:`None` means that count is left unchanged.
         Raises:
             :class:`~cybsi.api.error.InvalidRequestError`:

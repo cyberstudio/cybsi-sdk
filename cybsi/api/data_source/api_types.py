@@ -20,7 +20,7 @@ class DataSourceTypesAPI(BaseAPI):
         Args:
             form: Filled data source type form.
         Raises:
-            :class:`~cybsi.api.error.DuplicateDataSourceType`: DataSourceType
+            :class:`~cybsi.api.error.ConflictError`: DataSourceType
                 already exist.
         """
         r = self._connector.do_post(path=self._path, json=form.json())
@@ -62,7 +62,7 @@ class DataSourceTypesAPI(BaseAPI):
                 Confidence for datasource type.
                 Overrides default confidence of the data source type.
                 Valid values are in [0, 1].
-                :data:`~cybsi.api.common.Null` means
+                :data:`~cybsi.api.Null` means
                 that Cybsi can use default confidence.
                 :data:`None` means that confidence is left unchanged.
         Raises:

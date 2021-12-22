@@ -36,7 +36,7 @@ class CybsiClient:
     so use client's functions wisely.
 
     Hint:
-        Use :class:`~cybsi_sdk.client.CybsiClient` properties
+        Use :class:`~cybsi.api.CybsiClient` properties
         to construct needed API handles. Don't construct sub-APIs manually.
 
         Do this:

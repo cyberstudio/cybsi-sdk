@@ -213,7 +213,7 @@ class GenericObservationForm(JsonObjectForm):
 
 class GenericObservationView(JsonObjectView):
     """Generic observation view,
-    as retrieved by :meth:`GenericObservationAPI.view`."""
+    as retrieved by :meth:`GenericObservationsAPI.view`."""
 
     @property
     def reporter(self) -> RefView:

@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class APIKeyAuth:
     """Callable. Authomatically handles authentication
-    of :class:`CybsiClient` requests using API key.
+    of :class:`~cybsi.api.CybsiClient` requests using API key.
 
     Args:
         api_url: Cybsi API URL.

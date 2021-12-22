@@ -3,6 +3,7 @@
 from .api import (
     ArtifactsAPI,
     ArtifactView,
+    ArtifactCommonView,
     ArtifactContent,
     ArtifactContentView,
 )

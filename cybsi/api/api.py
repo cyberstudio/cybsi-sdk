@@ -31,6 +31,7 @@ Null = NullType()
 """The only possible value of :class:`NullType`"""
 
 T = TypeVar("T")
+"""Non-null type."""
 
 Nullable = Union[T, None, NullType]
 """Missing JSON field and ``null`` JSON field sometimes have a difference in Cybsi API.

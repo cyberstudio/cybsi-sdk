@@ -50,9 +50,11 @@ class DataSourcesAPI(BaseAPI):
         Args:
             form: Filled data source form.
         Raises:
-            :class:`~cybsi.api.error.DuplicateDataSource`: Data source already exist.
-            :class:`~cybsi.api.error.SemanticErrorCodes.DataSourceTypeNotFound`:
-                Data source type not found.
+            :class:`~cybsi.api.error.ConflictError`: Data source already exist.
+            :class:`~cybsi.api.error.SemanticError`
+        Note:
+            Semantic error codes:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceTypeNotFound`
         """
         r = self._connector.do_post(path=self._path, json=form.json())
         return RefView(r.json())
@@ -76,7 +78,7 @@ class DataSourcesAPI(BaseAPI):
                 Confidence for data source.
                 Overrides confidence of the data source inherited from data source type.
                 Valid values are in [0, 1].
-                :data:`~cybsi.api.common.Null` means
+                :data:`~cybsi.api.Null` means
                 that Cybsi can use confidence provided by data source type.
                 :data:`None` means that confidence is left unchanged.
         Raises:

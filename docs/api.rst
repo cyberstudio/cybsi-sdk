@@ -49,7 +49,7 @@ Configuration
 
 Tasks
 """""
-.. automodule:: cybsi.api.enrichment.task
+.. automodule:: cybsi.api.enrichment.tasks
     :members:
     :inherited-members:
 
@@ -83,8 +83,10 @@ Observations
 .. automodule:: cybsi.api.observation
     :members:
     :inherited-members:
-
 .. automodule:: cybsi.api.observation.api
+    :members:
+    :inherited-members:
+.. automodule:: cybsi.api.observation.enums
     :members:
     :inherited-members:
 

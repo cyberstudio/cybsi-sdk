@@ -50,6 +50,14 @@ add_function_parentheses = True
 # unit titles (such as .. function::).
 add_module_names = True
 
+# Warn about all references where the target cannot be found.
+nitpicky = True
+nitpick_ignore = [
+    ("py:class", "T"),  # Ignore classic typevar
+    ("py:obj", "cybsi.api.api.T"),  # https://github.com/sphinx-doc/sphinx/issues/9705
+    ("py:class", "requests.Response")
+]
+
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "colorful"
 

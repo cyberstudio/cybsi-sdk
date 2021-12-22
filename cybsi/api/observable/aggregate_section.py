@@ -8,6 +8,7 @@ from ..internal import JsonObject, JsonObjectView, list_mapper, parse_rfc3339_ti
 from .enums import EntityAggregateSections, ThreatStatus, ShareLevels
 
 T = TypeVar("T")
+"""Type of section data. Depends on section name."""
 
 
 class SectionView(JsonObjectView, Generic[T]):

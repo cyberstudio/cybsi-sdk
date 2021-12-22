@@ -213,7 +213,7 @@ class ErrorPosition(JsonObjectView):
 
 class StoredQueryCommonView(RefView):
     """Stored query short view,
-    as retrieved by :meth:`ReplistsAPI.view`."""
+    as retrieved by :meth:`~cybsi.api.replist.ReplistsAPI.view`."""
 
     @property
     def name(self) -> str:

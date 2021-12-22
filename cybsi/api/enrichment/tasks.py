@@ -41,6 +41,7 @@ class TasksAPI(BaseAPI):
         Returns:
             Reference to enrichment task in API.
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`: Form values are invalid.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
         Note:
             Semantic error codes specific for this method:
@@ -48,7 +49,6 @@ class TasksAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.ArtifactNotFound`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.EnrichmentNotAllowed`
-              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidData`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKeySet`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
         """
