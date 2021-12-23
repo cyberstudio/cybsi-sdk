@@ -1,19 +1,23 @@
 import cgi
 import uuid
+from datetime import datetime
 from typing import List, cast, Any, Dict, Optional
 
 from .. import RefView
 from ..error import CybsiError
-from ..internal import BaseAPI, JsonObjectView
+from ..internal import BaseAPI, JsonObjectView, parse_rfc3339_timestamp
 from ..observable import ShareLevels, EntityView
 
 from .enums import ArtifactTypes, ArtifactContentDownloadCompressionTypes
+from ..pagination import Page
+from ..view import _TaggedRefView
 
 
 class ArtifactsAPI(BaseAPI):
     """Artifact API."""
 
     _path = "/enrichment/artifacts"
+    _artifact_types_path = "/enrichment/artifact-type"
 
     def view(self, artifact_uuid: uuid.UUID) -> "ArtifactView":
         """Get an artifact view.
@@ -30,6 +34,46 @@ class ArtifactsAPI(BaseAPI):
         path = f"{self._path}/{artifact_uuid}"
         r = self._connector.do_get(path)
         return ArtifactView(r.json())
+
+    def view_registrations(
+        self, artifact_uuid: uuid.UUID
+    ) -> List["ArtifactRegistrationView"]:
+        """Get artifact registrations.
+
+        Note:
+            Calls `GET /enrichment/artifacts/{artifact_uuid}/registrations`.
+        Args:
+            artifact_uuid: Artifact uuid.
+        Returns:
+            List of artifact registrations.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Artifact not found.
+        """
+        path = f"{self._path}/{artifact_uuid}/registrations"
+        r = self._connector.do_get(path)
+        return [ArtifactRegistrationView(v) for v in r.json()]
+
+    def recognize_type(self, data: Any) -> "ArtifactTypeRecognizedView":
+        """Recognize artifact type by its first bytes.
+
+        The function allows to send the entire artifact, but it's recommended
+        to send 10KB or less to save time and bandwidth.
+
+        Note:
+            Calls `PUT /enrichment/artifact-type`.
+        Args:
+            data: File-like object. If you have bytes, wrap them in BytesIO.
+        Returns:
+            Recognized artifact type.
+        See Also:
+            The function is similar to :meth:`upload`.
+            The example for :meth:`upload` is applicable here too.
+        """
+
+        form = {"file": ("filename", data)}
+
+        r = self._connector.do_put(path=self._artifact_types_path, files=form)
+        return ArtifactTypeRecognizedView(r.json())
 
     def upload(
         self,
@@ -112,6 +156,73 @@ class ArtifactsAPI(BaseAPI):
         filename = _parse_content_filename(r)
         return ArtifactContent(filename, r.raw)
 
+    def filter(
+        self,
+        artifact_type: Optional[ArtifactTypes] = None,
+        data_source_uuids: Optional[List[uuid.UUID]] = None,
+        file_uuid: Optional[uuid.UUID] = None,
+        artifact_hash: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+    ) -> Page["ArtifactCommonView"]:
+        """Filter artifacts using provided parameters.
+
+        Note:
+            Calls `GET /enrichment/artifacts`
+        Args:
+            artifact_type: Artifact type.
+            data_source_uuids: Data sources of the artifact.
+            file_uuid: Artifact hash must be the same
+                as one of the hashes of provided File entity.
+            artifact_hash: Artifact hash.
+                Hash type (md5, sha1, sha256) is determined using its length.
+            cursor: Page cursor.
+            limit: Page limit.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Query contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+                * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+                * :attr:`~cybsi.api.error.SemanticErrorCodes.FileNotFound`
+        Return:
+            Page containing artifact descriptions.
+        """
+        params: Dict[str, Any] = {}
+        if artifact_type:
+            params["type"] = artifact_type.value
+        if data_source_uuids:
+            params["dataSourceUUID"] = [str(u) for u in data_source_uuids]
+        if file_uuid:
+            params["fileUUID"] = str(file_uuid)
+        if artifact_hash:
+            params["hash"] = artifact_hash
+        if cursor:
+            params["cursor"] = cursor
+        if limit:
+            params["limit"] = str(limit)
+
+        resp = self._connector.do_get(self._path, params=params)
+        page = Page(self._connector.do_get, resp, ArtifactCommonView)
+        return page
+
+
+class ArtifactTypeRecognizedView(JsonObjectView):
+    """Artifact type view, as recognized by Cybsi."""
+
+    @property
+    def type(self) -> ArtifactTypes:
+        """Artifact type."""
+        return ArtifactTypes(self._get("type"))
+
+    @property
+    def format_description(self) -> str:
+        """Format description (magic).
+
+        Example:
+         ``PE32 executable (GUI) Intel 80386, for MS Windows, Nullsoft Installer self-extracting archive``
+        """  # noqa: E501
+        return self._get("formatDescription")
+
 
 class ArtifactContent:
     """Binary artifact content.
@@ -170,7 +281,7 @@ class ArtifactCommonView(RefView):
         return self._get("type")
 
 
-class ArtifactView(RefView):
+class ArtifactView(_TaggedRefView):
     """Artifact view."""
 
     @property
@@ -236,3 +347,31 @@ class ArtifactContentView(JsonObjectView):
     def format_description(self) -> Optional[str]:
         """File format description magically extracted from signature."""
         return self._get_optional("formatDescription")
+
+
+class ArtifactRegistrationView(JsonObjectView):
+    """Artifact registration view."""
+
+    @property
+    def data_source(self) -> RefView:
+        """Data source which registered the artifact."""
+        return RefView(self._get("dataSource"))
+
+    @property
+    def type(self) -> ArtifactTypes:
+        """Artifact type."""
+        return ArtifactTypes(self._get("type"))
+
+    @property
+    def file_name(self) -> str:
+        """Artifact file name"""
+        return self._get("fileName")
+
+    @property
+    def share_level(self) -> ShareLevels:
+        """Artifact share level"""
+        return ShareLevels(self._get("shareLevel"))
+
+    @property
+    def registered_at(self) -> datetime:
+        return parse_rfc3339_timestamp(self._get("registeredAt"))

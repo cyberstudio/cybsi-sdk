@@ -73,10 +73,10 @@ class TasksAPI(BaseAPI):
 
     def filter(
         self,
-        cursor: Optional[str] = None,
-        limit: Optional[int] = None,
         artifact_uuid: Optional[uuid.UUID] = None,
         entity_uuid: Optional[uuid.UUID] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
     ) -> Page["TaskView"]:
         """Get enrichment task filtration list.
 

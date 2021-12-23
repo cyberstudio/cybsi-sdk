@@ -6,5 +6,7 @@ from .api import (
     ArtifactCommonView,
     ArtifactContent,
     ArtifactContentView,
+    ArtifactRegistrationView,
+    ArtifactTypeRecognizedView,
 )
 from .enums import ArtifactTypes, ArtifactContentDownloadCompressionTypes
