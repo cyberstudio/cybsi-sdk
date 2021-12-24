@@ -8,7 +8,7 @@ from .entity import EntityForm, EntityAggregateView, EntityKeyView
 from .enums import EntityTypes, EntityAggregateSections, EntityKeyTypes
 from .. import RefView
 from ..internal import BaseAPI, rfc3339_timestamp
-from ..pagination import Page
+from ..pagination import Page, Cursor
 
 
 class EntitiesAPI(BaseAPI):
@@ -107,7 +107,7 @@ class EntitiesAPI(BaseAPI):
         entity_uuids: List[uuid.UUID],
         sections: Optional[List[EntityAggregateSections]] = None,
         forecast_at: Optional[datetime] = None,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page[EntityAggregateView]:
         """Get list of aggregated entities.
@@ -154,7 +154,7 @@ class EntitiesAPI(BaseAPI):
         if forecast_at is not None:
             params["forecastAt"] = rfc3339_timestamp(forecast_at)
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
             params["limit"] = limit
         r = self._connector.do_get(path=self._path, params=params)

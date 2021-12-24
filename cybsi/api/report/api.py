@@ -6,7 +6,7 @@ import uuid
 
 from cybsi.api.artifact.api import ArtifactCommonView
 from ..observation import ObservationCommonView
-from ..pagination import Page
+from ..pagination import Page, Cursor
 
 from .. import RefView
 from ..internal import (
@@ -79,7 +79,7 @@ class ReportsAPI(BaseAPI):
         created_after: Optional[datetime] = None,
         updated_before: Optional[datetime] = None,
         updated_after: Optional[datetime] = None,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["ReportHeaderView"]:
         """Get report header filtration list that matches the specified criteria.
@@ -150,7 +150,7 @@ class ReportsAPI(BaseAPI):
         if updated_after is not None:
             params["updatedAfter"] = rfc3339_timestamp(updated_after)
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
 
@@ -163,7 +163,7 @@ class ReportsAPI(BaseAPI):
         report_uuid: uuid.UUID,
         reporter_uuid: Optional[uuid.UUID] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["SimilarReportView"]:
         """Get similar reports filtration list in descending order of similarity.
@@ -188,7 +188,7 @@ class ReportsAPI(BaseAPI):
         if data_source_uuid is not None:
             params["dataSourceUUID"] = str(data_source_uuid)
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
 
@@ -220,7 +220,7 @@ class ReportsAPI(BaseAPI):
         return SimilarReportView(r.json())
 
     def search_labels(
-        self, prefix: str, cursor: Optional[str] = None, limit: Optional[int] = None
+        self, prefix: str, cursor: Optional[Cursor] = None, limit: Optional[int] = None
     ) -> Page[str]:
         """Get report label filtration list.
 
@@ -235,7 +235,7 @@ class ReportsAPI(BaseAPI):
         """
         params: Dict[str, Any] = {"prefix": prefix}
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
 

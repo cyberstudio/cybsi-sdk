@@ -7,9 +7,23 @@ See Also:
 """
 import requests
 
-from typing import TypeVar, Callable, Iterator, List, Generic, Optional
+from typing import TypeVar, Callable, Iterator, List, Generic, Optional, cast
 
-Cursor = str
+
+class Cursor:
+
+    """:attr:`Page.cursor` value.
+    Use :meth:`Page` to retrieve it."""
+
+    pass
+
+
+# This is a hack to prevent Sphinx autodoc-typehint type inlining.
+# If we simply alias Cursor = str, it inlines str everywhere,
+# and functions lose descriptive parameter and return value types.
+# Additionally, this hack prevents SDK users from creating Cursor instances.
+# Users have to call view()-like methods.
+Cursor.__supertype__ = str  # type: ignore
 
 DEFAULT_PAGE_LIMIT = 30
 X_CURSOR_HEADER = "X-Cursor"
@@ -38,13 +52,19 @@ class Page(Generic[T]):
 
     @property
     def next_link(self) -> str:
-        """Next page link"""
+        """Next page link."""
         return self._resp.links.get("next", {}).get("url")
 
     @property
     def cursor(self) -> Cursor:
-        """Page cursor"""
-        return self._resp.headers.get(X_CURSOR_HEADER, "")
+        """Page cursor. The current position in the collection.
+
+        The value should be taken from the X-Cursor response header
+        of the previous request. If you pass an empty value,
+        the first page will be returned.
+        """
+
+        return cast(Cursor, self._resp.headers.get(X_CURSOR_HEADER, ""))
 
     def data(self) -> List[T]:
         """Get page data as a list of items."""
@@ -64,7 +84,7 @@ class Page(Generic[T]):
 
 
 def chain_pages(start_page: Page[T]) -> Iterator[T]:
-    """Get chain of collection objects"""
+    """Get chain of collection objects."""
 
     page: Optional[Page[T]] = start_page
     while page:

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Tuple
+from typing import Optional, Tuple, cast
 
 import uuid
 
@@ -14,7 +14,7 @@ from ..internal import (
     parse_rfc3339_timestamp,
 )
 from ..observable import EntityView, ShareLevels
-from ..pagination import Page
+from ..pagination import Page, Cursor
 from ..search import StoredQueryCommonView
 
 X_CHANGE_CURSOR = "X-Change-Cursor"
@@ -102,7 +102,7 @@ class ReplistsAPI(BaseAPI):
 
     def filter(
         self,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["ReplistCommonView"]:
         """Get replist filtration list.
@@ -117,7 +117,7 @@ class ReplistsAPI(BaseAPI):
         """
         params = {}
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
 
@@ -128,9 +128,9 @@ class ReplistsAPI(BaseAPI):
     def entities(
         self,
         replist_uuid: str,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
-    ) -> Tuple[Page[EntityView], str]:
+    ) -> Tuple[Page[EntityView], Cursor]:
         """Get replist entities.
 
         Note:
@@ -140,26 +140,27 @@ class ReplistsAPI(BaseAPI):
             cursor: Page cursor.
             limit: Page limit.
         Return:
-            Page with entities and cursor allowing to get next batch of changes.
+            Page with entities and cursor
+            allowing to get next batch of changes :meth:`changes`.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
         """
 
         params = {}
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
 
         path = self._replist_entities_tpl.format(replist_uuid)
         resp = self._connector.do_get(path, params=params)
         page = Page(self._connector.do_get, resp, EntityView)
-        return page, resp.headers.get(X_CHANGE_CURSOR, "")
+        return page, cast(Cursor, resp.headers.get(X_CHANGE_CURSOR, ""))
 
     def changes(
         self,
         replist_uuid: str,
-        cursor: str,
+        cursor: Cursor,
         limit: Optional[int] = None,
     ) -> Page["EntitySetChangeView"]:
         """Get replist changes
@@ -169,6 +170,8 @@ class ReplistsAPI(BaseAPI):
         Args:
             replist_uuid: Replist uuid.
             cursor: Page cursor.
+                On the first request you should pass the cursor value
+                obtained when requesting replist entities :meth:`entities`
             limit: Page limit.
         Return:
             Page with changes.
@@ -189,7 +192,7 @@ class ReplistsAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.CursorOutOfRange`
         """
 
-        params = {"cursor": cursor}
+        params = {"cursor": str(cursor)}
         if limit:
             params["limit"] = str(limit)
 

@@ -9,7 +9,7 @@ import uuid
 from typing import Optional, Union, cast, Dict, Any
 
 from ..internal import BaseAPI, JsonObjectForm, parse_rfc3339_timestamp
-from ..pagination import Page
+from ..pagination import Page, Cursor
 
 from .. import RefView
 from ..artifact import ArtifactTypes
@@ -75,7 +75,7 @@ class TasksAPI(BaseAPI):
         self,
         artifact_uuid: Optional[uuid.UUID] = None,
         entity_uuid: Optional[uuid.UUID] = None,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["TaskView"]:
         """Get enrichment task filtration list.
@@ -99,7 +99,7 @@ class TasksAPI(BaseAPI):
         """
         params: Dict[str, Any] = {}
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
         if artifact_uuid:
