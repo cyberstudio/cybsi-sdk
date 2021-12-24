@@ -1,16 +1,14 @@
-from datetime import datetime
 from typing import Any, List, Optional
 
-from .aggregate_section import SectionsView
+from .aggregate_section import SectionsView, AttributeValuableFactView
 
 from .. import RefView
 from ..internal import (
     JsonObjectForm,
     JsonObjectView,
-    parse_rfc3339_timestamp,
 )
 
-from .enums import EntityKeyTypes, EntityTypes, ShareLevels
+from .enums import EntityKeyTypes, EntityTypes
 
 
 class EntityForm(JsonObjectForm):
@@ -87,7 +85,7 @@ class EntityAttributeForecastView(JsonObjectView):
 
     @property
     def values(self) -> List["AttributeForecastView"]:
-        """Attribute values forecast in descenging order of confidence."""
+        """Attribute values forecast in descending order of confidence."""
         return [AttributeForecastView(x) for x in self._get("values")]
 
 
@@ -105,45 +103,6 @@ class AttributeForecastView(JsonObjectView):
         return self._get("confidence")
 
     @property
-    def valuable_facts(self) -> Optional[List["AttributeValuableFactView"]]:
+    def valuable_facts(self) -> Optional[List[AttributeValuableFactView]]:
         """List of forecast valuable facts in descending order of confidence."""
         return self._map_list_optional("valuableFacts", AttributeValuableFactView)
-
-
-class ValuableFactView(JsonObjectView):
-    """Valuable fact of forecast view."""
-
-    @property
-    def data_source(self) -> Optional[RefView]:
-        """Original datasource of fact."""
-        ds = self._get_optional("dataSource")
-        return None if ds is None else RefView(ds)
-
-    @property
-    def share_level(self) -> ShareLevels:
-        """Fact share level."""
-        return ShareLevels(self._get("shareLevel"))
-
-    @property
-    def published_at(self) -> Optional[datetime]:
-        """Fact observation time."""
-        return self._map_optional("seenAt", parse_rfc3339_timestamp)
-
-    @property
-    def confidence(self) -> float:
-        """Fact confidence."""
-        return self._get("confidence")
-
-    @property
-    def final_confidence(self) -> float:
-        """Final fact confidence."""
-        return self._get("finalConfidence")
-
-
-class AttributeValuableFactView(ValuableFactView):
-    """Valuable fact of attribute forecast view."""
-
-    @property
-    def value(self) -> Any:
-        """Facts attribute value."""
-        return self._get("value")

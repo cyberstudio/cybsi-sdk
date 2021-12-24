@@ -34,6 +34,19 @@ The content of the observation says that "test.com" is IoC and malicious with co
 
 .. literalinclude:: ../../examples/register_generic.py
 
+.. _get-attribute-and-relationship-forecasts:
+
+Get attribute and relationship forecasts
+----------------------------------------
+Forecasting is getting a metric to assess the confidence of the provided indicators and
+keeping it up to date.
+
+In the example below we get IsMalicious attribute forecast of ip-address "8.8.8.8".
+Also we get link forecasts of ip-address "8.8.8.8" and forecast of relationship
+that has form `ip-address("8.8.8.8") resolves domain-name("test.com")`
+
+.. literalinclude:: ../../examples/get_forecasts.py
+
 .. _implement-custom-external-db-example:
 
 Implement an external database

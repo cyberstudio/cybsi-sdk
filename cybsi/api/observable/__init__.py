@@ -10,7 +10,6 @@ from .entity import (
     EntityAggregateView,
     EntityAttributeForecastView,
     AttributeForecastView,
-    AttributeValuableFactView,
 )
 
 from .aggregate_section import (
@@ -18,7 +17,8 @@ from .aggregate_section import (
     SectionView,
     AttributesSectionData,
     AttributeAggregatedValue,
-    AttributeValuableFact,
+    ValuableFactView,
+    AttributeValuableFactView,
     ThreatSectionData,
     AVScanStatisticsSectionData,
     GeoIPSectionData,
@@ -31,14 +31,13 @@ from .links import (
     EntityLinkStatisticView,
     LinkTypeView,
     LinkStatisticView,
-    LinkConfidenceDistirbutionView,
+    LinkConfidenceDistributionView,
 )
 
 from .relationships import (
     RelationshipsAPI,
     RelationshipsForecastView,
     RelationshipView,
-    ValuableFactView,
 )
 
 from .enums import (

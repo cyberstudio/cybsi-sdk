@@ -1,9 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Optional, List
-
-from cybsi.api.error import JsonObject
-from cybsi.utils.converters import convert_attribute_name_kebab
+from typing import Optional, List, Dict, Any
 
 from .entity import (
     EntityAttributeForecastView,
@@ -25,6 +22,32 @@ from .links import EntityLinksForecastView, EntityLinkStatisticView
 from .. import RefView
 from ..internal import BaseAPI, rfc3339_timestamp
 from ..pagination import Page, Cursor
+
+
+def _convert_attribute_name_kebab(attribute_name: AttributeNames) -> str:
+    """Convert attribute name value to kebab-case.
+
+    Args:
+        attribute_name: attribute name, such of 'DomainName'.
+    Return:
+        Attribute name on kebab-case, such of `domain-name`.
+    """
+    return _attr_value_kebab_converters[attribute_name]
+
+
+_attr_value_kebab_converters: Dict[AttributeNames, str] = {
+    AttributeNames.Size: "size",
+    AttributeNames.Class: "class",
+    AttributeNames.Sectors: "sectors",
+    AttributeNames.DisplayNames: "display-names",
+    AttributeNames.Names: "names",
+    AttributeNames.NodeRoles: "node-roles",
+    AttributeNames.MalwareFamilyAliases: "malware-family-aliases",
+    AttributeNames.IsIoC: "is-ioc",
+    AttributeNames.IsTrusted: "is-trusted",
+    AttributeNames.IsMalicious: "is-malicious",
+    AttributeNames.IsDGA: "is-dga",
+}
 
 
 class EntitiesAPI(BaseAPI):
@@ -107,14 +130,16 @@ class EntitiesAPI(BaseAPI):
             >>>     for attr in aggregate.sections.associated_attributes.data:
             >>>         print(attr.attribute_name)
         """
-        path = f"{self._path}/{entity_uuid}"
-        params = {}  # type: JsonObject
+
+        params: Dict[str, Any] = {}
         if sections is not None:
             params["section"] = [section.value for section in sections]
         if forecast_at is not None:
             params["forecastAt"] = rfc3339_timestamp(forecast_at)
         if with_valuable_facts is not None:
             params["valuableFacts"] = with_valuable_facts
+
+        path = f"{self._path}/{entity_uuid}"
         r = self._connector.do_get(path=path, params=params)
         return EntityAggregateView(r.json())
 
@@ -137,7 +162,7 @@ class EntitiesAPI(BaseAPI):
             cursor: Page cursor.
             limit: Page limit.
         Returns:
-            Page with aggregated entities views.
+            Page with aggregated entities views and next page cursor.
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityNotFound`
@@ -164,7 +189,8 @@ class EntitiesAPI(BaseAPI):
             >>>     # Do something with an aggregate
             >>>     pass
         """
-        params = {"uuid": entity_uuids}  # type: JsonObject
+
+        params: Dict[str, Any] = {"uuid": entity_uuids}
         if sections is not None:
             params["section"] = [section.value for section in sections]
         if forecast_at is not None:
@@ -173,6 +199,7 @@ class EntitiesAPI(BaseAPI):
             params["cursor"] = str(cursor)
         if limit:
             params["limit"] = limit
+
         r = self._connector.do_get(path=self._path, params=params)
         page = Page(self._connector.do_get, r, EntityAggregateView)
         return page
@@ -225,7 +252,7 @@ class EntitiesAPI(BaseAPI):
         """Get a forecast of entity attribute value.
 
         Note:
-            Calls `GET /observable/entities/{entityUUID}/attributes/{attributeName}`.
+            Calls `GET /observable/entities/{entity_uuid}/attributes/{attr_name}`.
         Args:
             entity_uuid: Entity UUID.
             attr_name: Attribute name. Converts to kebab-case on URL-path.
@@ -234,28 +261,32 @@ class EntitiesAPI(BaseAPI):
         Returns:
             Attribute forecast view.
         Raises:
-              * :attr:`~cybsi.api.error.InvalidRequestError.NoSuchAttribute`:
-                Attribute with specified name does not exist.
-              * :attr:`~cybsi.api.error.SemanticErrorCodes.WrongEntityAttribute`:
-                Attribute is not registered for entity with given UUID.
+            :class:`~cybsi.api.error.SemanticError`: Query contains logic errors.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Attribute with specified name does not exist (NoSuchAttribute).
+        Note:
+            Semantic error codes specific for this method:
+             * :attr:`~cybsi.api.error.SemanticErrorCodes.WrongEntityAttribute`
         Usage:
             >>> from uuid import UUID
             >>> from cybsi.api import CybsiClient
             >>> from cybsi.api.observable import EntityAttributeForecastView
             >>> from cybsi.api.observable import AttributeNames
             >>> client: CybsiClient
-            >>> forecast = client.observable.entities.forecast_attribute_values(
-            >>>     UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
-            >>>     AttributeNames.IsMalicious,
+            >>> attr_forecast = client.observable.entities.forecast_attribute_values(
+            >>>     entity_uuid=UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
+            >>>     attr_name=AttributeNames.IsMalicious,
             >>> )
             >>> # Do something with the forecast
-            >>> print(forecast)
+            >>> print(attr_forecast)
         """
-        kebab_attr_name = convert_attribute_name_kebab(attr_name)
-        path = f"{self._path}/{entity_uuid}/attributes/{kebab_attr_name}"
-        params = {}
+
+        params: Dict[str, Any] = {}
         if forecast_at is not None:
             params["forecastAt"] = rfc3339_timestamp(forecast_at)
+
+        kebab_attr_name = _convert_attribute_name_kebab(attr_name)
+        path = f"{self._path}/{entity_uuid}/attributes/{kebab_attr_name}"
         r = self._connector.do_get(path=path, params=params)
         return EntityAttributeForecastView(r.json())
 
@@ -267,13 +298,13 @@ class EntitiesAPI(BaseAPI):
         kind: Optional[List[RelationshipKinds]] = None,
         confidence_threshold: Optional[float] = None,
         forecast_at: Optional[datetime] = None,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page[EntityLinksForecastView]:
         """Get a list of link forecasts of entity.
 
         Note:
-            Calls `GET /observable/entities/{entityUUID}/links`.
+            Calls `GET /observable/entities/{entity_uuid}/links`.
         Args:
             entity_uuid: Entity UUID.
             related_entity_types: Related entity types.
@@ -286,7 +317,7 @@ class EntitiesAPI(BaseAPI):
             cursor: Page cursor.
             limit: Page limit.
         Returns:
-            Page with links forecast view.
+            Page with links forecast view and next page cursor.
         Usage:
             >>> from uuid import UUID
             >>> from cybsi.api import CybsiClient
@@ -298,22 +329,22 @@ class EntitiesAPI(BaseAPI):
             >>> )
             >>> from cybsi.api.observable import EntityLinksForecastView
             >>> client: CybsiClient
-            >>> forecasts = client.observable.entities.forecast_links(
-            >>>     UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
-            >>>     related_entity_types = [EntityTypes.IPAddress, EntityTypes.File]
-            >>>     direction = [LinkDirection.Forward],
-            >>>     kind = [RelationshipKind.ResolvesTo, RelationshipKind.Uses],
-            >>>     confidence_threshold = 0.5,
+            >>> links_forecast = client.observable.entities.forecast_links(
+            >>>     entity_uuid=UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
+            >>>     related_entity_types=[EntityTypes.IPAddress, EntityTypes.File],
+            >>>     direction=[LinkDirection.Forward],
+            >>>     kind=[RelationshipKinds.ResolvesTo, RelationshipKinds.Uses],
+            >>>     confidence_threshold=0.5
             >>> )
             >>> # Do something with the forecast
-            >>> print(forecast)
+            >>> print(links_forecast)
         """
-        path = f"{self._path}/{entity_uuid}/links"
-        params = {}  # type: JsonObject
+
+        params: Dict[str, Any] = {}
         if related_entity_types is not None:
             params["relatedEntityType"] = [typ.value for typ in related_entity_types]
         if direction is not None:
-            params["direction"] = [dir.value for dir in direction]
+            params["direction"] = [d.value for d in direction]
         if kind is not None:
             params["kind"] = [k.value for k in kind]
         if confidence_threshold is not None:
@@ -321,9 +352,11 @@ class EntitiesAPI(BaseAPI):
         if forecast_at is not None:
             params["forecastAt"] = rfc3339_timestamp(forecast_at)
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
-            params["limit"] = limit
+            params["limit"] = str(limit)
+
+        path = f"{self._path}/{entity_uuid}/links"
         r = self._connector.do_get(path=path, params=params)
         page = Page(self._connector.do_get, r, EntityLinksForecastView)
         return page
@@ -336,7 +369,7 @@ class EntitiesAPI(BaseAPI):
         """Get statictics of links for entity.
 
         Note:
-            Calls `GET /observable/entities/{entityUUID}/link-type-statistic`.
+            Calls `GET /observable/entities/{entity_uuid}/link-type-statistic`.
         Args:
             entity_uuid: Entity UUID.
             forecast_at: Date of forecast.
@@ -348,15 +381,17 @@ class EntitiesAPI(BaseAPI):
             >>> from cybsi.api import CybsiClient
             >>> from cybsi.api.observable import EntityLinkStatisticView
             >>> client: CybsiClient
-            >>> forecasts = client.observable.entities.forecast_links_statistic(
-            >>>     UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a")
+            >>> link_forecast = client.observable.entities.forecast_links_statistic(
+            >>>     entity_uuid=UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a")
             >>> )
             >>> # Do something with the forecast
-            >>> print(forecast)
+            >>> print(link_forecast)
         """
-        path = f"{self._path}/{entity_uuid}/link-type-statistic"
-        params = {}
+
+        params: Dict[str, Any] = {}
         if forecast_at is not None:
             params["forecastAt"] = rfc3339_timestamp(forecast_at)
+
+        path = f"{self._path}/{entity_uuid}/link-type-statistic"
         r = self._connector.do_get(path=path, params=params)
         return EntityLinkStatisticView(r.json())

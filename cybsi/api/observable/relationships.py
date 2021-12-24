@@ -1,16 +1,41 @@
 import uuid
 from datetime import datetime
-from typing import Optional, List, cast
+from typing import Optional, List, cast, Dict
 
-from cybsi.utils.converters import convert_relationship_kind_kebab
-
-from .entity import EntityView, ValuableFactView
+from .entity import EntityView
+from .aggregate_section import ValuableFactView
 from .enums import RelationshipKinds
-from ..internal import (
-    BaseAPI,
-    JsonObjectView,
-    rfc3339_timestamp,
-)
+from ..internal import BaseAPI, JsonObjectView, rfc3339_timestamp
+
+
+def _convert_relationship_kind_kebab(kind: RelationshipKinds) -> str:
+    """Convert relationship kind value to kebab-case.
+
+    Args:
+        kind: relationship kind, such of 'ResolvesTo'.
+    Return:
+        Relationship kind on kebab-case, such of `resolves-to`.
+    """
+    return _rel_kind_kebab_converters[kind]
+
+
+_rel_kind_kebab_converters: Dict[RelationshipKinds, str] = {
+    RelationshipKinds.Has: "has",
+    RelationshipKinds.Contains: "contains",
+    RelationshipKinds.BelongsToDeprecated: "belongs-to",
+    RelationshipKinds.ConnectsTo: "connects-to",
+    RelationshipKinds.Drops: "drops",
+    RelationshipKinds.Uses: "uses",
+    RelationshipKinds.Owns: "owns",
+    RelationshipKinds.Supports: "supports",
+    RelationshipKinds.Resolves: "resolves-to",
+    RelationshipKinds.VariantOfDeprecated: "variant-of",
+    RelationshipKinds.Targets: "targets",
+    RelationshipKinds.Exploits: "exploits",
+    RelationshipKinds.Hosts: "hosts",
+    RelationshipKinds.Serves: "serves",
+    RelationshipKinds.Locates: "locates",
+}
 
 
 class RelationshipsAPI(BaseAPI):
@@ -29,8 +54,7 @@ class RelationshipsAPI(BaseAPI):
         """Get forecast of relationship between two entities.
 
         Note:
-            Calls `GET /observable/relationships
-                /{sourceEntityUUID}/{relationKind}/{targetEntityUUID}`.
+            Calls `GET /observable/relationships/{sourceEntityUUID}/{relationKind}/{targetEntityUUID}`. # noqa: E501
         Args:
             source_entity_uuid: Source entity UUID.
             kind: Kind of relationship. Converts to kebab-case on URL-path.
@@ -43,17 +67,17 @@ class RelationshipsAPI(BaseAPI):
         Usage:
             >>> from uuid import UUID
             >>> from cybsi.api import CybsiClient
-            >>> from cybsi.api.observable import RelationshipType
+            >>> from cybsi.api.observable import RelationshipKinds
             >>> client: CybsiClient
             >>> forecasts = client.observable.relationships.forecast(
             >>>     UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
             >>>     UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
-            >>>     RelationshipKind.ResolvesTo,
+            >>>     RelationshipKinds.ResolvesTo,
             >>> )
             >>> # Do something with the forecast
-            >>> print(forecast)
+            >>> print(forecasts)
         """
-        kebab_kind = convert_relationship_kind_kebab(kind)
+        kebab_kind = _convert_relationship_kind_kebab(kind)
         path = f"{self._path}/{source_entity_uuid}/{kebab_kind}/{target_entity_uuid}"
         params = {}
         if forecast_at is not None:
@@ -79,7 +103,7 @@ class RelationshipsForecastView(JsonObjectView):
         return self._get("confidence")
 
     @property
-    def valuable_facts(self) -> Optional[List["ValuableFactView"]]:
+    def valuable_facts(self) -> Optional[List[ValuableFactView]]:
         """List of forecast valuable facts in descending order of confidence."""
         return self._map_list_optional("valuableFacts", ValuableFactView)
 

@@ -9,7 +9,7 @@ from ..internal import BaseAPI, JsonObjectView, parse_rfc3339_timestamp
 from ..observable import ShareLevels, EntityView
 
 from .enums import ArtifactTypes, ArtifactContentDownloadCompressionTypes
-from ..pagination import Page
+from ..pagination import Page, Cursor
 from ..view import _TaggedRefView
 
 
@@ -162,7 +162,7 @@ class ArtifactsAPI(BaseAPI):
         data_source_uuids: Optional[List[uuid.UUID]] = None,
         file_uuid: Optional[uuid.UUID] = None,
         artifact_hash: Optional[str] = None,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["ArtifactCommonView"]:
         """Filter artifacts using provided parameters.
@@ -197,7 +197,7 @@ class ArtifactsAPI(BaseAPI):
         if artifact_hash:
             params["hash"] = artifact_hash
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
 

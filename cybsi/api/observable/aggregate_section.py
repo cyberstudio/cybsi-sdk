@@ -34,17 +34,17 @@ class SectionView(JsonObjectView, Generic[T]):
         return self._data_view(self._get("data"))
 
 
-class AttributeValuableFact(JsonObjectView):
+class ValuableFactView(JsonObjectView):
     """Facts influenced on value and its confidence."""
 
     @property
     def data_source(self) -> RefView:
-        """DataSource of the fact."""
+        """Data source of the fact."""
         return RefView(self._get("dataSource"))
 
     @property
     def share_level(self) -> ShareLevels:
-        """ShareLevel of the fact."""
+        """Share level of the fact."""
         return ShareLevels(self._get("shareLevel"))
 
     @property
@@ -54,7 +54,7 @@ class AttributeValuableFact(JsonObjectView):
 
     @property
     def confidence(self) -> float:
-        """DataSource confidence in the fact.
+        """Data source confidence in the fact.
         Value is in range (0; 1]."""
         return self._get("confidence")
 
@@ -64,9 +64,13 @@ class AttributeValuableFact(JsonObjectView):
         Value is in range (0; 1]."""
         return self._get("finalConfidence")
 
+
+class AttributeValuableFactView(ValuableFactView):
+    """Valuable fact of attribute forecast view."""
+
     @property
     def value(self) -> Any:
-        """Fact value."""
+        """Facts attribute value."""
         return self._get("value")
 
 
@@ -84,7 +88,7 @@ class AttributeAggregatedValue(JsonObjectView):
         return self._get("confidence")
 
     @property
-    def valuable_facts(self) -> Optional[List[AttributeValuableFact]]:
+    def valuable_facts(self) -> Optional[List[AttributeValuableFactView]]:
         """Facts influenced on value and its confidence.
         Can return None if valuable facts list is not set.
 
@@ -93,7 +97,7 @@ class AttributeAggregatedValue(JsonObjectView):
         """
         facts = self._get("valuableFacts")
         return (
-            [AttributeValuableFact(fact) for fact in facts]
+            [AttributeValuableFactView(fact) for fact in facts]
             if facts is not None
             else None
         )

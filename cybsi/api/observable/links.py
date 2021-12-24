@@ -33,7 +33,7 @@ class LinkForecastView(JsonObjectView):
         return LinkDirection(self._get("direction"))
 
     @property
-    def relationKind(self) -> RelationshipKinds:
+    def relation_kind(self) -> RelationshipKinds:
         """Relationship kind."""
         return RelationshipKinds(self._get("relationKind"))
 
@@ -71,7 +71,7 @@ class LinkTypeView(JsonObjectView):
         return LinkDirection(self._get("linkDirection"))
 
     @property
-    def relationKind(self) -> RelationshipKinds:
+    def relation_kind(self) -> RelationshipKinds:
         """Relationship kind."""
         return RelationshipKinds(self._get("relationKind"))
 
@@ -90,21 +90,21 @@ class LinkStatisticView(JsonObjectView):
         return self._get("total")
 
     @property
-    def confidence_distribution(self) -> List["LinkConfidenceDistirbutionView"]:
+    def confidence_distribution(self) -> List["LinkConfidenceDistributionView"]:
         """Distribution of number of links by confidence."""
         return [
-            LinkConfidenceDistirbutionView(x)
+            LinkConfidenceDistributionView(x)
             for x in self._get("distributionByConfidence")
         ]
 
 
-class LinkConfidenceDistirbutionView(JsonObjectView):
+class LinkConfidenceDistributionView(JsonObjectView):
     """Distribution of number of links by
-    confidence with step of 0.1 in descenging order."""
+    confidence with step of 0.1 in descending order."""
 
     @property
     def confidence_range(self) -> List[float]:
-        """List of confidence ranges: (from; to]."""
+        """List of confidence in range format (from; to]."""
         return self._get("confidenceRange")
 
     @property
