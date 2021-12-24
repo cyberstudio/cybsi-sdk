@@ -49,7 +49,7 @@ class AttributeValuableFact(JsonObjectView):
 
     @property
     def seen_at(self) -> datetime:
-        """ShareLevel of the fact."""
+        """Date and time when facts were seen."""
         return parse_rfc3339_timestamp(self._get("seenAt"))
 
     @property

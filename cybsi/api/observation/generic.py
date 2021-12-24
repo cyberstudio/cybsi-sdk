@@ -5,17 +5,15 @@ See Also:
     See :ref:`register-generic-observation-example`
     for a complete example of generic observation API usage.
 """
-import datetime
+from datetime import datetime
 import uuid
-
-from typing import Any, cast, List, Optional, Union
-
+from typing import Any, cast, List, Optional, Union, Dict
+from .api import ObservationHeaderView
 from .. import RefView
 from ..internal import (
     BaseAPI,
     JsonObjectForm,
     JsonObjectView,
-    parse_rfc3339_timestamp,
     rfc3339_timestamp,
 )
 from ..observable import (
@@ -25,6 +23,7 @@ from ..observable import (
     RelationshipKinds,
     ShareLevels,
 )
+from ..pagination import Page
 
 
 class GenericObservationsAPI(BaseAPI):
@@ -58,6 +57,49 @@ class GenericObservationsAPI(BaseAPI):
         """
         r = self._connector.do_post(path=self._path, json=observation.json())
         return RefView(r.json())
+
+    def filter(
+        self,
+        data_source_uuids: Optional[List[uuid.UUID]] = None,
+        reporter_uuids: Optional[List[uuid.UUID]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+    ) -> Page["GenericObservationView"]:
+        """Get page of filtered generic observation list.
+
+        Page's items are sorted in descending order of observation time.
+
+        Note:
+            Calls `GET /enrichment/observations/generics`
+        Args:
+            cursor: Page cursor.
+            limit: Page limit.
+            data_source_uuids: List of data source identifiers.
+                Filter observations by original data source identifiers.
+            reporter_uuids: List of reporter identifiers.
+                Filter observations by reporter data source identifiers.
+        Returns:
+            Page of generic observations list and next page cursor.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: query arguments contain errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+        """
+        params: Dict[str, Any] = {}
+
+        if cursor:
+            params["cursor"] = cursor
+        if limit:
+            params["limit"] = str(limit)
+        if data_source_uuids is not None:
+            params["dataSourceUUID"] = [str(u) for u in data_source_uuids]
+        if reporter_uuids is not None:
+            params["reporterUUID"] = [str(u) for u in reporter_uuids]
+
+        resp = self._connector.do_get(self._path, params=params)
+        page = Page(self._connector.do_get, resp, GenericObservationView)
+        return page
 
     def view(self, observation_uuid: uuid.UUID) -> "GenericObservationView":
         """Get the generic observation view.
@@ -115,7 +157,7 @@ class GenericObservationForm(JsonObjectForm):
         >>>)
     """
 
-    def __init__(self, share_level: ShareLevels, seen_at: datetime.datetime):
+    def __init__(self, share_level: ShareLevels, seen_at: datetime):
         super().__init__()
         self._data["shareLevel"] = share_level.value
         self._data["seenAt"] = rfc3339_timestamp(seen_at)
@@ -211,39 +253,9 @@ class GenericObservationForm(JsonObjectForm):
         return self
 
 
-class GenericObservationView(JsonObjectView):
+class GenericObservationView(ObservationHeaderView):
     """Generic observation view,
     as retrieved by :meth:`GenericObservationsAPI.view`."""
-
-    @property
-    def reporter(self) -> RefView:
-        """Source reporting the observation."""
-
-        return RefView(self._get("reporter"))
-
-    @property
-    def data_source(self) -> RefView:
-        """Observation data source."""
-
-        return RefView(self._get("dataSource"))
-
-    @property
-    def share_level(self) -> ShareLevels:
-        """Share level."""
-
-        return ShareLevels(self._get("shareLevel"))
-
-    @property
-    def seen_at(self) -> datetime.datetime:
-        """Date and time when observation was seen."""
-
-        return parse_rfc3339_timestamp(self._get("seenAt"))
-
-    @property
-    def registered_at(self) -> datetime.datetime:
-        """Date and time when observation was registered."""
-
-        return parse_rfc3339_timestamp(self._get("registeredAt"))
 
     @property
     def content(self) -> "GenericObservationContentView":

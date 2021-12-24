@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any
 
 import uuid
 
-from cybsi.api.artifact.api import ArtifactCommonView
+from cybsi.api.artifact import ArtifactCommonView
 from ..observation import ObservationCommonView
 from ..pagination import Page, Cursor
 
