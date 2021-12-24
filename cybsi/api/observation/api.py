@@ -10,7 +10,7 @@ from ..internal import (
 from .enums import ObservationTypes
 from .generic import GenericObservationsAPI
 from ..observable import ShareLevels
-from ..pagination import Page
+from ..pagination import Page, Cursor
 
 
 class ObservationsAPI(BaseAPI):
@@ -35,7 +35,7 @@ class ObservationsAPI(BaseAPI):
         registered_after: Optional[datetime] = None,
         report_uuid: Optional[UUID] = None,
         entity_uuid: Optional[UUID] = None,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["ObservationHeaderView"]:
         """Get observation search results page.
@@ -96,7 +96,7 @@ class ObservationsAPI(BaseAPI):
         if registered_after is not None:
             params["registeredAfter"] = rfc3339_timestamp(registered_after)
         if cursor:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
 

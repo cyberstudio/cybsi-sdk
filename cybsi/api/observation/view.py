@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from cybsi.api import RefView
-from cybsi.api.internal import parse_rfc3339_timestamp
-from cybsi.api.observable import ShareLevels
+from .. import RefView
+from ..internal import parse_rfc3339_timestamp
+from ..observable import ShareLevels
 from .enums import ObservationTypes
 
 
@@ -10,7 +10,7 @@ class ObservationCommonView(RefView):
     """Observation short view."""
 
     @property
-    def type(self) -> "ObservationTypes":
+    def type(self) -> ObservationTypes:
         """Observation type."""
         return ObservationTypes(self._get("type"))
 

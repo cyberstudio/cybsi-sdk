@@ -8,7 +8,7 @@ See Also:
 from datetime import datetime
 import uuid
 from typing import Any, cast, List, Optional, Union, Dict
-from .api import ObservationHeaderView
+from .view import ObservationHeaderView
 from .. import RefView
 from ..internal import (
     BaseAPI,
@@ -24,7 +24,7 @@ from ..observable import (
     ShareLevels,
     RelationshipView,
 )
-from ..pagination import Page
+from ..pagination import Page, Cursor
 
 
 class GenericObservationsAPI(BaseAPI):
@@ -63,7 +63,7 @@ class GenericObservationsAPI(BaseAPI):
         self,
         data_source_uuids: Optional[List[uuid.UUID]] = None,
         reporter_uuids: Optional[List[uuid.UUID]] = None,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["GenericObservationView"]:
         """Get page of filtered generic observation list.
@@ -89,14 +89,14 @@ class GenericObservationsAPI(BaseAPI):
         """
         params: Dict[str, Any] = {}
 
-        if cursor:
-            params["cursor"] = cursor
-        if limit:
-            params["limit"] = str(limit)
         if data_source_uuids is not None:
             params["dataSourceUUID"] = [str(u) for u in data_source_uuids]
         if reporter_uuids is not None:
             params["reporterUUID"] = [str(u) for u in reporter_uuids]
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
 
         resp = self._connector.do_get(self._path, params=params)
         page = Page(self._connector.do_get, resp, GenericObservationView)

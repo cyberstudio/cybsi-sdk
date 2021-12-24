@@ -5,15 +5,14 @@ Each type of observation is handled by their own subsection of API.
 """
 from .api import ObservationsAPI
 from .enums import ObservationTypes
+from .view import ObservationHeaderView, ObservationCommonView
 from .generic import (
     GenericObservationsAPI,
     GenericObservationForm,
     GenericObservationView,
     GenericObservationContentView,
-    RelationshipView,
     AttributeValueView,
 )
-from .view import ObservationHeaderView, ObservationCommonView
 from .archive import (
     ArchiveObservationsAPI,
     ArchiveObservationView,

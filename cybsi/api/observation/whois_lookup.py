@@ -1,11 +1,11 @@
 from uuid import UUID
 from typing import Any, List, Optional, Dict
-from .api import ObservationHeaderView
+from .view import ObservationHeaderView
 from ..internal import (
     BaseAPI,
     JsonObjectView,
 )
-from ..pagination import Page
+from ..pagination import Page, Cursor
 
 
 class WhoisLookupObservationsAPI(BaseAPI):
@@ -18,7 +18,7 @@ class WhoisLookupObservationsAPI(BaseAPI):
         entity_uuid: Optional[UUID] = None,
         data_source_uuids: Optional[List[UUID]] = None,
         reporter_uuids: Optional[List[UUID]] = None,
-        cursor: Optional[str] = None,
+        cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["WhoisLookupObservationView"]:
         """Get page of filtered whois lookups.
@@ -47,16 +47,16 @@ class WhoisLookupObservationsAPI(BaseAPI):
         """
         params: Dict[str, Any] = {}
 
-        if cursor:
-            params["cursor"] = cursor
-        if limit:
-            params["limit"] = str(limit)
         if data_source_uuids is not None:
             params["dataSourceUUID"] = [str(u) for u in data_source_uuids]
         if reporter_uuids is not None:
             params["reporterUUID"] = [str(u) for u in reporter_uuids]
         if entity_uuid is not None:
             params["entityUUID"] = str(entity_uuid)
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
 
         resp = self._connector.do_get(self._path, params=params)
         page = Page(self._connector.do_get, resp, WhoisLookupObservationView)

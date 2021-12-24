@@ -29,5 +29,3 @@ if __name__ == "__main__":
         next_cur = generic_observations.cursor
         if next_cur == "":
             break
-
-
