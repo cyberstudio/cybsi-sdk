@@ -1,27 +1,69 @@
+"""Use this section of API to register/retrieve
+observation of types known to Cybsi.
+
+Each type of observation is handled by their own subsection of API.
+"""
 from datetime import datetime
 from uuid import UUID
 from typing import Optional, List, Any, Dict
 
-from .view import ObservationHeaderView
 from ..internal import (
     BaseAPI,
     rfc3339_timestamp,
 )
-from .enums import ObservationTypes
-from .generic import GenericObservationsAPI
 from ..observable import ShareLevels
 from ..pagination import Page, Cursor
+
+from .archive import ArchiveObservationsAPI
+from .dns_lookup import DNSLookupObservationsAPI
+from .generic import GenericObservationsAPI
+from .network_session import NetworkSessionObservationsAPI
+from .scan_session import ScanSessionObservationsAPI
+from .threat import ThreatObservationsAPI
+from .whois_lookup import WhoisLookupObservationsAPI
+from .enums import ObservationTypes
+from .view import ObservationHeaderView
 
 
 class ObservationsAPI(BaseAPI):
     """Observations API."""
 
+    _path = "/enrichment/observations"
+
+    @property
+    def archives(self) -> ArchiveObservationsAPI:
+        """Get archive observations route."""
+        return ArchiveObservationsAPI(self._connector)
+
+    @property
+    def dns_lookups(self) -> DNSLookupObservationsAPI:
+        """Get DNS Lookup observations route."""
+        return DNSLookupObservationsAPI(self._connector)
+
     @property
     def generics(self) -> GenericObservationsAPI:
-        """Get generic observation route."""
+        """Get generic observations route."""
         return GenericObservationsAPI(self._connector)
 
-    _path = "/enrichment/observations"
+    @property
+    def network_sessions(self) -> NetworkSessionObservationsAPI:
+        """Get network session observations route."""
+        return NetworkSessionObservationsAPI(self._connector)
+
+    @property
+    def scan_sessions(self) -> ScanSessionObservationsAPI:
+        """Get scan session observations route."""
+        return ScanSessionObservationsAPI(self._connector)
+
+    @property
+    def threats(self) -> ThreatObservationsAPI:
+        """Get threat observations route."""
+        return ThreatObservationsAPI(self._connector)
+
+    @property
+    def whois_lookups(self) -> WhoisLookupObservationsAPI:
+        """Get Whois lookup observations route."""
+        return WhoisLookupObservationsAPI(self._connector)
 
     def search(
         self,

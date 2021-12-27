@@ -1,20 +1,13 @@
-from enum import Enum
-from enum_tools import document_enum
 from uuid import UUID
 from typing import Any, List, Optional, Dict
+
+from .enums import ScanSessionFiltrationMode
 from .view import ObservationHeaderView
 from ..internal import (
     BaseAPI,
     JsonObjectView,
 )
 from ..pagination import Page, Cursor
-
-
-@document_enum
-class ScanSessionFiltrationMode(Enum):
-    """Filter mode."""
-
-    Actual = "Actual"  #: doc: Last (actual) session for each of analysis engine
 
 
 class ScanSessionObservationsAPI(BaseAPI):

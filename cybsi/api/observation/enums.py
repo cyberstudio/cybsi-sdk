@@ -12,3 +12,10 @@ class ObservationTypes(Enum):
     ScanSession = "ScanSession"  #: doc: File sample scan information.
     Threat = "Threat"  #: doc: Threat information.
     Generic = "Generic"  #: doc: Fact set of attributes and relationships.
+
+
+@document_enum
+class ScanSessionFiltrationMode(Enum):
+    """Filter mode."""
+
+    Actual = "Actual"  #: doc: Last (actual) session for each of analysis engine

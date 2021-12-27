@@ -80,19 +80,59 @@ Observable entities
 
 Observations
 ~~~~~~~~~~~~
-.. automodule:: cybsi.api.observation
-    :members:
-    :inherited-members:
 .. automodule:: cybsi.api.observation.api
     :members:
     :inherited-members:
-.. automodule:: cybsi.api.observation.enums
+
+Archive
+"""""""
+.. automodule:: cybsi.api.observation.archive
     :members:
     :inherited-members:
 
-Generic observations
-""""""""""""""""""""
+DNS Lookup
+""""""""""
+.. automodule:: cybsi.api.observation.dns_lookup
+    :members:
+    :inherited-members:
+
+Generic
+"""""""
 .. automodule:: cybsi.api.observation.generic
+    :members:
+    :inherited-members:
+
+Network Session
+"""""""""""""""
+.. automodule:: cybsi.api.observation.network_session
+    :members:
+    :inherited-members:
+
+Scan Session
+""""""""""""
+.. automodule:: cybsi.api.observation.scan_session
+    :members:
+    :inherited-members:
+
+Threat
+""""""
+.. automodule:: cybsi.api.observation.threat
+    :members:
+    :inherited-members:
+
+WHOIS Lookup
+""""""""""""
+.. automodule:: cybsi.api.observation.whois_lookup
+    :members:
+    :inherited-members:
+
+Common
+""""""
+.. automodule:: cybsi.api.observation.view
+    :members:
+    :inherited-members:
+
+.. automodule:: cybsi.api.observation.enums
     :members:
     :inherited-members:
 
