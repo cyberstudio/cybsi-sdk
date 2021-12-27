@@ -45,3 +45,6 @@ from .whois_lookup import (
     WhoisLookupObservationView,
     WhoisLookupObservationContentView,
 )
+
+ObservationHeaderView.__module__ = "cybsi.api.observation"
+ObservationCommonView.__module__ = "cybsi.api.observation"

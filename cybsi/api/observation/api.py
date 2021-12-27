@@ -69,7 +69,6 @@ class ObservationsAPI(BaseAPI):
             :class:`~cybsi.api.error.SemanticError`: query arguments contain errors.
         Note:
             Semantic error codes specific for this method:
-              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidQueryArgument`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityNotFound`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
