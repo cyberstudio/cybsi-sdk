@@ -138,6 +138,10 @@ Common
 
 Data sources
 ~~~~~~~~~~~~
+
+.. automodule:: cybsi.api.data_source.enums
+    :members:
+
 Types
 """""
 .. automodule:: cybsi.api.data_source.api_types

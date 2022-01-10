@@ -1,14 +1,17 @@
 import uuid
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 from ..api import Nullable, _unwrap_nullable, Tag
 from ..view import _TaggedRefView
 from .. import RefView
+from ..pagination import Page, Cursor
 from ..internal import (
     BaseAPI,
     JsonObjectForm,
+    JsonObjectView,
 )
 from .api_types import DataSourceTypeCommonView
+from .enums import DataSourceListOrder
 
 
 class DataSourcesAPI(BaseAPI):
@@ -32,8 +35,25 @@ class DataSourcesAPI(BaseAPI):
         r = self._connector.do_get(path)
         return DataSourceView(r)
 
+    def view_links(self, datasource_uuid: uuid.UUID) -> "DataSourceLinksView":
+        """Get links view of the data source.
+
+        Note:
+            Calls `GET /data-sources/{datasource_uuid}/links`.
+        Args:
+            datasource_uuid: Data source UUID.
+        Returns:
+            Links view of the data source.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Data source not found.
+        """
+
+        path = f"{self._path}/{datasource_uuid}/links"
+        r = self._connector.do_get(path)
+        return DataSourceLinksView(r.json())
+
     def me(self) -> "DataSourceView":
-        """Get data source assosiated with current client.
+        """Get data source associated with current client.
 
         Note:
             Calls `GET /data-sources/me`.
@@ -71,7 +91,7 @@ class DataSourcesAPI(BaseAPI):
         Note:
             Calls `PATCH /data-sources/{source_uuid}`.
         Args:
-            type_uuid: Data source uuid.
+            type_uuid: Data source type uuid.
             tag: :attr:`DataSourceView.tag` value. Use :meth:`view` to retrieve it.
             long_name:  Human-readable data source name. Non-empty if not :data:`None`.
             manual_confidence:
@@ -96,6 +116,74 @@ class DataSourcesAPI(BaseAPI):
         path = f"{self._path}/{type_uuid}"
         self._connector.do_patch(path=path, tag=tag, json=form)
 
+    def filter(
+        self,
+        query: Optional[str] = None,
+        type_uuids: Optional[List[uuid.UUID]] = None,
+        order_by: Optional[DataSourceListOrder] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> Page["DataSourceCommonView"]:
+        """Get a filtered list of data sources.
+
+        Note:
+            Calls `GET /data-sources`.
+        Args:
+            query: Filter of data sources by specified substring (case-insensitive).
+                Substring length must be in range [1, 50].
+                Filtering is performed by specified substring in data source names or
+                its type names.
+            type_uuids: List of data source type UUIDs.
+            order_by: The field to sort the list. Default value is "UUID".
+                The sort is performed in case-insensitive manner in lexicographic order.
+
+                If ``order_by`` is not :data:`None` then it is necessary to pass
+                the parameter to each next request along with a non-empty cursor.
+                Otherwise, the sort will be reset to the "default" sort,
+                which may lead to inconsistency in the data selection.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page with data source common views and next page cursor.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`
+        Note:
+            Semantic error codes:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceTypeNotFound`
+        Usage:
+            >>> import uuid
+            >>> from cybsi.api import CybsiClient
+            >>> from cybsi.api.pagination import chain_pages
+            >>> from cybsi.api.data_source import DataSourceListOrder
+            >>>
+            >>> client: CybsiClient
+            >>> # filter data sources by specified type uuid and sort
+            >>> started_page = client.data_sources.filter(
+            >>>     type_uuids=[uuid.UUID("89200bef-2f50-4d4f-8b38-843d5ab9dfa9")],
+            >>>     order_by=DataSourceListOrder.FullName,
+            >>> )
+            >>> for item in chain_pages(started_page):
+            >>>     # do something with data source
+            >>>     print(item)
+            >>> pass
+        """
+
+        params: Dict[str, Any] = {}
+        if query is not None:
+            params["query"] = query
+        if type_uuids is not None:
+            params["typeUUID"] = [str(u) for u in type_uuids]
+        if order_by is not None:
+            params["orderBy"] = order_by.value
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        resp = self._connector.do_get(path=self._path, params=params)
+        page = Page(self._connector.do_get, resp, DataSourceCommonView)
+        return page
+
 
 class DataSourceForm(JsonObjectForm):
     """Data source form.
@@ -103,9 +191,12 @@ class DataSourceForm(JsonObjectForm):
     This is the form you need to fill to register data source.
 
     Args:
-        type_uuid: Id of data source type.
+        type_uuid: Data source type UUID.
         name: Data source identifier. Must be unique name for data source type.
+            Name should consist of characters without spaces (`[a-zA-Z0-9_-]`) and
+            have length in the range [1, 250].
         long_name: Human-readable data source name.
+            Long name length must be in the range [1, 250].
         manual_confidence:
             Confidence of the data source.
             Overrides confidence of the data source inherited from data source type.
@@ -182,3 +273,28 @@ class DataSourceCommonView(RefView):
     def type(self) -> "DataSourceTypeCommonView":
         """Data source type short view."""
         return DataSourceTypeCommonView(self._get("type"))
+
+
+class DataSourceLinksView(JsonObjectView):
+    """Data source links view"""
+
+    @property
+    def analyzer(self) -> Optional[RefView]:
+        """Reference to analyzer.
+
+        Use :meth:`~cybsi.api.enrichment.analyzers.AnalyzersAPI.view` to retrieve analyzer view.
+        """  # noqa: E501
+        return self._map_optional("analyzer", RefView)
+
+    @property
+    def external_db(self) -> Optional[RefView]:
+        """Reference to external database.
+
+        Use :meth:`~cybsi.api.enrichment.external_dbs.ExternalDBsAPI.view` to retrieve external db view.
+        """  # noqa: E501
+        return self._map_optional("externalDB", RefView)
+
+    @property
+    def user(self) -> Optional[RefView]:
+        """Reference to user."""
+        return self._map_optional("user", RefView)

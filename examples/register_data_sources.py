@@ -2,7 +2,7 @@
 from os import environ
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
-from cybsi.api.error import DuplicateDataSourceType
+from cybsi.api.error import ConflictError
 from cybsi.api.data_source import (
     DataSourceForm,
     DataSourceTypeForm,
@@ -16,20 +16,24 @@ if __name__ == "__main__":
     config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
 
+    ds_type_uuid = None
+    ds_uuid = None
     try:  # store datasource_type
-        circle_type = DataSourceTypeForm(
+        circl_type = DataSourceTypeForm(
             short_name="CIRCL",
             long_name="Computer Incident Response Center Luxembourg",
         )
-        ds_type_ref = client.data_source_types.register(circle_type)
+        ds_type_ref = client.data_source_types.register(circl_type)
+        ds_type_uuid = ds_type_ref.uuid
         datasource_form = DataSourceForm(
-            type_uuid=ds_type_ref.uuid,
+            type_uuid=ds_type_uuid,
             name="MISP",
             long_name="MISP",
         )
         ds_ref = client.data_sources.register(datasource_form)
-    except DuplicateDataSourceType:
+        ds_uuid = ds_ref.uuid
+    except ConflictError:
         # handle Duplicate Error here
         exit(1)
-    view = client.data_sources.view(ds_ref.uuid)
-    type_view = client.data_source_types.view(ds_type_ref.uuid)
+    view = client.data_sources.view(ds_uuid)
+    type_view = client.data_source_types.view(ds_type_uuid)
