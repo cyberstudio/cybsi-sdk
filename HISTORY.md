@@ -1,6 +1,10 @@
 Release History
 ===============
 
+0.0.18 (2022-01-11)
+-------------------
+- Support analyzedArtifactUUID in report API
+
 0.0.17 (2022-01-11)
 -------------------
 - Extend Artifact common view

@@ -259,6 +259,7 @@ class ReportForm(JsonObjectForm):
         data_source: UUID of report's associated datasource.
         observation_uuids: List of report's observations.
         artifact_uuids: List of report's artifacts.
+        analyzed_artifact_uuid: Analyzed artifact identifier.
     """
 
     def __init__(
@@ -274,6 +275,7 @@ class ReportForm(JsonObjectForm):
         data_source: Optional[uuid.UUID] = None,
         observation_uuids: Optional[List[uuid.UUID]] = None,
         artifact_uuids: Optional[List[uuid.UUID]] = None,
+        analyzed_artifact_uuid: Optional[uuid.UUID] = None,
     ):
         super().__init__()
         self._data["shareLevel"] = share_level.value
@@ -297,6 +299,8 @@ class ReportForm(JsonObjectForm):
             self._data["observations"] = [str(u) for u in observation_uuids]
         if artifact_uuids is not None:
             self._data["artifacts"] = [str(u) for u in artifact_uuids]
+        if analyzed_artifact_uuid is not None:
+            self._data["analyzedArtifactUUID"] = str(analyzed_artifact_uuid)
 
     def add_observation(self, observation_uuid: uuid.UUID) -> "ReportForm":
         """Add observation to report.
@@ -378,6 +382,11 @@ class ReportHeaderView(RefView):
     def reporter(self) -> RefView:
         """Data source that reported to system."""
         return RefView(self._get("reporter"))
+
+    @property
+    def analyzed_artifact_uuid(self) -> Optional[uuid.UUID]:
+        """Analyzed artifact UUID."""
+        return self._map_optional("analyzedArtifactUUID", uuid.UUID)
 
 
 class ReportView(ReportHeaderView):
