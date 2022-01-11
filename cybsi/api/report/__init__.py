@@ -4,6 +4,7 @@ from .api import (
     ReportsAPI,
     ReportForm,
     ReportView,
+    ArtifactShortView,
     ReportHeaderView,
     SimilarReportView,
     SimilarReportCorrelationView,

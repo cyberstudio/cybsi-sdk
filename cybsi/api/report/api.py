@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any
 
 import uuid
 
-from cybsi.api.artifact import ArtifactCommonView
+from ..artifact import ArtifactTypes
 from ..observation import ObservationCommonView
 from ..pagination import Page, Cursor
 
@@ -384,14 +384,23 @@ class ReportView(ReportHeaderView):
     """Report view."""
 
     @property
-    def artifacts(self) -> Optional[List[ArtifactCommonView]]:
+    def artifacts(self) -> Optional[List["ArtifactShortView"]]:
         """Artifacts attached to report."""
-        return self._map_list_optional("artifacts", ArtifactCommonView)
+        return self._map_list_optional("artifacts", ArtifactShortView)
 
     @property
     def observations(self) -> Optional[List[ObservationCommonView]]:
         """Observations attached to report."""
         return self._map_list_optional("observations", ObservationCommonView)
+
+
+class ArtifactShortView(RefView):
+    """Artifact short view."""
+
+    @property
+    def type(self) -> ArtifactTypes:
+        """Artifact type."""
+        return self._get("type")
 
 
 class SimilarReportView(JsonObjectView):

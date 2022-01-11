@@ -273,12 +273,27 @@ def _parse_content_filename(response) -> str:
 
 
 class ArtifactCommonView(RefView):
-    """Artifact short view, used in ReportView."""
+    """Common artifact view."""
 
     @property
-    def type(self) -> ArtifactTypes:
-        """Artifact type."""
-        return self._get("type")
+    def types(self) -> List[ArtifactTypes]:
+        """Artifact types."""
+        return [ArtifactTypes(t) for t in self._get("types")]
+
+    @property
+    def data_sources(self) -> List[RefView]:
+        """Data sources which registered the artifact."""
+        return [RefView(t) for t in self._get("dataSources")]
+
+    @property
+    def share_levels(self) -> Optional[List[ShareLevels]]:
+        """Artifact share levels, ordered from lowest to highest."""
+        return self._map_list_optional("shareLevels", ShareLevels)
+
+    @property
+    def content(self) -> "ArtifactContentView":
+        """Artifact content meta information."""
+        return ArtifactContentView(self._get("content"))
 
 
 class ArtifactView(_TaggedRefView):
