@@ -1,6 +1,10 @@
 Release History
 ===============
 
+0.0.17 (2022-01-11)
+-------------------
+- Extend Artifact common view
+- Add Data source filtering API
 
 0.0.16 (2021-12-27)
 -------------------
