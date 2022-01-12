@@ -2,7 +2,6 @@
 import shutil
 import time
 import uuid
-
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from io import BytesIO
@@ -14,17 +13,17 @@ from cybsi.api.enrichment import (
     ArtifactAnalysisParamsView,
     AssignedTaskView,
     CompletedTaskForm,
-    FailedTaskForm,
-    TaskResultReportForm,
     EnrichmentErrorCodes,
     EnrichmentTypes,
+    FailedTaskForm,
+    TaskResultReportForm,
 )
 from cybsi.api.observable import (
     AttributeNames,
+    EntityForm,
     EntityKeyTypes,
     EntityTypes,
     ShareLevels,
-    EntityForm,
 )
 from cybsi.api.observation import GenericObservationForm
 from cybsi.api.report import ReportForm

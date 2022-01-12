@@ -1,6 +1,7 @@
 from cybsi.api.observable.relationships import RelationshipsAPI
-from .entities_api import EntitiesAPI
+
 from ..internal import BaseAPI
+from .entities_api import EntitiesAPI
 
 
 class ObservableAPI(BaseAPI):

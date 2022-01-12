@@ -1,4 +1,5 @@
 from enum import Enum
+
 from enum_tools import document_enum
 
 

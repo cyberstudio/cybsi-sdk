@@ -1,11 +1,10 @@
 import json
 import unittest
+from io import BytesIO
+from itertools import chain
 
 import requests
-
-from itertools import chain
 from requests import Response
-from io import BytesIO
 
 from cybsi.api.pagination import Page, chain_pages
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import shutil
-from io import StringIO, BytesIO
+from io import BytesIO, StringIO
 from os import environ
 from zipfile import ZipFile
 

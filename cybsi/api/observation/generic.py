@@ -5,26 +5,22 @@ See Also:
     See :ref:`register-generic-observation-example`
     for a complete example of generic observation API usage.
 """
-from datetime import datetime
 import uuid
-from typing import Any, cast, List, Optional, Union, Dict
-from .view import ObservationHeaderView
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Union, cast
+
 from .. import RefView
-from ..internal import (
-    BaseAPI,
-    JsonObjectForm,
-    JsonObjectView,
-    rfc3339_timestamp,
-)
+from ..internal import BaseAPI, JsonObjectForm, JsonObjectView, rfc3339_timestamp
 from ..observable import (
     AttributeNames,
     EntityForm,
     EntityView,
     RelationshipKinds,
-    ShareLevels,
     RelationshipView,
+    ShareLevels,
 )
-from ..pagination import Page, Cursor
+from ..pagination import Cursor, Page
+from .view import ObservationHeaderView
 
 
 class GenericObservationsAPI(BaseAPI):

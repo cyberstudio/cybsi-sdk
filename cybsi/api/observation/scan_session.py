@@ -1,13 +1,10 @@
+from typing import Any, Dict, List, Optional
 from uuid import UUID
-from typing import Any, List, Optional, Dict
 
+from ..internal import BaseAPI, JsonObjectView
+from ..pagination import Cursor, Page
 from .enums import ScanSessionFiltrationMode
 from .view import ObservationHeaderView
-from ..internal import (
-    BaseAPI,
-    JsonObjectView,
-)
-from ..pagination import Page, Cursor
 
 
 class ScanSessionObservationsAPI(BaseAPI):

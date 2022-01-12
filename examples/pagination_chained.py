@@ -2,7 +2,6 @@
 from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.pagination import chain_pages
 
-
 if __name__ == "__main__":
     auth = APIKeyAuth("url", "key", ssl_verify=False)
     config = Config("url", auth, ssl_verify=False)

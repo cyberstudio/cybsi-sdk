@@ -1,7 +1,7 @@
 import logging
-import requests
-
 from typing import Optional
+
+import requests
 
 from ..error import CybsiError
 from ..internal import HTTPConnector

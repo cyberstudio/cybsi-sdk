@@ -10,7 +10,7 @@ Each exception type is annotated if it makes sense to retry.
 Some exceptions have ``code`` property. It allows to determine the concrete error.
 """
 from enum import Enum
-from typing import Any, cast, Dict
+from typing import Any, Dict, cast
 
 from enum_tools import document_enum
 

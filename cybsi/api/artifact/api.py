@@ -1,16 +1,15 @@
 import cgi
 import uuid
 from datetime import datetime
-from typing import List, cast, Any, Dict, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from .. import RefView
 from ..error import CybsiError
 from ..internal import BaseAPI, JsonObjectView, parse_rfc3339_timestamp
-from ..observable import ShareLevels, EntityView
-
-from .enums import ArtifactTypes, ArtifactContentDownloadCompressionTypes
-from ..pagination import Page, Cursor
+from ..observable import EntityView, ShareLevels
+from ..pagination import Cursor, Page
 from ..view import _TaggedRefView
+from .enums import ArtifactContentDownloadCompressionTypes, ArtifactTypes
 
 
 class ArtifactsAPI(BaseAPI):

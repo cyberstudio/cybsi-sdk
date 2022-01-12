@@ -4,25 +4,21 @@ observation of types known to Cybsi.
 Each type of observation is handled by their own subsection of API.
 """
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 from uuid import UUID
-from typing import Optional, List, Any, Dict
 
-from ..internal import (
-    BaseAPI,
-    rfc3339_timestamp,
-)
+from ..internal import BaseAPI, rfc3339_timestamp
 from ..observable import ShareLevels
-from ..pagination import Page, Cursor
-
+from ..pagination import Cursor, Page
 from .archive import ArchiveObservationsAPI
 from .dns_lookup import DNSLookupObservationsAPI
+from .enums import ObservationTypes
 from .generic import GenericObservationsAPI
 from .network_session import NetworkSessionObservationsAPI
 from .scan_session import ScanSessionObservationsAPI
 from .threat import ThreatObservationsAPI
-from .whois_lookup import WhoisLookupObservationsAPI
-from .enums import ObservationTypes
 from .view import ObservationHeaderView
+from .whois_lookup import WhoisLookupObservationsAPI
 
 
 class ObservationsAPI(BaseAPI):

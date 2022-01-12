@@ -1,21 +1,15 @@
+import uuid
 from datetime import datetime
 from typing import Optional, Tuple, cast
 
-import uuid
-
-from .enums import EntitySetOperations, ReplistStatus
-from ..api import Tag
-from ..view import _TaggedRefView
 from .. import RefView
-from ..internal import (
-    BaseAPI,
-    JsonObjectForm,
-    JsonObjectView,
-    parse_rfc3339_timestamp,
-)
+from ..api import Tag
+from ..internal import BaseAPI, JsonObjectForm, JsonObjectView, parse_rfc3339_timestamp
 from ..observable import EntityView, ShareLevels
-from ..pagination import Page, Cursor
+from ..pagination import Cursor, Page
 from ..search import StoredQueryCommonView
+from ..view import _TaggedRefView
+from .enums import EntitySetOperations, ReplistStatus
 
 X_CHANGE_CURSOR = "X-Change-Cursor"
 

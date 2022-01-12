@@ -3,8 +3,7 @@ Base internal classes, useful to simplify API implementation.
 """
 
 import json
-
-from typing import Any, Callable, Dict, Optional, TypeVar, List
+from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 from ..error import CybsiError
 from .connector import HTTPConnector

@@ -6,14 +6,14 @@ The observation typically provides new attributes for the requested entity and
 relationships of the requested entity with other entities.
 """
 
-from typing import List, Optional, Dict, Any
 import uuid
+from typing import Any, Dict, List, Optional
 
-from ..api import Nullable, _unwrap_nullable, Tag
-from ..view import _TaggedRefView
 from .. import RefView
+from ..api import Nullable, Tag, _unwrap_nullable
 from ..internal import BaseAPI, JsonObjectForm
 from ..observable import EntityTypes
+from ..view import _TaggedRefView
 
 
 class ExternalDBsAPI(BaseAPI):

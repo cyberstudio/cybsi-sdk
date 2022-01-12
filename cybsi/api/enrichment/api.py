@@ -1,10 +1,9 @@
 from ..internal import BaseAPI
-
-from .task_queue import TaskQueueAPI
-from .tasks import TasksAPI
+from .analyzers import AnalyzersAPI
 from .config_rules import ConfigRulesAPI
 from .external_dbs import ExternalDBsAPI
-from .analyzers import AnalyzersAPI
+from .task_queue import TaskQueueAPI
+from .tasks import TasksAPI
 
 
 class EnrichmentAPI(BaseAPI):

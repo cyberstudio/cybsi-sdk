@@ -1,11 +1,9 @@
 from datetime import datetime
-from typing import Any, List, TypeVar, Generic, Callable, Optional
-from typing import Dict
+from typing import Any, Callable, Dict, Generic, List, Optional, TypeVar
 
 from .. import RefView
 from ..internal import JsonObject, JsonObjectView, list_mapper, parse_rfc3339_timestamp
-
-from .enums import EntityAggregateSections, ThreatStatus, ShareLevels
+from .enums import EntityAggregateSections, ShareLevels, ThreatStatus
 
 T = TypeVar("T")
 """Type of section data. Depends on section name."""

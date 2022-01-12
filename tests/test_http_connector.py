@@ -1,13 +1,12 @@
 import json
 import unittest
+from unittest.mock import patch
 
 import requests
 
-from unittest.mock import patch
-
+from cybsi.__version__ import __version__
 from cybsi.api.error import CybsiError, NotFoundError
 from cybsi.api.internal.connector import HTTPConnector
-from cybsi.__version__ import __version__
 
 
 class HTTPConnectorTest(unittest.TestCase):

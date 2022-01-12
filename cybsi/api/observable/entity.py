@@ -1,13 +1,8 @@
 from typing import Any, List, Optional
 
-from .aggregate_section import SectionsView, AttributeValuableFactView
-
 from .. import RefView
-from ..internal import (
-    JsonObjectForm,
-    JsonObjectView,
-)
-
+from ..internal import JsonObjectForm, JsonObjectView
+from .aggregate_section import AttributeValuableFactView, SectionsView
 from .enums import EntityKeyTypes, EntityTypes
 
 

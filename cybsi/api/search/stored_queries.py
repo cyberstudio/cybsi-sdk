@@ -1,18 +1,13 @@
 import uuid
+from typing import Any, Dict, List, Optional
 
-from typing import List, Dict, Any, Optional
-
+from .. import RefView
+from ..api import Tag
+from ..error import CybsiError, SemanticError, SemanticErrorCodes
+from ..internal import BaseAPI, JsonObjectForm, JsonObjectView
+from ..view import _TaggedRefView
 from .enums import QueryCompatibility
 from .error import CybsiLangErrorCodes
-from ..api import Tag
-from ..view import _TaggedRefView
-from .. import RefView
-from ..error import SemanticError, SemanticErrorCodes, CybsiError
-from ..internal import (
-    BaseAPI,
-    JsonObjectForm,
-    JsonObjectView,
-)
 
 
 class StoredQueriesAPI(BaseAPI):

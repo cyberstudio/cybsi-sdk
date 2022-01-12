@@ -27,13 +27,16 @@ documentation.
 
 Developer Environment Setup
 ---------------------------
-We use ``poetry`` for project builds. Install it via pip (``pip3 install poetry==1.1.12``), and then run the following command:
+Run the following command:
 
 .. code-block:: bash
 
-  $ poetry install
+  $ make tools
 
 This will create a virtualenv with all dependencies installed.
+
+After that you have to `install isort's plugin <https://github.com/pycqa/isort/wiki/isort-Plugins>`_
+for your preferred text editor.
 
 Releases
 --------

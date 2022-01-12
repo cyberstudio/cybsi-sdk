@@ -6,15 +6,15 @@ The reports can contain observations and artifacts. The artifact is a regular fi
 with additional attributes that can be analyzed or unpacked by the system.
 The observation typically provides group of facts obtained after analyzing an artifact.
 """
-from typing import List, Optional, Dict, Any
 import uuid
+from typing import Any, Dict, List, Optional
 
-from ..api import Nullable, _unwrap_nullable, Tag
-from ..view import _TaggedRefView
 from .. import RefView
+from ..api import Nullable, Tag, _unwrap_nullable
 from ..artifact import ArtifactTypes
 from ..data_source import DataSourceCommonView
 from ..internal import BaseAPI, JsonObjectForm
+from ..view import _TaggedRefView
 
 
 class AnalyzersAPI(BaseAPI):

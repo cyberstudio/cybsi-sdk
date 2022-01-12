@@ -1,27 +1,25 @@
 import uuid
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from typing import Any, Dict, List, Optional
 
+from .. import RefView
+from ..internal import BaseAPI, rfc3339_timestamp
+from ..pagination import Cursor, Page
 from .entity import (
+    EntityAggregateView,
     EntityAttributeForecastView,
     EntityForm,
-    EntityAggregateView,
     EntityKeyView,
 )
-
 from .enums import (
     AttributeNames,
-    EntityTypes,
     EntityAggregateSections,
     EntityKeyTypes,
+    EntityTypes,
     LinkDirection,
     RelationshipKinds,
 )
 from .links import EntityLinksForecastView, EntityLinkStatisticView
-
-from .. import RefView
-from ..internal import BaseAPI, rfc3339_timestamp
-from ..pagination import Page, Cursor
 
 
 def _convert_attribute_name_kebab(attribute_name: AttributeNames) -> str:

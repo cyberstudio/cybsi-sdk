@@ -4,13 +4,9 @@ from os import environ
 from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.error import SemanticError, SemanticErrorCodes
 from cybsi.api.observable.enums import ShareLevels
-from cybsi.api.search.enums import QueryCompatibility
-from cybsi.api.search.stored_queries import (
-    StoredQueryForm,
-    CybsiLangErrorView,
-)
 from cybsi.api.replist import ReplistForm
-
+from cybsi.api.search.enums import QueryCompatibility
+from cybsi.api.search.stored_queries import CybsiLangErrorView, StoredQueryForm
 
 if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")

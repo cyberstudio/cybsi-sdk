@@ -4,7 +4,7 @@ a string to a valid value of a chosen type.
 """
 from typing import Any, Callable, Dict
 
-from cybsi.api.observable.enums import EntityKeyTypes, AttributeNames
+from cybsi.api.observable.enums import AttributeNames, EntityKeyTypes
 
 
 def _str_converter(val: str):

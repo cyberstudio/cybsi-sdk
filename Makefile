@@ -9,6 +9,7 @@ lint:
 	poetry run black cybsi examples
 	poetry run flake8
 	poetry run mypy cybsi
+	poetry run isort cybsi tests examples
 
 test:
 	poetry run python3 -m unittest discover tests/ -v
@@ -39,3 +40,9 @@ docker-build-docs:
 
 docker-clean:
 	docker rmi -f "$$(docker images -q $(DOCKER_IMAGE):$(DOCKER_TAG))"
+
+################ Helper targets ################
+.PHONY: tools
+tools: #### Install tools needed for development.
+	pip3 install poetry==1.1.12
+	poetry install

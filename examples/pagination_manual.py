@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from cybsi.api import APIKeyAuth, Config, CybsiClient
 
-
 if __name__ == "__main__":
     auth = APIKeyAuth("url", "key", ssl_verify=False)
     config = Config("url", auth, ssl_verify=False)

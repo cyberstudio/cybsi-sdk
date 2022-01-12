@@ -1,22 +1,19 @@
-from datetime import datetime
-
-from typing import List, Optional, Dict, Any
-
 import uuid
-
-from ..artifact import ArtifactTypes
-from ..observation import ObservationCommonView
-from ..pagination import Page, Cursor
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from .. import RefView
+from ..artifact import ArtifactTypes
 from ..internal import (
     BaseAPI,
     JsonObjectForm,
     JsonObjectView,
-    rfc3339_timestamp,
     parse_rfc3339_timestamp,
+    rfc3339_timestamp,
 )
-from ..observable import ShareLevels, EntityView
+from ..observable import EntityView, ShareLevels
+from ..observation import ObservationCommonView
+from ..pagination import Cursor, Page
 
 
 class ReportsAPI(BaseAPI):

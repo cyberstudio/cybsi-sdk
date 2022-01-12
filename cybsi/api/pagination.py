@@ -5,9 +5,9 @@ See Also:
     See :ref:`pagination-example`
     for complete examples of pagination usage.
 """
-import requests
+from typing import Callable, Generic, Iterator, List, Optional, TypeVar, cast
 
-from typing import TypeVar, Callable, Iterator, List, Generic, Optional, cast
+import requests
 
 
 class Cursor:

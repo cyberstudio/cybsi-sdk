@@ -10,7 +10,6 @@ from cybsi.api.observable import (
     RelationshipKinds,
 )
 
-
 if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")
     api_url = environ.get("CYBSI_API_URL")

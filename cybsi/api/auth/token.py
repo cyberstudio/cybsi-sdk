@@ -1,5 +1,4 @@
 import datetime
-
 from enum import Enum
 
 from enum_tools.documentation import document_enum

@@ -1,11 +1,11 @@
 import uuid
 from datetime import datetime
-from typing import Optional, List, cast, Dict
+from typing import Dict, List, Optional, cast
 
-from .entity import EntityView
-from .aggregate_section import ValuableFactView
-from .enums import RelationshipKinds
 from ..internal import BaseAPI, JsonObjectView, rfc3339_timestamp
+from .aggregate_section import ValuableFactView
+from .entity import EntityView
+from .enums import RelationshipKinds
 
 
 def _convert_relationship_kind_kebab(kind: RelationshipKinds) -> str:

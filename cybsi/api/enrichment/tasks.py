@@ -5,24 +5,20 @@ It also allows registering enrichment task to start enrichment forcibly.
 """
 import datetime
 import uuid
-
-from typing import Optional, Union, cast, Dict, Any
-
-from ..internal import BaseAPI, JsonObjectForm, parse_rfc3339_timestamp
-from ..pagination import Page, Cursor
+from typing import Any, Dict, Optional, Union, cast
 
 from .. import RefView
 from ..artifact import ArtifactTypes
 from ..data_source import DataSourceCommonView
-from ..internal import JsonObjectView
+from ..internal import BaseAPI, JsonObjectForm, JsonObjectView, parse_rfc3339_timestamp
 from ..observable import EntityView, ShareLevels
 from ..observation import ObservationCommonView
-
+from ..pagination import Cursor, Page
 from .enums import (
-    EnrichmentTypes,
+    EnrichmentErrorCodes,
     EnrichmentTaskPriorities,
     EnrichmentTaskStatuses,
-    EnrichmentErrorCodes,
+    EnrichmentTypes,
 )
 
 

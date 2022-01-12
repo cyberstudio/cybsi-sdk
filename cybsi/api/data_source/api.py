@@ -1,15 +1,11 @@
 import uuid
-from typing import Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional
 
-from ..api import Nullable, _unwrap_nullable, Tag
-from ..view import _TaggedRefView
 from .. import RefView
-from ..pagination import Page, Cursor
-from ..internal import (
-    BaseAPI,
-    JsonObjectForm,
-    JsonObjectView,
-)
+from ..api import Nullable, Tag, _unwrap_nullable
+from ..internal import BaseAPI, JsonObjectForm, JsonObjectView
+from ..pagination import Cursor, Page
+from ..view import _TaggedRefView
 from .api_types import DataSourceTypeCommonView
 from .enums import DataSourceListOrder
 

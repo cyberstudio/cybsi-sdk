@@ -2,11 +2,8 @@
 from os import environ
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api.data_source import DataSourceForm, DataSourceTypeForm
 from cybsi.api.error import ConflictError
-from cybsi.api.data_source import (
-    DataSourceForm,
-    DataSourceTypeForm,
-)
 
 if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")

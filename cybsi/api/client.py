@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from .artifact import ArtifactsAPI
+from .data_source import DataSourcesAPI, DataSourceTypesAPI
 from .enrichment import EnrichmentAPI
 from .internal import HTTPConnector
 from .observable import ObservableAPI
@@ -9,10 +10,6 @@ from .observation import ObservationsAPI
 from .replist import ReplistsAPI
 from .report import ReportsAPI
 from .search import SearchAPI
-from .data_source import (
-    DataSourcesAPI,
-    DataSourceTypesAPI,
-)
 
 
 @dataclass

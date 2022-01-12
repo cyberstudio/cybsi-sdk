@@ -2,14 +2,14 @@
 or validate search queries.
 """
 from .api import SearchAPI
-from .stored_queries import (
-    StoredQueriesAPI,
-    StoredQueryForm,
-    StoredQueryView,
-    StoredQueryCommonView,
-    StoredQueryValidationView,
-    CybsiLangErrorView,
-    ErrorPosition,
-)
 from .enums import QueryCompatibility
 from .error import CybsiLangErrorCodes
+from .stored_queries import (
+    CybsiLangErrorView,
+    ErrorPosition,
+    StoredQueriesAPI,
+    StoredQueryCommonView,
+    StoredQueryForm,
+    StoredQueryValidationView,
+    StoredQueryView,
+)

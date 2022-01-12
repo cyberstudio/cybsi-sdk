@@ -1,19 +1,20 @@
-import requests
-
 from typing import Callable
 from urllib.parse import urljoin
 
+import requests
+
 from cybsi.__version__ import __version__
+
 from ..api import Tag
 from ..error import (
-    CybsiError,
-    InvalidRequestError,
-    UnauthorizedError,
-    ForbiddenError,
-    NotFoundError,
     ConflictError,
+    CybsiError,
+    ForbiddenError,
+    InvalidRequestError,
+    NotFoundError,
     ResourceModifiedError,
     SemanticError,
+    UnauthorizedError,
 )
 
 requests.packages.urllib3.disable_warnings()

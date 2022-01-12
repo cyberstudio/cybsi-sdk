@@ -1,8 +1,8 @@
 from typing import List
 
-from .entity import EntityView
-from .enums import EntityTypes, RelationshipKinds, LinkDirection
 from ..internal import JsonObjectView
+from .entity import EntityView
+from .enums import EntityTypes, LinkDirection, RelationshipKinds
 
 
 class EntityLinksForecastView(JsonObjectView):

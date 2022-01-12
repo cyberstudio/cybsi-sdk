@@ -12,21 +12,13 @@ See Also:
 """
 import datetime
 import uuid
-
 from typing import List, Union, cast
 
 from .. import RefView
-from ..internal import BaseAPI, JsonObjectForm, parse_rfc3339_timestamp
-from .enums import (
-    EnrichmentErrorCodes,
-    EnrichmentTaskPriorities,
-    EnrichmentTypes,
-)
-from .tasks import (
-    ArtifactAnalysisParamsView,
-    ExternalDBLookupParamsView,
-)
 from ..data_source import DataSourceCommonView
+from ..internal import BaseAPI, JsonObjectForm, parse_rfc3339_timestamp
+from .enums import EnrichmentErrorCodes, EnrichmentTaskPriorities, EnrichmentTypes
+from .tasks import ArtifactAnalysisParamsView, ExternalDBLookupParamsView
 
 
 class TaskQueueAPI(BaseAPI):

@@ -1,28 +1,27 @@
 #!/usr/bin/env python3
 import time
 import uuid
-
 from dataclasses import dataclass
-from os import environ
 from datetime import datetime, timezone
-from typing import cast, List
+from os import environ
+from typing import List, cast
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.enrichment import (
     AssignedTaskView,
     CompletedTaskForm,
-    ExternalDBLookupParamsView,
     EnrichmentErrorCodes,
     EnrichmentTypes,
+    ExternalDBLookupParamsView,
     FailedTaskForm,
     TaskResultObservationForm,
 )
 from cybsi.api.observable import (
     AttributeNames,
+    EntityForm,
     EntityKeyTypes,
     EntityTypes,
     ShareLevels,
-    EntityForm,
 )
 from cybsi.api.observation import GenericObservationForm
 

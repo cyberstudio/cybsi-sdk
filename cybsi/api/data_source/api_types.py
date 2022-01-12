@@ -1,11 +1,11 @@
 import uuid
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
-from ..api import Nullable, _unwrap_nullable, Tag
-from ..view import _TaggedRefView
 from .. import RefView
-from ..pagination import Page, Cursor
+from ..api import Nullable, Tag, _unwrap_nullable
 from ..internal import BaseAPI, JsonObjectForm
+from ..pagination import Cursor, Page
+from ..view import _TaggedRefView
 from .enums import DataSourceTypeListOrder
 
 

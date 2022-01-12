@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from os import environ
 from datetime import datetime, timezone
+from os import environ
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.observable import (
@@ -8,8 +8,8 @@ from cybsi.api.observable import (
     EntityForm,
     EntityKeyTypes,
     EntityTypes,
-    ShareLevels,
     RelationshipKinds,
+    ShareLevels,
 )
 from cybsi.api.observation import GenericObservationForm
 

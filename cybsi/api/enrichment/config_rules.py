@@ -1,13 +1,13 @@
 """Use this section of API to operate config rules.
 """
-from typing import List, Optional
 import uuid
+from typing import List, Optional
 
 from .. import RefView
-from ..internal import BaseAPI, JsonObjectForm
 from ..artifact import ArtifactTypes
+from ..internal import BaseAPI, JsonObjectForm
 from ..observable import EntityTypes
-from .enums import EnrichmentTypes, EnrichmentTriggerTypes
+from .enums import EnrichmentTriggerTypes, EnrichmentTypes
 
 
 class ConfigRulesAPI(BaseAPI):
