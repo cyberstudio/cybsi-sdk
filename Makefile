@@ -17,7 +17,7 @@ test:
 include docs/Makefile
 build-docs: html
 
-.PHONY: image-clean
+.PHONY: image-build
 image-build:
 	docker build $(DOCKER_BUILD_FLAGS) --tag "$(DOCKER_IMAGE):$(DOCKER_TAG)" "$(ROOT_DIR)"
 

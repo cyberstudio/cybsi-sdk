@@ -175,6 +175,13 @@ Reports
     :imported-members:
     :inherited-members:
 
+Users
+~~~~~
+.. automodule:: cybsi.api.user
+    :members:
+    :imported-members:
+    :inherited-members:
+
 Common views and data types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: cybsi.api.Null

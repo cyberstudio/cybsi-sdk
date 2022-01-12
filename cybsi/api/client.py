@@ -10,6 +10,7 @@ from .observation import ObservationsAPI
 from .replist import ReplistsAPI
 from .report import ReportsAPI
 from .search import SearchAPI
+from .user import UsersAPI
 
 
 @dataclass
@@ -108,3 +109,8 @@ class CybsiClient:
     def search(self) -> SearchAPI:
         """Search API handle."""
         return SearchAPI(self._connector)
+
+    @property
+    def users(self) -> UsersAPI:
+        """Users API handle."""
+        return UsersAPI(self._connector)

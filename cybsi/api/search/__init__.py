@@ -1,4 +1,4 @@
-"""Use this section of API to to register, retrieve
+"""Use this section of API to register, retrieve
 or validate search queries.
 """
 from .api import SearchAPI

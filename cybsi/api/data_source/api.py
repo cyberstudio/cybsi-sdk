@@ -292,5 +292,8 @@ class DataSourceLinksView(JsonObjectView):
 
     @property
     def user(self) -> Optional[RefView]:
-        """Reference to user."""
+        """Reference to user.
+
+        Use :meth:`~cybsi.api.user.UsersAPI.view` to retrieve user view.
+        """
         return self._map_optional("user", RefView)
