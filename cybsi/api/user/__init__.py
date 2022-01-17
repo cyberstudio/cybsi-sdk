@@ -5,5 +5,7 @@ from .api import (
     UsersAPI,
     UserForm,
     UserView,
+    UserCommonView,
     RoleCommonView,
+    CurrentUserView,
 )

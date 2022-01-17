@@ -1,15 +1,18 @@
 import uuid
 from typing import List, Optional
 
-from ..internal import BaseAPI, JsonObjectForm, JsonObjectView
+from ..api import Nullable, _unwrap_nullable
+from ..internal import BaseAPI, JsonObject, JsonObjectForm, JsonObjectView
 from ..observable import ShareLevels
-from ..view import RefView, _TaggedRefView
+from ..pagination import Cursor, Page
+from ..view import RefView, Tag, _TaggedRefView
 
 
 class UsersAPI(BaseAPI):
     """Users API."""
 
     _path = "/users"
+    _me_path = "/users/me"
 
     def register(self, form: "UserForm") -> RefView:
         """Register user.
@@ -36,7 +39,7 @@ class UsersAPI(BaseAPI):
         """Get the user view.
 
         Note:
-            Calls `Get /users/{user_uuid}`.
+            Calls `GET /users/{user_uuid}`.
         Args:
             user_uuid: User UUID.
         Returns:
@@ -48,6 +51,162 @@ class UsersAPI(BaseAPI):
         path = f"{self._path}/{user_uuid}"
         resp = self._connector.do_get(path)
         return UserView(resp)
+
+    def me(self) -> "CurrentUserView":
+        """Get user associated with current client.
+
+        Note:
+            Calls `GET /users/me`.
+        Returns:
+            View of current user.
+        """
+
+        r = self._connector.do_get(self._me_path)
+        return CurrentUserView(r.json())
+
+    def filter(
+        self,
+        user_uuids: Optional[List[uuid.UUID]] = None,
+        data_source_uuid: Optional[uuid.UUID] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> Page["UserCommonView"]:
+        """Get users filtration list.
+
+        Note:
+            Calls `GET /users`.
+        Args:
+            user_uuids: User identifiers.
+                Filter users by specified user UUIDs.
+            data_source_uuid: Data source identifier.
+                Filter users by associated data source UUID.
+            cursor: Page cursor.
+            limit: Page limit.
+        Return:
+            Page with user common views and next page cursor.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: query arguments contain errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+        Usage:
+            >>> import uuid
+            >>> from cybsi.api import CybsiClient
+            >>> from cybsi.api.pagination import chain_pages
+            >>>
+            >>> client: CybsiClient
+            >>> # filter users by specified data source uuid
+            >>> started_page = client.users.filter(
+            >>>     data_source_uuid=uuid.UUID("007c3927-1ef6-474a-b89b-d6feb3c73871"),
+            >>> )
+            >>> for item in chain_pages(started_page):
+            >>>     # do something with users
+            >>>     print(item)
+            >>> pass
+        """
+
+        params: JsonObject = {}
+        if data_source_uuid is not None:
+            params["dataSourceUUID"] = data_source_uuid
+        if user_uuids is not None:
+            params["uuid"] = user_uuids
+        if cursor is not None:
+            params["cursor"] = cursor
+        if limit is not None:
+            params["limit"] = limit
+
+        resp = self._connector.do_get(path=self._path, params=params)
+        page = Page(self._connector.do_get, resp, UserCommonView)
+        return page
+
+    def edit(
+        self,
+        user_uuid: uuid.UUID,
+        tag: Tag,
+        full_name: Nullable[str] = None,
+        email: Nullable[str] = None,
+        data_source_uuid: Nullable[uuid.UUID] = None,
+        access_level: Optional[ShareLevels] = None,
+        roles: Optional[List[str]] = None,
+        password: Optional[str] = None,
+        is_disabled: Optional[bool] = None,
+    ):
+        """Edit user.
+
+        Note:
+            Calls `PATCH /users/{user_uuid}`.
+        Args:
+            user_uuid: User identifier.
+            tag: :attr:`UserView.tag` value. Use :meth:`view` to retrieve it.
+            full_name: User full name.
+                Name must be less than or equal to 250 characters.
+            email: User email. Email length must be in range [3, 254].
+            data_source_uuid: Associated data source UUID.
+                Cannot be changed for users of external providers.
+            access_level: User access level.
+            roles: List of user role names.
+            password: User password. Password length must be in range [4, 50].
+                Cannot be changed for users of external providers.
+            is_disabled: Disabled user flag.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.ConflictError`:
+                User with specified associated data source already exists.
+            :class:`~cybsi.api.error.NotFoundError`: User not found.
+            :class:`~cybsi.api.error.ResourceModifiedError`:
+                User changed since last request. Retry using updated tag.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.NonLocalUser`
+        """
+        form: JsonObject = {}
+        if full_name is not None:
+            form["fullName"] = _unwrap_nullable(full_name)
+        if email is not None:
+            form["email"] = _unwrap_nullable(email)
+        if data_source_uuid is not None:
+            form["dataSourceUUID"] = _unwrap_nullable(data_source_uuid)
+        if access_level is not None:
+            form["accessLevel"] = access_level.value
+        if roles is not None:
+            form["roles"] = roles
+        if password is not None:
+            form["password"] = password
+        if is_disabled is not None:
+            form["isDisabled"] = is_disabled
+
+        path = f"{self._path}/{user_uuid}"
+        self._connector.do_patch(path=path, tag=tag, json=form)
+
+    def edit_my_password(self, old_password: str, new_password: str):
+        """Change password of current client.
+
+        Note:
+            The password can be changed only if the password was set initially.
+            Password login is not available for users without a password.
+
+            To confirm authorization and exclude situations when
+            the password is changed using the API key,
+            you must specify the valid current user password in the request.
+        Note:
+            Calls `PUT /users/me/password`.
+        Args:
+            old_password: Old user password. Password length must be in range [4, 50].
+            new_password: New user password. Password length must be in range [4, 50].
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.ForbiddenError`:
+                Specified user password does not match the current one.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.NonLocalUser`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.PasswordAuthDisabled`
+        """
+
+        form: JsonObject = {"oldPassword": old_password, "newPassword": new_password}
+        path = f"{self._me_path}/password"
+        self._connector.do_put(path=path, json=form)
 
 
 class UserForm(JsonObjectForm):
@@ -108,8 +267,10 @@ class UserForm(JsonObjectForm):
             self._data["dataSourceUUID"] = str(data_source_uuid)
 
 
-class UserView(_TaggedRefView):
-    """User full view."""
+class UserCommonView(RefView):
+    """User common view.
+
+    As retrieved by :meth:`UsersAPI.filter`."""
 
     @property
     def login(self) -> str:
@@ -135,6 +296,12 @@ class UserView(_TaggedRefView):
     def auth_provider_id(self) -> str:
         """Authentication provider ID."""
         return self._get("authProviderID")
+
+
+class UserView(_TaggedRefView, UserCommonView):
+    """User full view.
+
+    As retrieved by :meth:`UsersAPI.view`."""
 
     @property
     def access_level(self) -> ShareLevels:
@@ -169,3 +336,24 @@ class RoleCommonView(JsonObjectView):
     def name(self) -> str:
         """Role name."""
         return self._get("name")
+
+
+class CurrentUserView(UserCommonView):
+    """Current user view.
+
+    as retrieved by :meth:`UsersAPI.me`."""
+
+    @property
+    def access_level(self) -> ShareLevels:
+        """User access level."""
+        return ShareLevels(self._get("accessLevel"))
+
+    @property
+    def permissions(self) -> List[str]:
+        """List of permissions derived from user roles."""
+        return self._get("permissions")
+
+    @property
+    def data_source(self) -> Optional[RefView]:
+        """Associated data source."""
+        return self._map_optional("dataSource", RefView)

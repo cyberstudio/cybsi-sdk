@@ -11,6 +11,7 @@ from .replist import ReplistsAPI
 from .report import ReportsAPI
 from .search import SearchAPI
 from .user import UsersAPI
+from .api_keys import APIKeys
 
 
 @dataclass
@@ -114,3 +115,8 @@ class CybsiClient:
     def users(self) -> UsersAPI:
         """Users API handle."""
         return UsersAPI(self._connector)
+
+    @property
+    def api_keys(self) -> APIKeys:
+        """API-Keys API handle."""
+        return APIKeys(self._connector)

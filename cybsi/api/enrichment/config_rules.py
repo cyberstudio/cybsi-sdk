@@ -115,7 +115,7 @@ class ConfigRulesAPI(BaseAPI):
             Calls `PATCH /enrichment/config/rules/{rule_uuid}`.
         Args:
             rule_uuid: config rule identifier.
-            tag: :attr:ConfigRuleView`.tag` value. Use :meth:`view` to retrieve it.
+            tag: :attr:`ConfigRuleView.tag` value. Use :meth:`view` to retrieve it.
             name: Config rule name.
             triggers: Non-empty list of enrichment trigger types.
             data_source_uuids:
