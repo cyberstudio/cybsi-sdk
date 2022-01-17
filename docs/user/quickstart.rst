@@ -13,6 +13,17 @@ First, make sure that:
 
 Let's get started with some simple examples.
 
+.. _generate-user-api-key:
+
+Generate user API-Key
+---------------------------
+Cybsi API authentication occurs through API-Key.
+The client receives a Bearer Token using the api-key and then authenticates in the Cybsi API using this token.
+
+In the example below we create new user and generate his API-Key.
+
+.. literalinclude:: ../../examples/generate_user_api_key.py
+
 .. _register-data-source-example:
 
 Register custom data source

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from .artifact import ArtifactsAPI
+from .auth import APIKeysAPI
 from .data_source import DataSourcesAPI, DataSourceTypesAPI
 from .enrichment import EnrichmentAPI
 from .internal import HTTPConnector
@@ -11,7 +12,6 @@ from .replist import ReplistsAPI
 from .report import ReportsAPI
 from .search import SearchAPI
 from .user import UsersAPI
-from .api_keys import APIKeys
 
 
 @dataclass
@@ -117,6 +117,6 @@ class CybsiClient:
         return UsersAPI(self._connector)
 
     @property
-    def api_keys(self) -> APIKeys:
+    def api_keys(self) -> APIKeysAPI:
         """API-Keys API handle."""
-        return APIKeys(self._connector)
+        return APIKeysAPI(self._connector)

@@ -83,13 +83,13 @@ class ConfigRulesAPI(BaseAPI):
 
         params: JsonObject = {}
         if data_source_uuid is not None:
-            params["dataSourceUUID"] = data_source_uuid
+            params["dataSourceUUID"] = str(data_source_uuid)
         if trigger_data_source_uuid is not None:
-            params["triggerDataSourceUUID"] = trigger_data_source_uuid
+            params["triggerDataSourceUUID"] = str(trigger_data_source_uuid)
         if limit is not None:
-            params["limit"] = limit
+            params["limit"] = str(limit)
         if cursor is not None:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
 
         resp = self._connector.do_get(self._path, params=params)
         page = Page(self._connector.do_get, resp, ConfigRuleCommonView)

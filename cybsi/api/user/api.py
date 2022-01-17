@@ -71,7 +71,7 @@ class UsersAPI(BaseAPI):
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["UserCommonView"]:
-        """Get users filtration list.
+        """Filter users.
 
         Note:
             Calls `GET /users`.
@@ -107,13 +107,13 @@ class UsersAPI(BaseAPI):
 
         params: JsonObject = {}
         if data_source_uuid is not None:
-            params["dataSourceUUID"] = data_source_uuid
+            params["dataSourceUUID"] = str(data_source_uuid)
         if user_uuids is not None:
-            params["uuid"] = user_uuids
+            params["uuid"] = [str(u) for u in user_uuids]
         if cursor is not None:
-            params["cursor"] = cursor
+            params["cursor"] = str(cursor)
         if limit is not None:
-            params["limit"] = limit
+            params["limit"] = str(limit)
 
         resp = self._connector.do_get(path=self._path, params=params)
         page = Page(self._connector.do_get, resp, UserCommonView)
@@ -166,7 +166,7 @@ class UsersAPI(BaseAPI):
         if email is not None:
             form["email"] = _unwrap_nullable(email)
         if data_source_uuid is not None:
-            form["dataSourceUUID"] = _unwrap_nullable(data_source_uuid)
+            form["dataSourceUUID"] = str(_unwrap_nullable(data_source_uuid))
         if access_level is not None:
             form["accessLevel"] = access_level.value
         if roles is not None:
@@ -179,7 +179,7 @@ class UsersAPI(BaseAPI):
         path = f"{self._path}/{user_uuid}"
         self._connector.do_patch(path=path, tag=tag, json=form)
 
-    def edit_my_password(self, old_password: str, new_password: str):
+    def change_my_password(self, old_password: str, new_password: str):
         """Change password of current client.
 
         Note:
@@ -268,9 +268,7 @@ class UserForm(JsonObjectForm):
 
 
 class UserCommonView(RefView):
-    """User common view.
-
-    As retrieved by :meth:`UsersAPI.filter`."""
+    """User common view."""
 
     @property
     def login(self) -> str:
@@ -299,9 +297,7 @@ class UserCommonView(RefView):
 
 
 class UserView(_TaggedRefView, UserCommonView):
-    """User full view.
-
-    As retrieved by :meth:`UsersAPI.view`."""
+    """User full view."""
 
     @property
     def access_level(self) -> ShareLevels:
@@ -339,9 +335,7 @@ class RoleCommonView(JsonObjectView):
 
 
 class CurrentUserView(UserCommonView):
-    """Current user view.
-
-    as retrieved by :meth:`UsersAPI.me`."""
+    """Current user view."""
 
     @property
     def access_level(self) -> ShareLevels:

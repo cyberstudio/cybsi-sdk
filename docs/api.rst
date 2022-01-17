@@ -23,10 +23,14 @@ Artifacts
 
 Auth
 ~~~~
-.. automodule:: cybsi.api.auth
+.. autoclass:: cybsi.api.auth.APIKeyAuth
+
+API-Keys
+~~~~~~~~
+.. automodule:: cybsi.api.auth.api_key
     :members:
-    :imported-members:
     :inherited-members:
+    :exclude-members: APIKeyAuth
 
 Enrichment
 ~~~~~~~~~~
