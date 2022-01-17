@@ -18,8 +18,8 @@ class BaseAPI:
 
 
 class JsonObjectForm:
-    def __init__(self):
-        self._data = {}
+    def __init__(self, data: Optional[JsonObject] = None):
+        self._data = data or {}
 
     def __str__(self):
         return json.dumps(self._data, indent=2)

@@ -6,6 +6,7 @@ from .api import EnrichmentAPI
 from .config_rules import (
     ConfigRulesAPI,
     ConfigRuleView,
+    ConfigRuleCommonView,
     ConfigRuleForm,
 )
 
