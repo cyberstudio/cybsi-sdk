@@ -1,7 +1,7 @@
 """Use this section of API to operate analyzers.
 
-Analyzers are systems outside of Cybsi. They can be queried by Cybsi
-for information about artifacts. The result of such query an report.
+Analyzers are systems outside Cybsi. They can be queried by Cybsi
+for information about artifacts. The result of such query is report.
 The reports can contain observations and artifacts. The artifact is a regular file
 with additional attributes that can be analyzed or unpacked by the system.
 The observation typically provides group of facts obtained after analyzing an artifact.
@@ -14,6 +14,7 @@ from ..api import Nullable, Tag, _unwrap_nullable
 from ..artifact import ArtifactTypes
 from ..data_source import DataSourceCommonView
 from ..internal import BaseAPI, JsonObjectForm
+from ..pagination import Cursor, Page
 from ..view import _TaggedRefView
 
 
@@ -115,9 +116,50 @@ class AnalyzersAPI(BaseAPI):
         path = f"{self._path}/{analyzer_uuid}"
         self._connector.do_patch(path=path, tag=tag, json=form)
 
+    def filter(
+        self,
+        artifact_types: Optional[List[ArtifactTypes]] = None,
+        data_source_uuid: Optional[uuid.UUID] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> Page["AnalyzerCommonView"]:
+        """Get page of filtered analyzers list.
 
-class AnalyzerView(_TaggedRefView):
-    """Analyzer view"""
+        Note:
+            Calls `GET /enrichment/analyzers`
+        Args:
+            artifact_types: Artifact types list.
+                Select analyzers that accept any specified artifact type.
+            data_source_uuid: Data source identifier.
+                Select analyzers by associated data source identifier.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of filtered analyzers list and next page cursor.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: query arguments contain errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+        """
+        params: Dict[str, Any] = {}
+
+        if artifact_types is not None:
+            params["artifactType"] = [t.value for t in artifact_types]
+        if data_source_uuid is not None:
+            params["dataSourceUUID"] = str(data_source_uuid)
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        resp = self._connector.do_get(self._path, params=params)
+        page = Page(self._connector.do_get, resp, AnalyzerCommonView)
+        return page
+
+
+class AnalyzerCommonView(RefView):
+    """Analyzer common view"""
 
     @property
     def artifact_types(self) -> List[ArtifactTypes]:
@@ -148,6 +190,10 @@ class AnalyzerView(_TaggedRefView):
     def data_source(self) -> "DataSourceCommonView":
         """Data source view representing analyzer."""
         return DataSourceCommonView(self._get("dataSource"))
+
+
+class AnalyzerView(_TaggedRefView, AnalyzerCommonView):
+    pass
 
 
 class AnalyzerForm(JsonObjectForm):

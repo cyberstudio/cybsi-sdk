@@ -13,6 +13,7 @@ from .. import RefView
 from ..api import Nullable, Tag, _unwrap_nullable
 from ..internal import BaseAPI, JsonObjectForm
 from ..observable import EntityTypes
+from ..pagination import Cursor, Page
 from ..view import _TaggedRefView
 
 
@@ -108,6 +109,47 @@ class ExternalDBsAPI(BaseAPI):
             )
         path = f"{self._path}/{db_uuid}"
         self._connector.do_patch(path=path, tag=tag, json=form)
+
+    def filter(
+        self,
+        entity_types: Optional[List[EntityTypes]] = None,
+        data_source_uuid: Optional[uuid.UUID] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> Page["ExternalDBView"]:
+        """Get page of filtered external databases list.
+
+        Note:
+            Calls `GET /enrichment/external-dbs`
+        Args:
+            entity_types: Entity types list.
+                Select external databases that accept any specified artifact type.
+            data_source_uuid: Data source identifier.
+                Select analyzers by associated data source identifier.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of filtered external databases list and next page cursor.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: query arguments contain errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+        """
+        params: Dict[str, Any] = {}
+
+        if entity_types is not None:
+            params["entityType"] = [t.value for t in entity_types]
+        if data_source_uuid is not None:
+            params["dataSourceUUID"] = str(data_source_uuid)
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        resp = self._connector.do_get(self._path, params=params)
+        page = Page(self._connector.do_get, resp, ExternalDBView)
+        return page
 
 
 class ExternalDBView(_TaggedRefView):

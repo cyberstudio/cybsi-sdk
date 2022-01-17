@@ -5,6 +5,7 @@ from .. import RefView
 from ..api import Tag
 from ..error import CybsiError, SemanticError, SemanticErrorCodes
 from ..internal import BaseAPI, JsonObjectForm, JsonObjectView
+from ..pagination import Cursor, Page
 from ..view import _TaggedRefView
 from .enums import QueryCompatibility
 from .error import CybsiLangErrorCodes
@@ -101,6 +102,42 @@ class StoredQueriesAPI(BaseAPI):
             form["text"] = text
         path = f"{self._path}/{query_uuid}"
         self._connector.do_patch(path=path, tag=tag, json=form)
+
+    def filter(
+        self,
+        user_uuid: Optional[uuid.UUID] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> Page["StoredQueryView"]:
+        """Get page of filtered stored queries list.
+
+        Note:
+            Calls `GET /search/stored-queries`
+        Args:
+            user_uuid: User's identifier.
+                Filter stored queries by author's id.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of filtered stored queries list and next page cursor.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: query arguments contain errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.UserNotFound`
+        """
+        params: Dict[str, Any] = {}
+
+        if user_uuid is not None:
+            params["userUUID"] = str(user_uuid)
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        resp = self._connector.do_get(self._path, params=params)
+        page = Page(self._connector.do_get, resp, StoredQueryView)
+        return page
 
 
 class StoredQueryForm(JsonObjectForm):
