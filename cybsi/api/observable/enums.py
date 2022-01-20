@@ -64,14 +64,14 @@ class RelationshipKinds(Enum):
 
     Has = "Has"
     Contains = "Contains"
-    BelongsToDeprecated = "BelongsTo"
+    BelongsTo = "BelongsTo"  # doc: Deprecated.
     ConnectsTo = "ConnectsTo"
     Drops = "Drops"
     Uses = "Uses"
     Owns = "Owns"
     Supports = "Supports"
-    Resolves = "ResolvesTo"
-    VariantOfDeprecated = "VariantOf"
+    ResolvesTo = "ResolvesTo"
+    VariantOf = "VariantOf"  # doc: Deprecated.
     Targets = "Targets"
     Exploits = "Exploits"
     Hosts = "Hosts"
