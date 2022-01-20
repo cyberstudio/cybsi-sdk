@@ -9,4 +9,6 @@ from .api import (
     SimilarReportView,
     SimilarReportCorrelationView,
     MatchedEntitiesView,
+    ObservationReportView,
+    ObservationContentView,
 )

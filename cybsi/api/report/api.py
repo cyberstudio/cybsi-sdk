@@ -1,18 +1,29 @@
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from .. import RefView
 from ..artifact import ArtifactTypes
 from ..internal import (
     BaseAPI,
+    JsonObject,
     JsonObjectForm,
     JsonObjectView,
     parse_rfc3339_timestamp,
     rfc3339_timestamp,
 )
 from ..observable import EntityView, ShareLevels
-from ..observation import ObservationCommonView
+from ..observation import (
+    DNSLookupObservationContentView,
+    GenericObservationContentView,
+    NetworkSessionObservationContentView,
+    ObservationCommonView,
+    ObservationHeaderView,
+    ObservationTypes,
+    ScanSessionObservationContentView,
+    ThreatObservationContentView,
+    WhoisLookupObservationContentView,
+)
 from ..pagination import Cursor, Page
 
 
@@ -224,9 +235,10 @@ class ReportsAPI(BaseAPI):
         Note:
             Calls `GET /enrichment/report-labels`.
         Args:
+            prefix: Label prefix.
+                Prefix length must be in range [2;50].
             cursor: Page cursor.
             limit: Page limit.
-            prefix: Label prefix. Prefix length must be in range [2;50].
         Returns:
             Page of reports label list and next page cursor.
         """
@@ -238,6 +250,64 @@ class ReportsAPI(BaseAPI):
 
         resp = self._connector.do_get(self._label_path, params=params)
         page = Page(self._connector.do_get, resp, str)
+        return page
+
+    def add_observations(
+        self, report_uuid: uuid.UUID, observation_uuids: List[uuid.UUID]
+    ) -> RefView:
+        """Add observations to the report.
+
+        Note:
+            Calls `POST /enrichment/reports/{report_uuid}/observations`.
+        Args:
+            report_uuid: Report UUID.
+            observation_uuids: Observation UUIDs.
+        Returns:
+            Reference to the report.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.NotFoundError`: Report not found.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ObservationNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.UnallowedObservationType`
+        """
+        form: Dict[str, Any] = {"observations": [str(u) for u in observation_uuids]}
+
+        path = f"{self._path}/{report_uuid}/observations"
+        resp = self._connector.do_post(path=path, json=form)
+        return RefView(resp.json())
+
+    def filter_observations(
+        self,
+        report_uuid: uuid.UUID,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> Page["ObservationReportView"]:
+        """Filter observations in the report.
+
+        Note:
+            Calls `GET /enrichment/reports/{report_uuid}/observations`.
+        Args:
+            report_uuid: Report UUID.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of report observations list and next page cursor.
+                Observations always return in a stable order:
+                in the order in which they appear in the report.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Report not found.
+        """
+        params: Dict[str, Any] = {}
+        if cursor is not None:
+            params["cursor"] = str(cursor)
+        if limit is not None:
+            params["limit"] = str(limit)
+
+        path = f"{self._path}/{report_uuid}/observations"
+        resp = self._connector.do_get(path=path, params=params)
+        page = Page(self._connector.do_get, resp, ObservationReportView)
         return page
 
 
@@ -450,3 +520,123 @@ class MatchedEntitiesView(JsonObjectView):
     def weight(self) -> float:
         """Weight value of entity in range [0;1]."""
         return self._get("weight")
+
+
+class ObservationReportView(ObservationHeaderView):
+    """Observations report views."""
+
+    @property
+    def content(self) -> "ObservationContentView":
+        """Observation content.
+
+        Depends on observation type.
+
+        Using:
+            >>> from typing import cast
+            >>> from cybsi.api.observation import ObservationTypes
+            >>> from cybsi.api.report import ObservationReportView
+            >>> view = ObservationReportView()
+            >>> if view.type == ObservationTypes.Generic:
+            >>>     # do something with generic content
+            >>>     print(view.content.generic)
+        """
+
+        return ObservationContentView(self.type, self._get("content"))
+
+
+class ObservationContentView:
+    """Observation content view."""
+
+    _content_converters = {
+        ObservationTypes.DNSLookup: DNSLookupObservationContentView,
+        ObservationTypes.Generic: GenericObservationContentView,
+        ObservationTypes.NetworkSession: NetworkSessionObservationContentView,
+        ObservationTypes.ScanSession: ScanSessionObservationContentView,
+        ObservationTypes.Threat: ThreatObservationContentView,
+        ObservationTypes.WhoisLookup: WhoisLookupObservationContentView,
+    }
+
+    def __init__(self, obs_type: ObservationTypes, data: JsonObject):
+        view = self._content_converters[obs_type]
+        self._contents = {obs_type: view(data)}
+
+    @property
+    def dns_lookup(self) -> DNSLookupObservationContentView:
+        """Content of dns lookup observation.
+
+        Raises:
+            :class:`KeyError`:
+                Content is absent in the :class:`ObservationContentView`.
+        """
+        val = cast(
+            DNSLookupObservationContentView, self._contents[ObservationTypes.DNSLookup]
+        )
+        return val
+
+    @property
+    def generic(self) -> GenericObservationContentView:
+        """Content of generic observation.
+
+        Raises:
+            :class:`KeyError`:
+                Content is absent in the :class:`ObservationContentView`.
+        """
+        val = cast(
+            GenericObservationContentView, self._contents[ObservationTypes.Generic]
+        )
+        return val
+
+    @property
+    def network_session(self) -> NetworkSessionObservationContentView:
+        """Content of network session observation.
+
+        Raises:
+            :class:`KeyError`:
+                Content is absent in the :class:`ObservationContentView`.
+        """
+        val = cast(
+            NetworkSessionObservationContentView,
+            self._contents[ObservationTypes.NetworkSession],
+        )
+        return val
+
+    @property
+    def scan_session(self) -> ScanSessionObservationContentView:
+        """Content of scan session observation.
+
+        Raises:
+           :class:`KeyError`:
+               Content is absent in the :class:`ObservationContentView`.
+        """
+        val = cast(
+            ScanSessionObservationContentView,
+            self._contents[ObservationTypes.ScanSession],
+        )
+        return val
+
+    @property
+    def threat(self) -> ThreatObservationContentView:
+        """Content of threat observation.
+
+        Raises:
+            :class:`KeyError`:
+                Content is absent in the :class:`ObservationContentView`.
+        """
+        val = cast(
+            ThreatObservationContentView, self._contents[ObservationTypes.Threat]
+        )
+        return val
+
+    @property
+    def whois_lookup(self) -> WhoisLookupObservationContentView:
+        """Content of whois lookup observation.
+
+        Raises:
+            :class:`KeyError`:
+                Content is absent in the :class:`ObservationContentView`.
+        """
+        val = cast(
+            WhoisLookupObservationContentView,
+            self._contents[ObservationTypes.WhoisLookup],
+        )
+        return val
