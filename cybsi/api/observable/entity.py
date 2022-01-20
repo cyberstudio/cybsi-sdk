@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, Iterable, List, Optional, Tuple
 
 from .. import RefView
 from ..internal import JsonObjectForm, JsonObjectView
@@ -11,11 +11,16 @@ class EntityForm(JsonObjectForm):
 
     Args:
         ent_type: Entity type.
+        ent_keys: Entity natural keys.
     """
 
-    def __init__(self, ent_type: EntityTypes):
+    def __init__(
+        self, ent_type: EntityTypes, ent_keys: Iterable[Tuple[EntityKeyTypes, str]] = []
+    ):
         super().__init__()
         self._data["type"] = ent_type.value
+        keys = self._data.setdefault("keys", [])
+        keys.extend({"type": t.value, "value": v} for t, v in ent_keys)
 
     def add_key(self, key_type: EntityKeyTypes, value: str) -> "EntityForm":
         """Add natural key to the list of entity keys.

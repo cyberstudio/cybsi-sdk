@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from .. import RefView
 from ..internal import BaseAPI, rfc3339_timestamp
@@ -75,8 +75,15 @@ class EntitiesAPI(BaseAPI):
             >>> from cybsi.api import CybsiClient
             >>> from cybsi.api.observable import EntityForm, EntityTypes, EntityKeyTypes
             >>> client: CybsiClient
-            >>> entity_form = EntityForm(EntityTypes.DomainName)
-            >>> entity_form.add_key(EntityKeyTypes.String, "example.com")
+            >>> entity_form = EntityForm(
+            >>>     EntityTypes.File,
+            >>>     [(EntityKeyTypes.MD5, "3c4729715ef0d6bafd3d9c719e152099")],
+            >>> )
+            >>> # if you need to add extra key to entity form keys
+            >>> entity_form.add_key(
+            >>>     EntityKeyTypes.SHA1,
+            >>>     "0462cb99ddd46c142aa46244cb8c2d35bfe226f5",
+            >>> )
             >>> ref = client.observable.entities.register(entity_form)
             >>> # It's a good idea to use entity uuid in observation forms.
             >>> # But here we simply print returned ref.
@@ -241,6 +248,42 @@ class EntitiesAPI(BaseAPI):
         r = self._connector.do_get(path=self._path_canonical_key, params=params)
         return EntityKeyView(r.json())
 
+    def add_natural_keys(
+        self, entity_uuid: uuid.UUID, keys: Iterable[Tuple[EntityKeyTypes, str]]
+    ):
+        """Add entity nalural keys.
+
+        Note:
+            Calls `PUT /observable/entities/{entity_uuid}/keys`.
+        Args:
+            entity_uuid: Entity UUID.
+            keys: Entity natural keys.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKeySet`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKey`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.KeyConflict`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.BrokenKeySet`
+        Usage:
+            >>> import uuid
+            >>> from cybsi.api import CybsiClient
+            >>> from cybsi.api.observable import EntityKeyTypes
+            >>> client: CybsiClient
+            >>> entity_keys = [
+            >>>     (EntityKeyTypes.MD5, "3c4729715ef0d6bafd3d9c719e152099"),
+            >>>     (EntityKeyTypes.SHA1, "0462cb99ddd46c142aa46244cb8c2d35bfe226f5")
+            >>> ],
+            >>> client.observable.entities.add_natural_keys(
+            >>>     entity_uuid=uuid.UUID("d90f5ea5-0f33-44a4-b063-6bf90e654a81"),
+            >>>     form=entity_keys,
+            >>> )
+        """
+        form = [{"type": t.value, "value": v} for t, v in keys]
+        path = f"{self._path}/{entity_uuid}/keys"
+        self._connector.do_put(path=path, json=form)
+
     def forecast_attribute_values(
         self,
         entity_uuid: uuid.UUID,
@@ -393,3 +436,32 @@ class EntitiesAPI(BaseAPI):
         path = f"{self._path}/{entity_uuid}/link-type-statistic"
         r = self._connector.do_get(path=path, params=params)
         return EntityLinkStatisticView(r.json())
+
+    def add_labels(self, entity_uuid: uuid.UUID, labels: List[str]):
+        """Add entity labels.
+
+        Note:
+            Calls `PUT /observable/entities/{entityUUID}/labels`.
+        Args:
+            entity_uuid: Entity UUID.
+            labels: List of labels. Label length must be in range [2, 50].
+                Labels are converted to lowercase before saving.
+        """
+
+        path = f"{self._path}/{entity_uuid}/labels"
+        self._connector.do_put(path=path, json=labels)
+
+    def delete_labels(self, entity_uuid: uuid.UUID, labels: List[str]):
+        """Delete entity labels.
+
+        Note:
+            Calls `DELETE /observable/entities/{entityUUID}/labels`.
+        Args:
+            entity_uuid: Entity UUID.
+            labels: List of labels.
+                Labels are case-insensitive when compared.
+        """
+
+        params: Dict[str, Any] = {"label": labels}
+        path = f"{self._path}/{entity_uuid}/labels"
+        self._connector.do_delete(path=path, params=params)

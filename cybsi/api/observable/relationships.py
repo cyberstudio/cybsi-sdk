@@ -39,7 +39,7 @@ _rel_kind_kebab_converters: Dict[RelationshipKinds, str] = {
 
 
 class RelationshipsAPI(BaseAPI):
-    """Entities API."""
+    """Relationships API."""
 
     _path = "/observable/relationships"
 

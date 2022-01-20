@@ -40,6 +40,8 @@ from .relationships import (
     RelationshipView,
 )
 
+from .annotations import AnnotationsAPI
+
 from .enums import (
     AttributeNames,
     EntityKeyTypes,

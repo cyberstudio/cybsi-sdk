@@ -126,6 +126,18 @@ class HTTPConnector:
         """
         return self._do("PUT", path, json=json, **kwargs)
 
+    def do_delete(self, path, params: dict = None, **kwargs) -> requests.Response:
+        """Do HTTP PUT request.
+
+        Args:
+            path: URL path.
+            params: Query params.
+            kwargs: Any kwargs supported by request.Request.
+        Return:
+            Response.
+        """
+        return self._do("DELETE", path, params=params, **kwargs)
+
     def _raise_for_status(self, resp: requests.Response) -> None:
         if resp.ok:
             return

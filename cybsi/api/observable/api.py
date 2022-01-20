@@ -1,7 +1,7 @@
-from cybsi.api.observable.relationships import RelationshipsAPI
-
 from ..internal import BaseAPI
+from .annotations import AnnotationsAPI
 from .entities_api import EntitiesAPI
+from .relationships import RelationshipsAPI
 
 
 class ObservableAPI(BaseAPI):
@@ -16,3 +16,8 @@ class ObservableAPI(BaseAPI):
     def relationships(self) -> RelationshipsAPI:
         """Relationships API."""
         return RelationshipsAPI(self._connector)
+
+    @property
+    def annotations(self) -> AnnotationsAPI:
+        """Annotations API."""
+        return AnnotationsAPI(self._connector)
