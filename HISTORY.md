@@ -1,6 +1,17 @@
 Release History
 ===============
 
+0.0.19 (TBD)
+------------
+- Add User API
+- Simplify installation
+- Implement enrichment config rule filter/edit methods
+- Implement filter methods for stored queries, external DBs and analyzers
+- Implement API key API
+- Fix relationship names
+- Add annotations API
+- Allow adding entity keys
+
 0.0.18 (2022-01-11)
 -------------------
 - Support analyzedArtifactUUID in report API
