@@ -13,6 +13,10 @@ Low-level client
     :members:
 .. autoclass:: cybsi.api.Config
     :members:
+.. autoclass:: cybsi.api.VersionView
+    :members:
+.. autoclass:: cybsi.api.Version
+    :members:
 
 Artifacts
 ~~~~~~~~~

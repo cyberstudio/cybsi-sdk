@@ -11,4 +11,4 @@ from .view import RefView
 # only to improve initial SDK experience for newcomers
 # (less typing of imports)
 from .auth import APIKeyAuth
-from .client import CybsiClient, Config
+from .client import CybsiClient, Config, VersionView, Version

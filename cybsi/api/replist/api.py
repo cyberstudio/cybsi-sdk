@@ -1,11 +1,11 @@
 import uuid
 from datetime import datetime
-from typing import Optional, Tuple, cast
+from typing import List, Optional, Tuple, cast
 
 from .. import RefView
 from ..api import Tag
 from ..internal import BaseAPI, JsonObjectForm, JsonObjectView, parse_rfc3339_timestamp
-from ..observable import EntityView, ShareLevels
+from ..observable import EntityTypes, EntityView, ShareLevels
 from ..pagination import Cursor, Page
 from ..search import StoredQueryCommonView
 from ..view import _TaggedRefView
@@ -195,6 +195,23 @@ class ReplistsAPI(BaseAPI):
         page = Page(self._connector.do_get, resp, EntitySetChangeView)
         return page
 
+    def statistic(self, replist_uuid: uuid.UUID) -> "ReplistStatisticView":
+        """Get replist statistic.
+
+        Note:
+            Calls `GET /replists/{replist_uuid}/statistic`.
+        Args:
+            replist_uuid: Replist uuid.
+        Returns:
+            Replist statistic view.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Replist not found.
+        """
+
+        path = f"{self._replist_base_url}/{replist_uuid}/statistic"
+        resp = self._connector.do_get(path)
+        return ReplistStatisticView(resp.json())
+
 
 class ReplistForm(JsonObjectForm):
     """Reputation list form.
@@ -268,3 +285,33 @@ class EntitySetChangeView(JsonObjectView):
     def entity(self) -> EntityView:
         """Get entity."""
         return self._get("entity")
+
+
+class ReplistStatisticView(JsonObjectView):
+    """Replist statistic view."""
+
+    @property
+    def entity_count(self) -> int:
+        """Total number of entities in the replist."""
+        return self._get("entityCount")
+
+    @property
+    def entity_type_distribution(self) -> List["EntityTypeDistributionView"]:
+        """Distribution of entities number by their types."""
+        return [
+            EntityTypeDistributionView(x) for x in self._get("entityTypeDistribution")
+        ]
+
+
+class EntityTypeDistributionView(JsonObjectView):
+    """Entity type distribution."""
+
+    @property
+    def entity_type(self) -> EntityTypes:
+        """Entity type."""
+        return EntityTypes(self._get("entityType"))
+
+    @property
+    def count(self) -> int:
+        """Number of entities."""
+        return self._get("count")

@@ -252,10 +252,10 @@ class ReportsAPI(BaseAPI):
         page = Page(self._connector.do_get, resp, str)
         return page
 
-    def add_observations(
+    def attach_observations(
         self, report_uuid: uuid.UUID, observation_uuids: List[uuid.UUID]
     ) -> RefView:
-        """Add observations to the report.
+        """Attach observations to existing report.
 
         Note:
             Calls `POST /enrichment/reports/{report_uuid}/observations`.
@@ -283,7 +283,7 @@ class ReportsAPI(BaseAPI):
         report_uuid: uuid.UUID,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
-    ) -> Page["ObservationReportView"]:
+    ) -> Page["ObservationView"]:
         """Filter observations in the report.
 
         Note:
@@ -294,8 +294,7 @@ class ReportsAPI(BaseAPI):
             limit: Page limit.
         Returns:
             Page of report observations list and next page cursor.
-                Observations always return in a stable order:
-                in the order in which they appear in the report.
+                The list of observations is ordered as in the report.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Report not found.
         """
@@ -307,7 +306,7 @@ class ReportsAPI(BaseAPI):
 
         path = f"{self._path}/{report_uuid}/observations"
         resp = self._connector.do_get(path=path, params=params)
-        page = Page(self._connector.do_get, resp, ObservationReportView)
+        page = Page(self._connector.do_get, resp, ObservationView)
         return page
 
 
@@ -522,8 +521,8 @@ class MatchedEntitiesView(JsonObjectView):
         return self._get("weight")
 
 
-class ObservationReportView(ObservationHeaderView):
-    """Observations report views."""
+class ObservationView(ObservationHeaderView):
+    """Observation view."""
 
     @property
     def content(self) -> "ObservationContentView":
@@ -534,8 +533,8 @@ class ObservationReportView(ObservationHeaderView):
         Using:
             >>> from typing import cast
             >>> from cybsi.api.observation import ObservationTypes
-            >>> from cybsi.api.report import ObservationReportView
-            >>> view = ObservationReportView()
+            >>> from cybsi.api.report import ObservationView
+            >>> view = ObservationView()
             >>> if view.type == ObservationTypes.Generic:
             >>>     # do something with generic content
             >>>     print(view.content.generic)
@@ -556,9 +555,9 @@ class ObservationContentView:
         ObservationTypes.WhoisLookup: WhoisLookupObservationContentView,
     }
 
-    def __init__(self, obs_type: ObservationTypes, data: JsonObject):
+    def __init__(self, obs_type: ObservationTypes, content: JsonObject):
         view = self._content_converters[obs_type]
-        self._contents = {obs_type: view(data)}
+        self._contents = {obs_type: view(content)}
 
     @property
     def dns_lookup(self) -> DNSLookupObservationContentView:

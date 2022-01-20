@@ -9,6 +9,8 @@ from .api import (
     ReplistCommonView,
     ReplistView,
     EntitySetChangeView,
+    ReplistStatisticView,
+    EntityTypeDistributionView,
 )
 
 from .enums import (
