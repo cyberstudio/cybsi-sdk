@@ -1,8 +1,12 @@
 Release History
 ===============
 
-0.0.19 (TBD)
-------------
+2.8.0a1 (2022-01-21)
+--------------------
+This is the first version of SDK supporting the entire Cybsi REST API.
+
+As Cybsi 2.8.0 is in development right now, the SDK is released as alpha.
+
 - Add User API
 - Simplify installation
 - Implement enrichment config rule filter/edit methods
@@ -11,6 +15,9 @@ Release History
 - Fix relationship names
 - Add annotations API
 - Allow adding entity keys
+- Extend Report API with `attach_observations` and `filter_observations`
+- Implement Replist statistic
+- Implement API spec/server version API
 
 0.0.18 (2022-01-11)
 -------------------
