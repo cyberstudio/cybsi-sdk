@@ -32,7 +32,7 @@ class ArtifactsAPI(BaseAPI):
         """
         path = f"{self._path}/{artifact_uuid}"
         r = self._connector.do_get(path)
-        return ArtifactView(r.json())
+        return ArtifactView(r)
 
     def view_registrations(
         self, artifact_uuid: uuid.UUID
