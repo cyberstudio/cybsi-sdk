@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.8.0a2 (2022-01-27)
+--------------------
+- Fix artifact view initialization crash
+
 2.8.0a1 (2022-01-21)
 --------------------
 This is the first version of SDK supporting the entire Cybsi REST API.
