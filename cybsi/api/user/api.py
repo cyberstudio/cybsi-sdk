@@ -1,11 +1,12 @@
 import uuid
-from typing import List, Optional
+from typing import Iterable, List, Optional
 
 from ..api import Nullable, _unwrap_nullable
 from ..internal import BaseAPI, JsonObject, JsonObjectForm, JsonObjectView
 from ..observable import ShareLevels
 from ..pagination import Cursor, Page
 from ..view import RefView, Tag, _TaggedRefView
+from .enums import RoleName
 
 
 class UsersAPI(BaseAPI):
@@ -127,7 +128,7 @@ class UsersAPI(BaseAPI):
         email: Nullable[str] = None,
         data_source_uuid: Nullable[uuid.UUID] = None,
         access_level: Optional[ShareLevels] = None,
-        roles: Optional[List[str]] = None,
+        roles: Optional[Iterable[RoleName]] = None,
         password: Optional[str] = None,
         is_disabled: Optional[bool] = None,
     ):
@@ -235,7 +236,7 @@ class UserForm(JsonObjectForm):
         >>> userForm = UserForm(
         >>>     login="user_test",
         >>>     access_level=ShareLevels.Green,
-        >>>     roles=["EntityReader"],
+        >>>     roles=[RoleName.EntityReader],
         >>>     password="string",
         >>>     full_name="Test Tester",
         >>>     email="test@pt.com",
@@ -247,7 +248,7 @@ class UserForm(JsonObjectForm):
         self,
         login: str,
         access_level: ShareLevels,
-        roles: List[str],
+        roles: Iterable[RoleName],
         password: Optional[str] = None,
         full_name: Optional[str] = None,
         email: Optional[str] = None,
@@ -256,7 +257,7 @@ class UserForm(JsonObjectForm):
         super().__init__()
         self._data["login"] = login
         self._data["accessLevel"] = access_level.value
-        self._data["roles"] = roles
+        self._data["roles"] = [role.value for role in roles]
         if password is not None:
             self._data["password"] = password
         if full_name is not None:
@@ -329,9 +330,9 @@ class RoleCommonView(JsonObjectView):
         return uuid.UUID(self._get("uuid"))
 
     @property
-    def name(self) -> str:
+    def name(self) -> RoleName:
         """Role name."""
-        return self._get("name")
+        return RoleName(self._get("name"))
 
 
 class CurrentUserView(UserCommonView):

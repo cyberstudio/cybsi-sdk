@@ -7,6 +7,7 @@ from cybsi.api.auth import APIKeyForm
 from cybsi.api.error import ConflictError
 from cybsi.api.observable import ShareLevels
 from cybsi.api.user import UserForm
+from cybsi.api.user.enums import RoleName
 
 if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")
@@ -22,7 +23,7 @@ if __name__ == "__main__":
         userForm = UserForm(
             login="user_test",
             access_level=ShareLevels.Green,
-            roles=["EntityReader"],
+            roles=[RoleName.EntityReader],
             password="string",
             full_name="Test Tester",
             email="test@pt.com",
