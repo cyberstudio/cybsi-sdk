@@ -16,10 +16,11 @@ background information about Cybsi, then focuses on step-by-step
 instructions for getting the most out of Cybsi SDK.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    user/install
    user/quickstart
+   user/examples
    user/advanced
    user/authentication
 
