@@ -1,5 +1,5 @@
 import uuid
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, Optional
 
 from .. import RefView
 from ..api import Nullable, Tag, _unwrap_nullable
@@ -115,7 +115,7 @@ class DataSourcesAPI(BaseAPI):
     def filter(
         self,
         query: Optional[str] = None,
-        type_uuids: Optional[List[uuid.UUID]] = None,
+        type_uuids: Optional[Iterable[uuid.UUID]] = None,
         order_by: Optional[DataSourceListOrder] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,

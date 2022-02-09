@@ -7,7 +7,7 @@ with additional attributes that can be analyzed or unpacked by the system.
 The observation typically provides group of facts obtained after analyzing an artifact.
 """
 import uuid
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 from .. import RefView
 from ..api import Nullable, Tag, _unwrap_nullable
@@ -63,7 +63,7 @@ class AnalyzersAPI(BaseAPI):
         self,
         analyzer_uuid: uuid.UUID,
         tag: Tag,
-        artifact_types: Optional[List[ArtifactTypes]] = None,
+        artifact_types: Optional[Iterable[ArtifactTypes]] = None,
         artifact_size_limit: Nullable[int] = None,
         dashboard_url: Nullable[str] = None,
         task_execution_timeout: Nullable[int] = None,
@@ -118,7 +118,7 @@ class AnalyzersAPI(BaseAPI):
 
     def filter(
         self,
-        artifact_types: Optional[List[ArtifactTypes]] = None,
+        artifact_types: Optional[Iterable[ArtifactTypes]] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
@@ -225,7 +225,7 @@ class AnalyzerForm(JsonObjectForm):
     def __init__(
         self,
         data_source_uuid: uuid.UUID,
-        artifact_types: List[ArtifactTypes],
+        artifact_types: Iterable[ArtifactTypes],
         artifact_size_limit: Optional[int] = None,
         dashboard_url: Optional[str] = None,
         task_execution_timeout: Optional[int] = None,

@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, Optional, Tuple
 
 from .. import RefView
 from ..internal import BaseAPI, rfc3339_timestamp
@@ -95,7 +95,7 @@ class EntitiesAPI(BaseAPI):
     def view(
         self,
         entity_uuid: uuid.UUID,
-        sections: Optional[List[EntityAggregateSections]] = None,
+        sections: Optional[Iterable[EntityAggregateSections]] = None,
         forecast_at: Optional[datetime] = None,
         with_valuable_facts: Optional[bool] = None,
     ) -> EntityAggregateView:
@@ -150,8 +150,8 @@ class EntitiesAPI(BaseAPI):
 
     def aggregate(
         self,
-        entity_uuids: List[uuid.UUID],
-        sections: Optional[List[EntityAggregateSections]] = None,
+        entity_uuids: Iterable[uuid.UUID],
+        sections: Optional[Iterable[EntityAggregateSections]] = None,
         forecast_at: Optional[datetime] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
@@ -334,9 +334,9 @@ class EntitiesAPI(BaseAPI):
     def forecast_links(
         self,
         entity_uuid: uuid.UUID,
-        related_entity_types: Optional[List[EntityTypes]] = None,
-        direction: Optional[List[LinkDirection]] = None,
-        kind: Optional[List[RelationshipKinds]] = None,
+        related_entity_types: Optional[Iterable[EntityTypes]] = None,
+        direction: Optional[Iterable[LinkDirection]] = None,
+        kind: Optional[Iterable[RelationshipKinds]] = None,
         confidence_threshold: Optional[float] = None,
         forecast_at: Optional[datetime] = None,
         cursor: Optional[Cursor] = None,
@@ -437,7 +437,7 @@ class EntitiesAPI(BaseAPI):
         r = self._connector.do_get(path=path, params=params)
         return EntityLinkStatisticView(r.json())
 
-    def add_labels(self, entity_uuid: uuid.UUID, labels: List[str]):
+    def add_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]):
         """Add entity labels.
 
         Note:
@@ -449,9 +449,9 @@ class EntitiesAPI(BaseAPI):
         """
 
         path = f"{self._path}/{entity_uuid}/labels"
-        self._connector.do_put(path=path, json=labels)
+        self._connector.do_put(path=path, json=list(labels))
 
-    def delete_labels(self, entity_uuid: uuid.UUID, labels: List[str]):
+    def delete_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]):
         """Delete entity labels.
 
         Note:
@@ -462,6 +462,6 @@ class EntitiesAPI(BaseAPI):
                 Labels are case-insensitive when compared.
         """
 
-        params: Dict[str, Any] = {"label": labels}
+        params: Dict[str, Any] = {"label": list(labels)}
         path = f"{self._path}/{entity_uuid}/labels"
         self._connector.do_delete(path=path, params=params)

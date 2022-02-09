@@ -1,7 +1,7 @@
 import cgi
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, Iterable, List, Optional, cast
 
 from .. import RefView
 from ..error import CybsiError
@@ -158,7 +158,7 @@ class ArtifactsAPI(BaseAPI):
     def filter(
         self,
         artifact_type: Optional[ArtifactTypes] = None,
-        data_source_uuids: Optional[List[uuid.UUID]] = None,
+        data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
         file_uuid: Optional[uuid.UUID] = None,
         artifact_hash: Optional[str] = None,
         cursor: Optional[Cursor] = None,

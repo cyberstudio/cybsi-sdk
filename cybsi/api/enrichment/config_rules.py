@@ -1,7 +1,7 @@
 """Use this section of API to operate config rules.
 """
 import uuid
-from typing import Any, List, Optional
+from typing import Any, Iterable, List, Optional
 
 from .. import RefView, Tag
 from ..api import Nullable, _unwrap_nullable
@@ -101,11 +101,11 @@ class ConfigRulesAPI(BaseAPI):
         tag: Tag,
         name: Optional[str] = None,
         is_disabled: Optional[bool] = None,
-        triggers: Optional[List[EnrichmentTriggerTypes]] = None,
-        trigger_data_source_uuids: Nullable[List[uuid.UUID]] = None,
-        artifact_types: Nullable[List[ArtifactTypes]] = None,
-        entity_types: Nullable[List[EntityTypes]] = None,
-        data_source_uuids: Optional[List[uuid.UUID]] = None,
+        triggers: Optional[Iterable[EnrichmentTriggerTypes]] = None,
+        trigger_data_source_uuids: Nullable[Iterable[uuid.UUID]] = None,
+        artifact_types: Nullable[Iterable[ArtifactTypes]] = None,
+        entity_types: Nullable[Iterable[EntityTypes]] = None,
+        data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
         throttling_interval: Nullable[int] = None,
         enrichment: Optional[EnrichmentTypes] = None,
     ) -> None:
@@ -280,13 +280,13 @@ class ConfigRuleForm(JsonObjectForm):
     def __init__(
         self,
         name: str,
-        triggers: List[EnrichmentTriggerTypes],
-        data_source_uuids: List[uuid.UUID],
+        triggers: Iterable[EnrichmentTriggerTypes],
+        data_source_uuids: Iterable[uuid.UUID],
         enrichment: EnrichmentTypes,
         is_disabled: Optional[bool] = False,
-        trigger_data_source_uuids: Optional[List[uuid.UUID]] = None,
-        artifact_types: Optional[List[ArtifactTypes]] = None,
-        entity_types: Optional[List[EntityTypes]] = None,
+        trigger_data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
+        artifact_types: Optional[Iterable[ArtifactTypes]] = None,
+        entity_types: Optional[Iterable[EntityTypes]] = None,
         throttling_interval: Optional[int] = None,
     ):
         data = _create_rule_form_data(
@@ -306,11 +306,11 @@ class ConfigRuleForm(JsonObjectForm):
 def _create_rule_form_data(
     name: Optional[str],
     is_disabled: Optional[bool] = None,
-    triggers: Optional[List[EnrichmentTriggerTypes]] = None,
-    trigger_data_source_uuids: Nullable[List[uuid.UUID]] = None,
-    artifact_types: Nullable[List[ArtifactTypes]] = None,
-    entity_types: Nullable[List[EntityTypes]] = None,
-    data_source_uuids: Optional[List[uuid.UUID]] = None,
+    triggers: Optional[Iterable[EnrichmentTriggerTypes]] = None,
+    trigger_data_source_uuids: Nullable[Iterable[uuid.UUID]] = None,
+    artifact_types: Nullable[Iterable[ArtifactTypes]] = None,
+    entity_types: Nullable[Iterable[EntityTypes]] = None,
+    data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
     throttling_interval: Nullable[int] = None,
     enrichment: Optional[EnrichmentTypes] = None,
 ) -> JsonObject:

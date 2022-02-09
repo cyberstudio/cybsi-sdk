@@ -67,7 +67,7 @@ class UsersAPI(BaseAPI):
 
     def filter(
         self,
-        user_uuids: Optional[List[uuid.UUID]] = None,
+        user_uuids: Optional[Iterable[uuid.UUID]] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
@@ -171,7 +171,7 @@ class UsersAPI(BaseAPI):
         if access_level is not None:
             form["accessLevel"] = access_level.value
         if roles is not None:
-            form["roles"] = roles
+            form["roles"] = [role.value for role in roles]
         if password is not None:
             form["password"] = password
         if is_disabled is not None:

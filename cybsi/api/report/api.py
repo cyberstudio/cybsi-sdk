@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, Iterable, List, Optional, cast
 
 from .. import RefView
 from ..artifact import ArtifactTypes
@@ -77,10 +77,10 @@ class ReportsAPI(BaseAPI):
     def filter(
         self,
         file_uuid: Optional[uuid.UUID] = None,
-        reporter_uuids: Optional[List[uuid.UUID]] = None,
-        data_source_uuids: Optional[List[uuid.UUID]] = None,
-        entity_uuids: Optional[List[uuid.UUID]] = None,
-        label: Optional[List[str]] = None,
+        reporter_uuids: Optional[Iterable[uuid.UUID]] = None,
+        data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
+        entity_uuids: Optional[Iterable[uuid.UUID]] = None,
+        labels: Optional[Iterable[str]] = None,
         analyzed_artifact_uuid: Optional[uuid.UUID] = None,
         title: Optional[str] = None,
         created_before: Optional[datetime] = None,
@@ -106,7 +106,8 @@ class ReportsAPI(BaseAPI):
                 Filter reports by original data source identifiers.
             entity_uuids: entity identifiers.
                 Filter reports by at least one of the specified entity.
-            label: Filter reports by any of the specified labels. Label case is ignored.
+            labels: Filter reports by any of the specified labels.
+                Label case is ignored.
             analyzed_artifact_uuid: Analyzed artifact identifier.
                 Filter reports based on analysis of the specified artifact.
             title: Filter reports by specified title. Title case is ignored.
@@ -143,8 +144,8 @@ class ReportsAPI(BaseAPI):
             params["dataSourceUUID"] = [str(u) for u in data_source_uuids]
         if entity_uuids is not None:
             params["entityUUID"] = [str(u) for u in entity_uuids]
-        if label is not None:
-            params["label"] = label
+        if labels is not None:
+            params["label"] = list(labels)
         if analyzed_artifact_uuid is not None:
             params["analyzedArtifactUUID"] = str(analyzed_artifact_uuid)
         if title is not None:
@@ -336,11 +337,11 @@ class ReportForm(JsonObjectForm):
         external_id: Optional[str] = None,
         created_at: Optional[datetime] = None,
         published_at: Optional[datetime] = None,
-        external_refs: Optional[List[str]] = None,
-        labels: Optional[List[str]] = None,
+        external_refs: Optional[Iterable[str]] = None,
+        labels: Optional[Iterable[str]] = None,
         data_source: Optional[uuid.UUID] = None,
-        observation_uuids: Optional[List[uuid.UUID]] = None,
-        artifact_uuids: Optional[List[uuid.UUID]] = None,
+        observation_uuids: Optional[Iterable[uuid.UUID]] = None,
+        artifact_uuids: Optional[Iterable[uuid.UUID]] = None,
         analyzed_artifact_uuid: Optional[uuid.UUID] = None,
     ):
         super().__init__()
@@ -356,9 +357,9 @@ class ReportForm(JsonObjectForm):
         if published_at is not None:
             self._data["publishedAt"] = rfc3339_timestamp(published_at)
         if external_refs is not None:
-            self._data["externalRefs"] = external_refs
+            self._data["externalRefs"] = list(external_refs)
         if labels is not None:
-            self._data["labels"] = labels
+            self._data["labels"] = list(labels)
         if data_source is not None:
             self._data["dataSource"] = str(data_source)
         if observation_uuids is not None:

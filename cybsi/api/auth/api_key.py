@@ -1,7 +1,7 @@
 import logging
 import uuid
 from datetime import datetime
-from typing import List, Optional
+from typing import Iterable, List, Optional
 
 import requests
 
@@ -210,14 +210,14 @@ class APIKeyForm(JsonObjectForm):
         self,
         expires_at: datetime,
         description: Optional[str] = None,
-        permissions: Optional[List[str]] = None,
+        permissions: Optional[Iterable[str]] = None,
     ):
         super().__init__()
         self._data["expiresAt"] = rfc3339_timestamp(expires_at)
         if description is not None:
             self._data["description"] = description
         if permissions is not None:
-            self._data["permissions"] = permissions
+            self._data["permissions"] = list(permissions)
 
 
 class APIKeyRefView(JsonObjectView):

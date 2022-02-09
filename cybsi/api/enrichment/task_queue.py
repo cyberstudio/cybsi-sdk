@@ -12,7 +12,7 @@ See Also:
 """
 import datetime
 import uuid
-from typing import List, Union, cast
+from typing import Iterable, List, Union, cast
 
 from .. import RefView
 from ..data_source import DataSourceCommonView
@@ -45,7 +45,7 @@ class TaskQueueAPI(BaseAPI):
         r = self._connector.do_post(path=path, json={"limit": limit})
         return [AssignedTaskView(t) for t in r.json()]
 
-    def complete_tasks(self, completed_tasks: List["CompletedTaskForm"]) -> None:
+    def complete_tasks(self, completed_tasks: Iterable["CompletedTaskForm"]) -> None:
         """Register successful task results.
 
         Note:
@@ -72,7 +72,7 @@ class TaskQueueAPI(BaseAPI):
         task_jsons = [r.json() for r in completed_tasks]
         self._connector.do_post(path=path, json={"tasks": task_jsons})
 
-    def fail_tasks(self, failed_tasks: List["FailedTaskForm"]) -> None:
+    def fail_tasks(self, failed_tasks: Iterable["FailedTaskForm"]) -> None:
         """Register failed task errors.
 
         Note:

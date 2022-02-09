@@ -7,7 +7,7 @@ See Also:
 """
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Iterable, List, Optional, Union, cast
 
 from .. import RefView
 from ..internal import BaseAPI, JsonObjectForm, JsonObjectView, rfc3339_timestamp
@@ -57,8 +57,8 @@ class GenericObservationsAPI(BaseAPI):
 
     def filter(
         self,
-        data_source_uuids: Optional[List[uuid.UUID]] = None,
-        reporter_uuids: Optional[List[uuid.UUID]] = None,
+        data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
+        reporter_uuids: Optional[Iterable[uuid.UUID]] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["GenericObservationView"]:

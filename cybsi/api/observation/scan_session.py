@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, Optional
 from uuid import UUID
 
 from ..internal import BaseAPI, JsonObjectView
@@ -15,8 +15,8 @@ class ScanSessionObservationsAPI(BaseAPI):
     def filter(
         self,
         entity_uuid: Optional[UUID] = None,
-        data_source_uuids: Optional[List[UUID]] = None,
-        reporter_uuids: Optional[List[UUID]] = None,
+        data_source_uuids: Optional[Iterable[UUID]] = None,
+        reporter_uuids: Optional[Iterable[UUID]] = None,
         mode: Optional[ScanSessionFiltrationMode] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,

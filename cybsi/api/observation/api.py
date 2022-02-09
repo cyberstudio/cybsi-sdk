@@ -4,7 +4,7 @@ observation of types known to Cybsi.
 Each type of observation is handled by their own subsection of API.
 """
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, Optional
 from uuid import UUID
 
 from ..internal import BaseAPI, rfc3339_timestamp
@@ -63,9 +63,9 @@ class ObservationsAPI(BaseAPI):
 
     def search(
         self,
-        types: Optional[List[ObservationTypes]] = None,
-        data_source_uuids: Optional[List[UUID]] = None,
-        reporter_uuids: Optional[List[UUID]] = None,
+        types: Optional[Iterable[ObservationTypes]] = None,
+        data_source_uuids: Optional[Iterable[UUID]] = None,
+        reporter_uuids: Optional[Iterable[UUID]] = None,
         max_share_level: Optional[ShareLevels] = None,
         seen_before: Optional[datetime] = None,
         seen_after: Optional[datetime] = None,

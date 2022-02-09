@@ -7,7 +7,7 @@ relationships of the requested entity with other entities.
 """
 
 import uuid
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 from .. import RefView
 from ..api import Nullable, Tag, _unwrap_nullable
@@ -64,7 +64,7 @@ class ExternalDBsAPI(BaseAPI):
         self,
         db_uuid: uuid.UUID,
         tag: Tag,
-        entity_types: Optional[List[EntityTypes]] = None,
+        entity_types: Optional[Iterable[EntityTypes]] = None,
         web_page_url: Nullable[str] = None,
         task_execution_timeout: Nullable[int] = None,
         task_execution_attempts_count: Nullable[int] = None,
@@ -112,7 +112,7 @@ class ExternalDBsAPI(BaseAPI):
 
     def filter(
         self,
-        entity_types: Optional[List[EntityTypes]] = None,
+        entity_types: Optional[Iterable[EntityTypes]] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
@@ -206,7 +206,7 @@ class ExternalDBForm(JsonObjectForm):
     def __init__(
         self,
         data_source_uuid: uuid.UUID,
-        entity_types: List[EntityTypes],
+        entity_types: Iterable[EntityTypes],
         web_page_url: Optional[str] = None,
         task_execution_timeout: Optional[int] = None,
         task_execution_attempts_count: Optional[int] = None,
