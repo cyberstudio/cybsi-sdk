@@ -18,12 +18,17 @@ from ..view import _TaggedRefView
 
 
 class ExternalDBsAPI(BaseAPI):
-    """External databases API."""
+    """External databases API.
+
+    .. versionadded:: 2.7
+    """
 
     _path = "/enrichment/external-dbs"
 
     def view(self, db_uuid: uuid.UUID) -> "ExternalDBView":
         """Get the external database view.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `GET /enrichment/external-dbs/{db_uuid}`.
@@ -40,6 +45,8 @@ class ExternalDBsAPI(BaseAPI):
 
     def register(self, form: "ExternalDBForm") -> RefView:
         """Register external database.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `POST /enrichment/external-dbs`.
@@ -70,6 +77,8 @@ class ExternalDBsAPI(BaseAPI):
         task_execution_attempts_count: Nullable[int] = None,
     ) -> None:
         """Edit the external database.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `PATCH /enrichment/external-dbs/{db_uuid}`.
@@ -118,6 +127,8 @@ class ExternalDBsAPI(BaseAPI):
         limit: Optional[int] = None,
     ) -> Page["ExternalDBView"]:
         """Get page of filtered external databases list.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `GET /enrichment/external-dbs`

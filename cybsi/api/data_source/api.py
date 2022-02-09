@@ -34,6 +34,8 @@ class DataSourcesAPI(BaseAPI):
     def view_links(self, datasource_uuid: uuid.UUID) -> "DataSourceLinksView":
         """Get links view of the data source.
 
+        .. versionadded:: 2.7
+
         Note:
             Calls `GET /data-sources/{datasource_uuid}/links`.
         Args:

@@ -22,12 +22,17 @@ from .tasks import ArtifactAnalysisParamsView, ExternalDBLookupParamsView
 
 
 class TaskQueueAPI(BaseAPI):
-    """Task queue API."""
+    """Task queue API.
+
+    .. versionadded:: 2.7
+    """
 
     _path = "/enrichment/task-queue"
 
     def get_assigned_tasks(self, limit: int = 1) -> List["AssignedTaskView"]:
         """Assign a batch of pending enrichment tasks for execution by client.
+
+        .. versionadded:: 2.7
 
         All returned tasks have status `Executing`.
 
@@ -47,6 +52,8 @@ class TaskQueueAPI(BaseAPI):
 
     def complete_tasks(self, completed_tasks: Iterable["CompletedTaskForm"]) -> None:
         """Register successful task results.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `POST /enrichment/task-queue/completed-tasks`.
@@ -74,6 +81,8 @@ class TaskQueueAPI(BaseAPI):
 
     def fail_tasks(self, failed_tasks: Iterable["FailedTaskForm"]) -> None:
         """Register failed task errors.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `POST /enrichment/task-queue/failed-tasks`.

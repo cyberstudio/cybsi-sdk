@@ -19,12 +19,17 @@ from ..view import _TaggedRefView
 
 
 class AnalyzersAPI(BaseAPI):
-    """Analyzers API."""
+    """Analyzers API.
+
+    .. versionadded:: 2.7
+    """
 
     _path = "/enrichment/analyzers"
 
     def view(self, analyzer_uuid: uuid.UUID) -> "AnalyzerView":
         """Get the analyzer view.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `GET /enrichment/analyzers/{analyzer_uuid}`.
@@ -41,6 +46,8 @@ class AnalyzersAPI(BaseAPI):
 
     def register(self, form: "AnalyzerForm") -> RefView:
         """Register analyzer.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `POST /enrichment/analyzers`.
@@ -70,6 +77,8 @@ class AnalyzersAPI(BaseAPI):
         task_execution_attempts_count: Nullable[int] = None,
     ) -> None:
         """Edit the analyzer.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `PATCH /enrichment/analyzers/{analyzer_uuid}`.

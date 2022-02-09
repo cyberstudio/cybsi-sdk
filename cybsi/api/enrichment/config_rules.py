@@ -21,6 +21,8 @@ class ConfigRulesAPI(BaseAPI):
     def view(self, rule_uuid: uuid.UUID) -> "ConfigRuleView":
         """Get the config rule view.
 
+        .. versionadded:: 2.7
+
         Note:
             Calls `GET /enrichment/config/rules/{rule_uuid}`.
         Args:
@@ -36,6 +38,8 @@ class ConfigRulesAPI(BaseAPI):
 
     def register(self, rule: "ConfigRuleForm") -> RefView:
         """Register config rule.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `POST /enrichment/config/rules`.
@@ -110,6 +114,8 @@ class ConfigRulesAPI(BaseAPI):
         enrichment: Optional[EnrichmentTypes] = None,
     ) -> None:
         """Edit config rule.
+
+        .. versionadded:: 2.7
 
         Note:
             Calls `PATCH /enrichment/config/rules/{rule_uuid}`.
