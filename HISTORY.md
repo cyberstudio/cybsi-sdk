@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.8.0a3 (2022-02-10)
+--------------------
+- Add enum of user roles and its permissions
+- Add cybsi_data_model/examples sections in documentation
+
 2.8.0a2 (2022-01-27)
 --------------------
 - Fix artifact view initialization crash
