@@ -1,7 +1,7 @@
 import logging
 import uuid
 from datetime import datetime
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Tuple
 
 import requests
 
@@ -16,6 +16,7 @@ from ..internal import (
     rfc3339_timestamp,
 )
 from ..pagination import Cursor, Page
+from ..user import ActionSet, ResourceName
 from ..view import Tag, _TaggedRefView
 from .token import TokenView
 
@@ -210,14 +211,16 @@ class APIKeyForm(JsonObjectForm):
         self,
         expires_at: datetime,
         description: Optional[str] = None,
-        permissions: Optional[Iterable[str]] = None,
+        permissions: Iterable[Tuple[ResourceName, ActionSet]] = [],
     ):
         super().__init__()
         self._data["expiresAt"] = rfc3339_timestamp(expires_at)
         if description is not None:
             self._data["description"] = description
-        if permissions is not None:
-            self._data["permissions"] = list(permissions)
+        if permissions:
+            self._data["permissions"] = [
+                ":".join([res.value, act]) for res, act in permissions
+            ]
 
 
 class APIKeyRefView(JsonObjectView):
@@ -279,9 +282,15 @@ class APIKeyCommonView(JsonObjectView):
         return self._get("revoked")
 
     @property
-    def permissions(self) -> List[str]:
+    def permissions(self) -> List[Tuple[ResourceName, ActionSet]]:
         """List of permissions."""
-        return self._get("permissions")
+
+        permissions: List[Tuple[ResourceName, ActionSet]] = []
+
+        for raw_perm in self._get("permissions"):
+            res, act = raw_perm.split(":", 1)
+            permissions.append((ResourceName(res), act))
+        return permissions
 
 
 class APIKeyView(_TaggedRefView, APIKeyCommonView):

@@ -1,12 +1,22 @@
 import uuid
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Literal, Optional, Tuple
 
 from ..api import Nullable, _unwrap_nullable
 from ..internal import BaseAPI, JsonObject, JsonObjectForm, JsonObjectView
 from ..observable import ShareLevels
 from ..pagination import Cursor, Page
 from ..view import RefView, Tag, _TaggedRefView
-from .enums import RoleName
+from .enums import ResourceName, RoleName
+
+ActionSet = Literal["r", "w", "rw"]
+""" Action set.
+
+    Actions can be:
+
+    * r - Reading action, includes: review, getting information, filtering, downloading.
+    * w - Writing action, includes: upload, create, modify, delete.
+    * rw - Reading and writing action, combines reading and writing actions.
+"""
 
 
 class UsersAPI(BaseAPI):
@@ -311,9 +321,15 @@ class UserView(_TaggedRefView, UserCommonView):
         return [RoleCommonView(r) for r in self._get("roles")]
 
     @property
-    def permissions(self) -> List[str]:
+    def permissions(self) -> List[Tuple[ResourceName, ActionSet]]:
         """List of permissions derived from user roles."""
-        return self._get("permissions")
+
+        permissions: List[Tuple[ResourceName, ActionSet]] = []
+
+        for raw_perm in self._get("permissions"):
+            res, act = raw_perm.split(":", 1)
+            permissions.append((ResourceName(res), act))
+        return permissions
 
     @property
     def data_source(self) -> Optional[RefView]:
@@ -344,9 +360,15 @@ class CurrentUserView(UserCommonView):
         return ShareLevels(self._get("accessLevel"))
 
     @property
-    def permissions(self) -> List[str]:
+    def permissions(self) -> List[Tuple[ResourceName, ActionSet]]:
         """List of permissions derived from user roles."""
-        return self._get("permissions")
+
+        permissions: List[Tuple[ResourceName, ActionSet]] = []
+
+        for raw_perm in self._get("permissions"):
+            res, act = raw_perm.split(":", 1)
+            permissions.append((ResourceName(res), act))
+        return permissions
 
     @property
     def data_source(self) -> Optional[RefView]:

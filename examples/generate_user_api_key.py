@@ -7,7 +7,7 @@ from cybsi.api.auth import APIKeyForm
 from cybsi.api.error import ConflictError
 from cybsi.api.observable import ShareLevels
 from cybsi.api.user import UserForm
-from cybsi.api.user.enums import RoleName
+from cybsi.api.user.enums import ResourceName, RoleName
 
 if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")
@@ -34,6 +34,10 @@ if __name__ == "__main__":
         apiKeyForm = APIKeyForm(
             description="test key",
             expires_at=dtm.datetime(2022, 6, 1, 0, 0, 0, 0, dtm.timezone.utc),
+            permissions=[
+                (ResourceName.DataSources, "r"),
+                (ResourceName.Observable, "r"),
+            ],
         )
         ref_key = client.api_keys.generate(user_uuid=user_ref.uuid, form=apiKeyForm)
     except ConflictError:

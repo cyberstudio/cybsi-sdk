@@ -5,7 +5,12 @@ from enum_tools import document_enum
 
 @document_enum
 class RoleName(Enum):
-    """Role name."""
+    """Role name.
+
+    Role means a list of permissions.
+    Each permission is Resource:Action pair.
+    See :class:`ResourceName`.
+    """
 
     Administrator = "Administrator"  # noqa: E501 doc: Administrator's role permissions: DataSources:rw,EnrichmentConfig:r,Users:r
     ConfigReader = "ConfigReader"  # noqa: E501 doc: ConfigReader's role permissions: [DataSources:r, EnrichmentConfig:r]
@@ -22,3 +27,32 @@ class RoleName(Enum):
     ArtifactContentReader = "ArtifactContentReader"  # noqa: E501 doc: ArtifactContentReader's role permissions: [Artifacts:r, ArtifactsContent:r]
     Searcher = "Searcher"  # noqa: E501 doc: Searcher's role permissions: [DataSources:r, Observable:r, Search:r, SearchFilters:rw]
     UserAdministrator = "UserAdministrator"  # noqa: E501 doc: UserAdministrator's role permissions: [APIKeys:rw, Users:rw]
+
+
+@document_enum
+class ResourceName(Enum):
+    """Resource name.
+
+    Permission can be with read/write action for almost all resources.
+    Exclusion resources:
+    ArtifactsContent, RawReports, Search, ReputationListsContent.
+    """
+
+    Artifacts = "Artifacts"  # doc: Samples.
+    ArtifactsContent = "ArtifactsContent"  # noqa: E501 doc: Sample contents. Permission can be only with reading action.
+    DataSources = "DataSources"  # doc: Data sources.
+    EnrichmentConfig = "EnrichmentConfig"  # doc: Enrichment configs.
+    EnrichmentTasks = "EnrichmentTasks"  # doc: Enrichment tasks.
+    Feeds = "Feeds"  # doc: Feeds.
+    FeedsData = "FeedsData"  # noqa: E501 doc: Feed contents. Permission can be only with reading action.
+    Observable = "Observable"  # doc: Observable entities.
+    Observations = "Observations"  # doc: Observations.
+    RawReports = "RawReports"  # noqa: E501 doc: Initial data of reports and observations. Permission can be only with reading action.
+    Reports = "Reports"  # doc: Reports.
+    Search = "Search"  # doc: Search. Permission can be only with reading action.
+    SearchFilters = "SearchFilters"  # doc: Search filters.
+    Users = "Users"  # doc: Users.
+    APIKeys = "APIKeys"  # doc: Access keys.
+    ReputationLists = "ReputationLists"  # doc: Reputation lists.
+    ReputationListsContent = "ReputationListsContent"  # noqa: E501 doc: Reputation list contents. Permission can be only with reading action.
+    StoredQuery = "StoredQuery"  # doc: Stored queries.
