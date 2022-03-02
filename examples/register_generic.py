@@ -42,7 +42,7 @@ def create_generic_observation():
         )
         .add_entity_relationship(
             source=domain,
-            kind=RelationshipKinds.Resolves,
+            kind=RelationshipKinds.ResolvesTo,
             target=ip_address,
             confidence=0.5,
         )

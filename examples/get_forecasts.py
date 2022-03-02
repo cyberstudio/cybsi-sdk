@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     # Get forecast of relationship (domain name entity resolves ip-address entity).
     relationship_forecast = client.observable.relationships.forecast(
-        domain_ref.uuid, ip_address_ref.uuid, RelationshipKinds.Resolves
+        domain_ref.uuid, ip_address_ref.uuid, RelationshipKinds.ResolvesTo
     )
     print(relationship_forecast)
     # {

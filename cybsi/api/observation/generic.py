@@ -148,7 +148,7 @@ class GenericObservationForm(JsonObjectForm):
         >>>     confidence=0.9
         >>> ).add_entity_relationship(
         >>>     source=domain,
-        >>>     kind=RelationshipKinds.Resolves,
+        >>>     kind=RelationshipKinds.ResolvesTo,
         >>>     target=ip_address,
         >>>     confidence=0.5,
         >>>)
