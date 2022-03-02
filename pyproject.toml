@@ -13,6 +13,7 @@ include = ["cybsi/py.typed"]
 python = "^3.7"
 requests = "^2.26"
 enum-tools = "0.6.5"
+typing-extensions = {version = "^4.1.1", markers = "python_version < '3.8'" }
 
 [tool.poetry.dev-dependencies]
 isort = "5.10.1"

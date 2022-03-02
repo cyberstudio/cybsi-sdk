@@ -1,5 +1,11 @@
+import sys
 import uuid
-from typing import Iterable, List, Literal, Optional, Tuple
+from typing import Iterable, List, Optional, Tuple
+
+if sys.version_info >= (3, 8):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
 
 from ..api import Nullable, _unwrap_nullable
 from ..internal import BaseAPI, JsonObject, JsonObjectForm, JsonObjectView
