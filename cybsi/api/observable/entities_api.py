@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any, Dict, Iterable, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from .. import RefView
 from ..internal import BaseAPI, rfc3339_timestamp
@@ -414,8 +414,9 @@ class EntitiesAPI(BaseAPI):
         self,
         entity_uuid: uuid.UUID,
         forecast_at: Optional[datetime] = None,
-    ) -> EntityLinkStatisticView:
-        """Get statictics of links for entity.
+    ) -> List[EntityLinkStatisticView]:
+        """Get statictics of forecasted links for entity
+        considering all facts about entity.
 
         Note:
             Calls `GET /observable/entities/{entity_uuid}/link-type-statistic`.
@@ -424,7 +425,9 @@ class EntitiesAPI(BaseAPI):
             forecast_at: Date of forecast.
                 If not specified, forecast is built on current time.
         Returns:
-            Link types statistic forecast view.
+            List of link forecasts. Links are grouped by direction, relation kind,
+             and entity type. Groups are ordered by direction,
+             relation kind, and entity type.
         Usage:
             >>> from uuid import UUID
             >>> from cybsi.api import CybsiClient
@@ -443,9 +446,9 @@ class EntitiesAPI(BaseAPI):
 
         path = f"{self._path}/{entity_uuid}/link-type-statistic"
         r = self._connector.do_get(path=path, params=params)
-        return EntityLinkStatisticView(r.json())
+        return [EntityLinkStatisticView(v) for v in r.json()]
 
-    def add_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]):
+    def add_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]) -> None:
         """Add entity labels.
 
         Note:
@@ -459,7 +462,7 @@ class EntitiesAPI(BaseAPI):
         path = f"{self._path}/{entity_uuid}/labels"
         self._connector.do_put(path=path, json=list(labels))
 
-    def delete_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]):
+    def delete_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]) -> None:
         """Delete entity labels.
 
         Note:

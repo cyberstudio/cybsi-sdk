@@ -10,6 +10,7 @@ from cybsi.api.observable import (
     RelationshipKinds,
 )
 
+# Run register_generic.py before script to initialize entity relationships.
 if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")
     api_url = environ.get("CYBSI_API_URL")
@@ -109,4 +110,59 @@ if __name__ == "__main__":
     #   },
     #   "confidence": 0.4999951,
     #   "valuableFacts": null
+    # }
+
+    print(client.observable.entities.forecast_links_statistic(domain_ref.uuid)[0])
+    # {
+    #     "linkType": {
+    #         "url": "http://.../observable/entities/66fd82a1-c35c-424e-986c-133054bd7797/links?kind=ResolvesTo&relatedEntityType=IPAddress&direction=Forward", # noqa: E501
+    #         "linkDirection": "Forward",
+    #         "relationKind": "ResolvesTo",
+    #         "relatedEntitiesType": "IPAddress"
+    #     },
+    #     "links": {
+    #         "total": 1,
+    #         "distributionByConfidence": [
+    #             {
+    #                 "confidenceRange": [0, 0.1],
+    #                 "count": 0
+    #             },
+    #             {
+    #                 "confidenceRange": [0.1, 0.2],
+    #                 "count": 0
+    #             },
+    #             {
+    #                 "confidenceRange": [0.2, 0.3],
+    #                 "count": 0
+    #             },
+    #             {
+    #                 "confidenceRange": [0.3, 0.4],
+    #                 "count": 0
+    #             },
+    #             {
+    #                 "confidenceRange": [0.4, 0.5],
+    #                 "count": 1
+    #             },
+    #             {
+    #                 "confidenceRange": [0.5, 0.6],
+    #                 "count": 0
+    #             },
+    #             {
+    #                 "confidenceRange": [0.6, 0.7],
+    #                 "count": 0
+    #             },
+    #             {
+    #                 "confidenceRange": [0.7, 0.8],
+    #                 "count": 0
+    #             },
+    #             {
+    #                 "confidenceRange": [0.8, 0.9],
+    #                 "count": 0
+    #             },
+    #             {
+    #                 "confidenceRange": [0.9, 1],
+    #                 "count": 0
+    #             }
+    #         ]
+    #     }
     # }
