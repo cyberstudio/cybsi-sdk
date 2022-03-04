@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.8.0a4 (2022-03-04)
+--------------------
+- Restore compatibility with Python 3.7
+- Fix link forecast statistics view
+
 2.8.0a3 (2022-02-10)
 --------------------
 - Add enum of user roles and its permissions
