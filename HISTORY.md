@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.8.0a5 (2022-03-28)
+--------------------
+- Add string to enum converter
+
 2.8.0a4 (2022-03-04)
 --------------------
 - Restore compatibility with Python 3.7
