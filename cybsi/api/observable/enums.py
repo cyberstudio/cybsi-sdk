@@ -5,7 +5,7 @@ from enum_tools.documentation import document_enum
 
 @document_enum
 class ShareLevels(Enum):
-    """Information share level, according with Traffic Light Protocol."""
+    """Information share level, according to Traffic Light Protocol."""
 
     White = "White"  # doc: Disclosure is not limited.
     Green = "Green"  # doc: Limited disclosure, restricted to the community.
