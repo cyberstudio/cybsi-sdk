@@ -2,8 +2,6 @@
 A set of utility functions allowing to convert
 a string to a valid value of a chosen type.
 """
-from enum import Enum, EnumMeta
-from functools import lru_cache
 from typing import Any, Callable, Dict
 
 from cybsi.api.observable.enums import AttributeNames, EntityKeyTypes
@@ -101,22 +99,3 @@ def convert_attribute_value(attribute_name: AttributeNames, val: Any) -> Any:
             f'"{val}" is not convertible to {attribute_name} value'
         ) from None
     return result
-
-
-@lru_cache()
-def convert_enum_value_case_insensitive(value: str, enum_type: EnumMeta) -> Enum:
-    """Convert string value to enumeration value. The string value is case-insensitive.
-
-    Args:
-        value: value to convert.
-        enum_type: enumeration type to convert to.
-    Return:
-        Converted value to the specified enum type.
-    """
-    try:
-        return enum_type(value)
-    except ValueError as exp:
-        for member in enum_type:  # type: ignore
-            if str(member.value).lower() == value.lower():
-                return member
-        raise ValueError(exp) from None

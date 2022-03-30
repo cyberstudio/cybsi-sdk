@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.8.0a6 (2022-03-29)
+--------------------
+- Add enum value converter to enum classes
+
 2.8.0a5 (2022-03-28)
 --------------------
 - Add string to enum converter

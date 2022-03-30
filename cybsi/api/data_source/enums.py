@@ -1,10 +1,10 @@
-from enum import Enum
-
 from enum_tools import document_enum
+
+from cybsi.api.enum import CybsiAPIEnum
 
 
 @document_enum
-class DataSourceListOrder(Enum):
+class DataSourceListOrder(CybsiAPIEnum):
     """Sorting field of data sources."""
 
     UUID = "UUID"  #: doc: Sort by UUID field.
@@ -12,7 +12,7 @@ class DataSourceListOrder(Enum):
 
 
 @document_enum
-class DataSourceTypeListOrder(Enum):
+class DataSourceTypeListOrder(CybsiAPIEnum):
     """Sorting field of data source types."""
 
     ShortName = "ShortName"  #: doc: Sort by ShortName field.

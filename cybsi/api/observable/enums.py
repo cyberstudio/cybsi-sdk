@@ -1,10 +1,10 @@
-from enum import Enum
-
 from enum_tools.documentation import document_enum
+
+from cybsi.api.enum import CybsiAPIEnum
 
 
 @document_enum
-class ShareLevels(Enum):
+class ShareLevels(CybsiAPIEnum):
     """Information share level, according to Traffic Light Protocol."""
 
     White = "White"  # doc: Disclosure is not limited.
@@ -14,7 +14,7 @@ class ShareLevels(Enum):
 
 
 @document_enum
-class EntityTypes(Enum):
+class EntityTypes(CybsiAPIEnum):
     """Entity types."""
 
     IPAddress = "IPAddress"  # doc: IPv4 or IPv6 address.
@@ -27,7 +27,7 @@ class EntityTypes(Enum):
 
 
 @document_enum
-class EntityKeyTypes(Enum):
+class EntityKeyTypes(CybsiAPIEnum):
     """Natural entity key types."""
 
     String = "String"  # doc: String identifying entity.
@@ -40,7 +40,7 @@ class EntityKeyTypes(Enum):
 
 
 @document_enum
-class AttributeNames(Enum):
+class AttributeNames(CybsiAPIEnum):
     """Entity attribute names.
 
     See Also:
@@ -64,7 +64,7 @@ class AttributeNames(Enum):
 
 
 @document_enum
-class RelationshipKinds(Enum):
+class RelationshipKinds(CybsiAPIEnum):
     """Kind of a relationship between entities.
 
     See Also:
@@ -90,7 +90,7 @@ class RelationshipKinds(Enum):
 
 
 @document_enum
-class EntityAggregateSections(Enum):
+class EntityAggregateSections(CybsiAPIEnum):
     """Entity aggregation section."""
 
     AssociatedAttributes = "AssociatedAttributes"
@@ -102,7 +102,7 @@ class EntityAggregateSections(Enum):
 
 
 @document_enum
-class ThreatStatus(Enum):
+class ThreatStatus(CybsiAPIEnum):
     """Threat status."""
 
     Unknown = "Unknown"
@@ -111,7 +111,7 @@ class ThreatStatus(Enum):
 
 
 @document_enum
-class LinkDirection(Enum):
+class LinkDirection(CybsiAPIEnum):
     """Direction of links."""
 
     Forward = "Forward"

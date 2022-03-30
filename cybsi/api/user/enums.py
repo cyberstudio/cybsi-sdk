@@ -1,10 +1,10 @@
-from enum import Enum
-
 from enum_tools import document_enum
+
+from cybsi.api.enum import CybsiAPIEnum
 
 
 @document_enum
-class RoleName(Enum):
+class RoleName(CybsiAPIEnum):
     """Role name.
 
     Role means a list of permissions.
@@ -30,7 +30,7 @@ class RoleName(Enum):
 
 
 @document_enum
-class ResourceName(Enum):
+class ResourceName(CybsiAPIEnum):
     """Resource name.
 
     Permission can be with read/write action for almost all resources.

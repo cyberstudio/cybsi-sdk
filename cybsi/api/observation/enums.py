@@ -1,10 +1,10 @@
-from enum import Enum
-
 from enum_tools import document_enum
+
+from cybsi.api.enum import CybsiAPIEnum
 
 
 @document_enum
-class ObservationTypes(Enum):
+class ObservationTypes(CybsiAPIEnum):
     """Observation types."""
 
     DNSLookup = "DNSLookup"  #: doc: DNS lookup results.
@@ -16,7 +16,7 @@ class ObservationTypes(Enum):
 
 
 @document_enum
-class ScanSessionFiltrationMode(Enum):
+class ScanSessionFiltrationMode(CybsiAPIEnum):
     """Filter mode."""
 
     Actual = "Actual"  #: doc: Last (actual) session for each of analysis engine

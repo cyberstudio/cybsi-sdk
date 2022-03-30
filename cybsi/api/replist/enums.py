@@ -1,10 +1,10 @@
-from enum import Enum
-
 from enum_tools import document_enum
+
+from cybsi.api.enum import CybsiAPIEnum
 
 
 @document_enum
-class EntitySetOperations(Enum):
+class EntitySetOperations(CybsiAPIEnum):
     """Type of operation applied to an entity in reputation list."""
 
     Add = "Add"  # doc: An entity was added.
@@ -12,7 +12,7 @@ class EntitySetOperations(Enum):
 
 
 @document_enum
-class ReplistStatus(Enum):
+class ReplistStatus(CybsiAPIEnum):
     """Current status of reputation list."""
 
     Initializing = "Initializing"  # doc: Replist is in building process.

@@ -1,10 +1,10 @@
-from enum import Enum
-
 from enum_tools.documentation import document_enum
+
+from cybsi.api.enum import CybsiAPIEnum
 
 
 @document_enum
-class CybsiLangErrorCodes(Enum):
+class CybsiLangErrorCodes(CybsiAPIEnum):
     """Stored query error code."""
 
     # fmt: off

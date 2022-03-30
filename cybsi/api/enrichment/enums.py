@@ -1,10 +1,10 @@
-from enum import Enum
-
 from enum_tools import document_enum
+
+from cybsi.api.enum import CybsiAPIEnum
 
 
 @document_enum
-class EnrichmentTypes(Enum):
+class EnrichmentTypes(CybsiAPIEnum):
     """Enrichment type."""
 
     ArchiveUnpack = "ArchiveUnpack"  #: doc: Archive unpack.
@@ -16,7 +16,7 @@ class EnrichmentTypes(Enum):
 
 
 @document_enum
-class EnrichmentTriggerTypes(Enum):
+class EnrichmentTriggerTypes(CybsiAPIEnum):
     """Enrichment trigger type."""
 
     OnDemand = "OnDemand"  # noqa: E501 doc: Enrichment starts on manual task creation through API.
@@ -24,7 +24,7 @@ class EnrichmentTriggerTypes(Enum):
 
 
 @document_enum
-class EnrichmentErrorCodes(Enum):
+class EnrichmentErrorCodes(CybsiAPIEnum):
     """Enrichment task error code."""
 
     # fmt: off
@@ -39,7 +39,7 @@ class EnrichmentErrorCodes(Enum):
 
 
 @document_enum
-class EnrichmentTaskPriorities(Enum):
+class EnrichmentTaskPriorities(CybsiAPIEnum):
     """Enrichment task priority."""
 
     High = "High"  #: doc: High.
@@ -47,7 +47,7 @@ class EnrichmentTaskPriorities(Enum):
 
 
 @document_enum
-class EnrichmentTaskStatuses(Enum):
+class EnrichmentTaskStatuses(CybsiAPIEnum):
     """Enrichment task status."""
 
     Pending = "Pending"  # noqa: E501 doc: Task in the queue, awaiting execution (new or has been restarted).
