@@ -51,4 +51,7 @@ from .enums import (
     EntityAggregateSections,
     ThreatStatus,
     LinkDirection,
+    IndustrySector,
+    NodeRole,
+    IdentityClass,
 )

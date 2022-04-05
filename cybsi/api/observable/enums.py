@@ -64,6 +64,70 @@ class AttributeNames(CybsiAPIEnum):
 
 
 @document_enum
+class NodeRole(CybsiAPIEnum):
+    """Node roles."""
+
+    CnC = "CnC"  # doc: CnC node.
+    TorNode = "TorNode"  # doc: Tor node of any type.
+    TorExitNode = "TorExitNode"  # doc: Tor exit node.
+    Proxy = "Proxy"  # doc: Proxy server.
+    NameServer = "NameServer"  # doc: Name server.
+    MailExchanger = "MailExchanger"  # doc: Mail server.
+    Phishing = "Phishing"  # doc: Phishing server.
+
+
+@document_enum
+class IdentityClass(CybsiAPIEnum):
+    """Identity classes."""
+
+    Individual = "Individual"  # doc: A single person.
+    Group = "Group"  # doc: An informal collection of people, without formal governance.
+    Organization = (
+        "Organization"  # doc: A formal organization of people, with governance.
+    )
+    Class = (
+        "Class"  # doc: A class of entities, such as all hospitals, all Europeans etc.
+    )
+
+
+@document_enum
+class IndustrySector(CybsiAPIEnum):
+    """Industry Sectors."""
+
+    Agriculture = "Agriculture"
+    Aerospace = "Aerospace"
+    Automotive = "Automotive"
+    Communications = "Communications"
+    Construction = "Construction"
+    Defence = "Defence"
+    Education = "Education"
+    Energy = "Energy"
+    Entertainment = "Entertainment"
+    FinancialServices = "FinancialServices"
+    GovernmentNational = "GovernmentNational"
+    GovernmentRegional = "GovernmentRegional"
+    GovernmentLocal = "GovernmentLocal"
+    GovernmentPublicServices = "GovernmentPublicServices"
+    Healthcare = "Healthcare"
+    HospitalityLeisure = "HospitalityLeisure"
+    Infrastructure = "Infrastructure"
+    Insurance = "Insurance"
+    Manufacturing = "Manufacturing"
+    Mining = "Mining"
+    NonProfit = "NonProfit"
+    Pharmaceuticals = "Pharmaceuticals"
+    Retail = "Retail"
+    Technology = "Technology"
+    Telecommunications = "Telecommunications"
+    Transportation = "Transportation"
+    Utilities = "Utilities"
+    HostingProvider = "TelecommunicationsHostingProvider"
+    DomainRegistrar = "TelecommunicationsDomainRegistrar"
+    MobilePhoneOperator = "TelecommunicationsMobilePhoneOperator"
+    FixedLinePhoneOperator = "TelecommunicationsFixedLinePhoneOperator"
+
+
+@document_enum
 class RelationshipKinds(CybsiAPIEnum):
     """Kind of a relationship between entities.
 

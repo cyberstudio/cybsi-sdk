@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.8.0a7 (2022-04-04)
+--------------------
+- Add enums: NodeRoles, IdentityClasses, IndustrySectors
+- Add enum attribute value conversion
+
 2.8.0a6 (2022-03-29)
 --------------------
 - Add enum value converter to enum classes
