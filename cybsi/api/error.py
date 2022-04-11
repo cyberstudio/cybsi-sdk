@@ -9,10 +9,11 @@ Each exception type is annotated if it makes sense to retry.
 
 Some exceptions have ``code`` property. It allows to determine the concrete error.
 """
-from enum import Enum
 from typing import Any, Dict, cast
 
 from enum_tools import document_enum
+
+from .enum import CybsiAPIEnum
 
 
 class CybsiError(Exception):
@@ -155,7 +156,7 @@ class SemanticError(APIError):
 
 
 @document_enum
-class ForbiddenErrorCodes(Enum):
+class ForbiddenErrorCodes(CybsiAPIEnum):
     """Possible error codes of :class:`ForbiddenError`."""
 
     InvalidCredentials = "InvalidCredentials"  # doc: User provided invalid credentials.
@@ -166,7 +167,7 @@ class ForbiddenErrorCodes(Enum):
 
 
 @document_enum
-class SemanticErrorCodes(Enum):
+class SemanticErrorCodes(CybsiAPIEnum):
     """Common semantic error codes."""
 
     ArtifactNotFound = "ArtifactNotFound"  # doc: Artifact not found.

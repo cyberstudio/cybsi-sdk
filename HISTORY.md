@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.8.0a8 (2022-04-08)
+--------------------
+- Add CybsiAPIEnum class to documentation
+
 2.8.0a7 (2022-04-04)
 --------------------
 - Add enums: NodeRoles, IdentityClasses, IndustrySectors

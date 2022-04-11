@@ -24,6 +24,11 @@ Artifacts
     :members:
     :imported-members:
     :inherited-members:
+    :exclude-members: ArtifactTypes, ArtifactContentDownloadCompressionTypes
+
+.. automodule:: cybsi.api.artifact.enums
+    :members:
+    :show-inheritance:
 
 Auth
 ~~~~
@@ -48,6 +53,7 @@ Enrichment
 
 .. automodule:: cybsi.api.enrichment.enums
     :members:
+    :show-inheritance:
 
 Configuration
 """""""""""""
@@ -85,6 +91,11 @@ Observable entities
     :members:
     :imported-members:
     :inherited-members:
+    :exclude-members:  AttributeNames, EntityKeyTypes, EntityTypes, RelationshipKinds, ShareLevels, EntityAggregateSections, ThreatStatus, LinkDirection, IndustrySector, NodeRole,IdentityClass,
+
+.. automodule:: cybsi.api.observable.enums
+    :members:
+    :show-inheritance:
 
 Observations
 ~~~~~~~~~~~~
@@ -143,12 +154,14 @@ Common
 .. automodule:: cybsi.api.observation.enums
     :members:
     :inherited-members:
+    :show-inheritance:
 
 Data sources
 ~~~~~~~~~~~~
 
 .. automodule:: cybsi.api.data_source.enums
     :members:
+    :show-inheritance:
 
 Types
 """""
@@ -168,6 +181,15 @@ Search
     :members:
     :imported-members:
     :inherited-members:
+    :exclude-members: QueryCompatibility, CybsiLangErrorCodes
+
+.. automodule:: cybsi.api.search.enums
+    :members:
+    :show-inheritance:
+
+.. automodule:: cybsi.api.search.error
+    :members:
+    :show-inheritance:
 
 Reputation lists
 ~~~~~~~~~~~~~~~~
@@ -175,6 +197,11 @@ Reputation lists
     :members:
     :imported-members:
     :inherited-members:
+    :exclude-members: EntitySetOperations, ReplistStatus
+
+.. automodule:: cybsi.api.replist.enums
+    :members:
+    :show-inheritance:
 
 Reports
 ~~~~~~~
@@ -189,6 +216,11 @@ Users
     :members:
     :imported-members:
     :inherited-members:
+    :exclude-members: RoleName, ResourceName
+
+.. automodule:: cybsi.api.user.enums
+    :members:
+    :show-inheritance:
 
 Common views and data types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -198,6 +230,8 @@ Common views and data types
 .. autoclass:: cybsi.api.Tag
 .. autoclass:: cybsi.api.RefView
     :members:
+.. autoclass::  cybsi.api.CybsiAPIEnum
+     :members:
 
 Pagination
 ~~~~~~~~~~

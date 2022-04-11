@@ -1,13 +1,13 @@
 import datetime
-from enum import Enum
+from enum_tools import document_enum
 
-from enum_tools.documentation import document_enum
+from cybsi.api.enum import CybsiAPIEnum
 
 from ..internal import JsonObjectView
 
 
 @document_enum
-class TokenType(Enum):
+class TokenType(CybsiAPIEnum):
     """Token type."""
 
     Bearer = "Bearer"  # doc: Authentication is made using Bearer token type

@@ -5,11 +5,11 @@ from .api import SearchAPI
 from .enums import QueryCompatibility
 from .error import CybsiLangErrorCodes
 from .stored_queries import (
-    CybsiLangErrorView,
-    ErrorPosition,
     StoredQueriesAPI,
     StoredQueryCommonView,
     StoredQueryForm,
     StoredQueryValidationView,
     StoredQueryView,
+    CybsiLangErrorView,
+    ErrorPosition,
 )

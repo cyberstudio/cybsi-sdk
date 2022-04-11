@@ -12,3 +12,5 @@ from .view import RefView
 # (less typing of imports)
 from .auth import APIKeyAuth
 from .client import CybsiClient, Config, VersionView, Version
+
+from .enum import CybsiAPIEnum
