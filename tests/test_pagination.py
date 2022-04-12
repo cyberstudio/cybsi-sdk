@@ -5,22 +5,19 @@ from itertools import chain
 
 import requests
 from requests import Response
+from requests.structures import CaseInsensitiveDict
 
 from cybsi.api.pagination import Page, chain_pages
 
 
 class PaginationTest(unittest.TestCase):
-
     @staticmethod
-    def _make_response(
-        status_code=200, headers=None, data=None
-    ) -> requests.Response:
-        """Make test response
-        """
-        data = json.dumps(data).encode() if data else '[]'.encode()
+    def _make_response(status_code=200, headers=None, data=None) -> requests.Response:
+        """Make test response"""
+        data = json.dumps(data).encode() if data else "[]".encode()
         response = Response()
         response.status_code = status_code
-        response.headers = headers or {}
+        response.headers = CaseInsensitiveDict(headers)
         response.raw = BytesIO(data)
         return response
 
@@ -31,21 +28,21 @@ class PaginationTest(unittest.TestCase):
         self.assertIs(page.next_page(), None)
 
     def test_pagination_iterate_pages(self):
-        expected = ['http://link1.com', 'http://link2.com']
+        expected = ["http://link1.com", "http://link2.com"]
 
         def pages():
-            for link in expected + ['']:
+            for link in expected + [""]:
                 if link:
                     link_hdr = f'<l1>; rel="first",<{link}>; rel="next"'
                 else:
                     link_hdr = '<l1>; rel="first"'
-                yield self._make_response(200, headers={'link': link_hdr})
+                yield self._make_response(200, headers={"link": link_hdr})
 
         actual = []
         page_gen = pages()
 
         page = Page(lambda _: next(page_gen), next(page_gen), lambda x: x)
-        for _ in range(len(expected)+1):
+        for _ in range(len(expected) + 1):
             actual.append(page.next_link)
             page = page.next_page()
 
@@ -79,9 +76,7 @@ class PaginationTest(unittest.TestCase):
                     hdr = '<l1>; rel="first",<link>; rel="next"'
                 else:
                     hdr = '<l1>; rel="first"'
-                yield self._make_response(
-                    200, headers={'link': hdr}, data=page_data
-                )
+                yield self._make_response(200, headers={"link": hdr}, data=page_data)
 
         actual = []
         page_gen = pages()

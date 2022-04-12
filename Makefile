@@ -7,13 +7,13 @@ DOCKER_TAG ?= latest
 VENV_DIR ?= .venv
 
 lint:
-	poetry run black cybsi examples
-	poetry run flake8
-	poetry run mypy cybsi
+	poetry run black cybsi examples tests
+	poetry run flake8 tests
+	poetry run mypy cybsi tests
 	poetry run isort cybsi tests examples
 
 test:
-	poetry run python3 -m unittest discover tests/ -v
+	poetry run pytest --tb=native --verbose ./tests/
 
 build-docs:
 	make -C ${DOCS_DIR} linkcheck html

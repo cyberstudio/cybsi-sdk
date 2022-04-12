@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get install --no-install-suggests --no-install-recommends --yes \
     gcc libc-dev make libffi-dev
 
-RUN pip3 install poetry==1.1.12
+RUN pip3 install poetry==1.1.12 pytest enum_tools
 
 WORKDIR /cybsi_sdk
 ADD . /cybsi_sdk
