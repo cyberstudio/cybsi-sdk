@@ -7,7 +7,7 @@ See Also:
 """
 from typing import Callable, Generic, Iterator, List, Optional, TypeVar, cast
 
-import requests
+import httpx
 
 
 class Cursor:
@@ -42,8 +42,8 @@ class Page(Generic[T]):
 
     def __init__(
         self,
-        api_call: Callable[..., requests.Response],
-        resp: requests.Response,
+        api_call: Callable[..., httpx.Response],
+        resp: httpx.Response,
         view: Callable[..., T],
     ):
         self._api_call = api_call
@@ -53,7 +53,7 @@ class Page(Generic[T]):
     @property
     def next_link(self) -> str:
         """Next page link."""
-        return self._resp.links.get("next", {}).get("url")
+        return cast(str, self._resp.links.get("next", {}).get("url"))
 
     @property
     def cursor(self) -> Cursor:

@@ -1,13 +1,13 @@
-import uuid
 import datetime as dtm
-
-from tests import BaseTest
+import uuid
 from typing import cast
 from unittest.mock import patch
+
 from cybsi.api.api import Tag
+from cybsi.api.auth.api_key import APIKeyForm, APIKeysAPI
 from cybsi.api.internal.connector import HTTPConnector
 from cybsi.api.user.enums import ResourceName
-from cybsi.api.auth.api_key import APIKeysAPI, APIKeyForm
+from tests import BaseTest
 
 
 class ApiKeyTest(BaseTest):

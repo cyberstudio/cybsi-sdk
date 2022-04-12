@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from os import environ
 from typing import List, cast
 
-from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api import Config, CybsiClient
 from cybsi.api.enrichment import (
     AssignedTaskView,
     CompletedTaskForm,
@@ -30,8 +30,7 @@ def main():
     api_key = environ.get("CYBSI_API_KEY")
     api_url = environ.get("CYBSI_API_URL")
 
-    auth = APIKeyAuth(api_url, api_key, ssl_verify=False)
-    config = Config(api_url, auth, ssl_verify=False)
+    config = Config(api_url, api_key=api_key, ssl_verify=False)
     client = CybsiClient(config)
 
     wait_on_empty_tasks_sec = 10

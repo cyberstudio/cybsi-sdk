@@ -62,7 +62,7 @@ nitpicky = True
 nitpick_ignore = [
     ("py:class", "T"),  # Ignore classic typevar
     ("py:obj", "cybsi.api.api.T"),  # https://github.com/sphinx-doc/sphinx/issues/9705
-    ("py:class", "requests.Response"),
+    ("py:class", "httpx.Response"),
     ("py:class", "enum.EnumMeta"),
 ]
 

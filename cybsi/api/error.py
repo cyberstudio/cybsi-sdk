@@ -11,6 +11,7 @@ Some exceptions have ``code`` property. It allows to determine the concrete erro
 """
 from typing import Any, Dict, cast
 
+import httpx
 from enum_tools import document_enum
 
 from .enum import CybsiAPIEnum
@@ -222,3 +223,28 @@ class _ErrorView(dict):
         """Error message."""
 
         return cast(str, self.get("message"))
+
+
+_error_mapping = {
+    400: InvalidRequestError,
+    401: UnauthorizedError,
+    403: ForbiddenError,
+    404: NotFoundError,
+    409: ConflictError,
+    412: ResourceModifiedError,
+    422: SemanticError,
+}
+
+
+def _raise_for_status(resp: httpx.Response) -> None:
+    if resp.is_success:
+        return
+
+    err_cls = _error_mapping.get(resp.status_code, None)
+    if err_cls is not None:
+        raise err_cls(resp.json())
+
+    raise CybsiError(
+        f"unexpected response status code: {resp.status_code}. "
+        f"Request body: {resp.text}"
+    )

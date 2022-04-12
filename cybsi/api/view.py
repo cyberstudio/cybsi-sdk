@@ -1,7 +1,7 @@
 import uuid
 from typing import cast
 
-import requests
+import httpx
 
 from .api import Tag
 from .internal import JsonObjectView
@@ -30,7 +30,7 @@ class RefView(JsonObjectView):
 class _TaggedRefView(RefView):
     _etag_header = "ETag"
 
-    def __init__(self, resp: requests.Response):
+    def __init__(self, resp: httpx.Response):
         super().__init__(resp.json())
         self._tag = cast(Tag, resp.headers.get(self._etag_header, ""))
 

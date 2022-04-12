@@ -1,14 +1,13 @@
 import logging
 import uuid
 from datetime import datetime
-from typing import Iterable, List, Optional, Tuple
+from typing import Generator, Iterable, List, Optional, Tuple
 
-import requests
+import httpx
 
-from ..error import CybsiError
+from ..error import _raise_for_status
 from ..internal import (
     BaseAPI,
-    HTTPConnector,
     JsonObject,
     JsonObjectForm,
     JsonObjectView,
@@ -23,68 +22,61 @@ from .token import TokenView
 logger = logging.getLogger(__name__)
 
 
-class APIKeyAuth:
-    """Callable. Authomatically handles authentication
+class APIKeyAuth(httpx.Auth):
+    """Authomatically handles authentication
     of :class:`~cybsi.api.CybsiClient` requests using API key.
 
     Args:
-        api_url: Cybsi API URL.
+        api_url: Cybsi API URL. Deprecated, has no effect.
+            Uses URL set for CybsiClient config.
         api_key: Cybsi API key.
-        ssl_verify: enable SSL verification.
+        ssl_verify: enable SSL verification. Deprecated, has no effect.
+            Uses value set for CybsiClient config.
     Usage:
         >>> from cybsi.api import APIKeyAuth, Config, CybsiClient
-        >>> api_url = "http://localhost:80/api"
         >>> api_key = "8Nqjk6V4Q_et_Rf5EPu4SeWy4nKbVPKPzKJESYdRd7E"
-        >>> auth = APIKeyAuth(api_url, api_key)
-        >>> config = Config(api_url, auth)
+        >>> auth = APIKeyAuth("", api_key)
+        >>> config = Config(api_url, auth)  # Consider using :attr:`Config.api_key`
         >>> client = CybsiClient(config)
         >>> client.observations
         <cybsi_sdk.client.observation.ObservationsAPI object at 0x7f57a293c190>
     """
 
-    _get_token_path = "auth/token"
+    requires_response_body = True  # instructs httpx to pass token request response body
+
+    _get_token_path = "/api/auth/token"
 
     def __init__(self, api_url: str, api_key: str, ssl_verify: bool = True):
         self._api_key = api_key
-        self._connector = HTTPConnector(api_url, ssl_verify=ssl_verify)
         self._token = None  # type: Optional[str]
 
-    def __call__(self, r: requests.Request):
-        # Get access token from Cybsi using API key and retry HTTP
-        # request if 401 response is received.
-        if self._token:
-            r.headers["Authorization"] = self._token
+    def auth_flow(
+        self, request: httpx.Request
+    ) -> Generator[httpx.Request, httpx.Response, None]:
+        # See https://www.python-httpx.org/advanced/#customizing-authentication
+        if self._token is None:
+            token_response = yield self._build_token_request(request)
+            _raise_for_status(token_response)
 
-        r.register_hook("response", self._handle_401)
-        return r
+            token = TokenView(token_response.json())
+            self._token = f"{token.type.value} {token.access_token}"
 
-    def _handle_401(self, r, **kwargs):
-        """Handler for 401 http response"""
+        request.headers["Authorization"] = self._token
+        yield request
 
-        if r.status_code != 401:
-            return r
+    def _build_token_request(self, req):
+        url = req.url.copy_with(path=self._get_token_path)
 
-        r.close()
-        req = r.request.copy()
-
-        logger.debug("request: %s %s, unauthorized.", req.method, req.url)
-
-        resp = self._connector.do_get(
-            self._get_token_path, params={"apiKey": self._api_key}
+        headers = {
+            "Accept": req.headers["Accept"],
+            "User-Agent": req.headers["User-Agent"],
+        }
+        return httpx.Request(
+            "GET",
+            url=url,
+            params={"apiKey": self._api_key},
+            headers=headers,
         )
-        token = TokenView(resp.json())
-
-        self._token = f"{token.type.value} {token.access_token}"
-        req.headers["Authorization"] = self._token
-
-        try:
-            _r = r.connection.send(req, **kwargs)
-        except Exception as exp:
-            raise CybsiError("unable to send authenticated request", exp) from None
-
-        _r.history.append(r)
-        _r.request = req
-        return _r
 
 
 class APIKeysAPI(BaseAPI):

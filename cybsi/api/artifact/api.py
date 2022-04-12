@@ -1,6 +1,7 @@
 import cgi
 import uuid
 from datetime import datetime
+from io import BytesIO
 from typing import Any, Dict, Iterable, List, Optional, cast
 
 from .. import RefView
@@ -104,9 +105,9 @@ class ArtifactsAPI(BaseAPI):
         form: Dict[str, Any] = {}
 
         if artifact_type is not None:
-            form["type"] = artifact_type.value
+            form["type"] = artifact_type.value.encode()
 
-        form["shareLevel"] = share_level.value
+        form["shareLevel"] = share_level.value.encode()
         form["file"] = (filename, data)
 
         r = self._connector.do_post(path=self._path, files=form)
@@ -153,7 +154,7 @@ class ArtifactsAPI(BaseAPI):
         r = self._connector.do_get(path=path, params=params, stream=True)
 
         filename = _parse_content_filename(r)
-        return ArtifactContent(filename, r.raw)
+        return ArtifactContent(filename, r)
 
     def filter(
         self,
@@ -232,7 +233,6 @@ class ArtifactContent:
     def __init__(self, filename: str, raw: Any):
         self._filename = filename
         self._raw = raw
-        self._raw.decode_content = True
 
     def __enter__(self):
         return self
@@ -251,7 +251,9 @@ class ArtifactContent:
 
         File-like object, supports read() but does not support seek().
         """
-        return self._raw
+        # TODO: Implement actual streaming using iter_bytes()
+        # https://www.python-httpx.org/compatibility/#streaming-responses
+        return BytesIO(self._raw.read())
 
     def close(self):
         """Close content, releasing connection."""

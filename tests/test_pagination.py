@@ -1,30 +1,26 @@
 import json
 import unittest
-from io import BytesIO
 from itertools import chain
 
-import requests
-from requests import Response
-from requests.structures import CaseInsensitiveDict
+import httpx
 
 from cybsi.api.pagination import Page, chain_pages
 
 
 class PaginationTest(unittest.TestCase):
     @staticmethod
-    def _make_response(status_code=200, headers=None, data=None) -> requests.Response:
+    def _make_response(status_code=200, headers=None, data=None) -> httpx.Response:
         """Make test response"""
         data = json.dumps(data).encode() if data else "[]".encode()
-        response = Response()
-        response.status_code = status_code
-        response.headers = CaseInsensitiveDict(headers)
-        response.raw = BytesIO(data)
+        response = httpx.Response(
+            status_code=status_code, headers=headers or {}, content=data
+        )
         return response
 
     def test_pagination_no_next_link(self):
         response = self._make_response(200)
 
-        page = Page(lambda: Response(), response, lambda x: x)
+        page = Page(lambda: httpx.Response(), response, lambda x: x)
         self.assertIs(page.next_page(), None)
 
     def test_pagination_iterate_pages(self):
@@ -53,14 +49,14 @@ class PaginationTest(unittest.TestCase):
         expected = [1, 2, 3, 4]
         response = self._make_response(200, data=[str(i) for i in expected])
 
-        page = Page(lambda: Response(), response, lambda x: int(x))
+        page = Page(lambda: httpx.Response(), response, lambda x: int(x))
         self.assertEqual(expected, page.data())
 
     def test_pagination_iterate_page_data(self):
         expected = [1, 2, 3, 4]
         response = self._make_response(200, data=[str(i) for i in expected])
 
-        page = Page(lambda: Response(), response, lambda x: int(x))
+        page = Page(lambda: httpx.Response(), response, lambda x: int(x))
         actual = []
         for item in page:
             actual.append(item)

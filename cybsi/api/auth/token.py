@@ -1,4 +1,5 @@
 import datetime
+
 from enum_tools import document_enum
 
 from cybsi.api.enum import CybsiAPIEnum

@@ -2,14 +2,13 @@
 import uuid
 from os import environ
 
-from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api import Config, CybsiClient
 
 if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")
     api_url = environ.get("CYBSI_API_URL")
 
-    auth = APIKeyAuth(api_url, api_key, ssl_verify=False)
-    config = Config(api_url, auth, ssl_verify=False)
+    config = Config(api_url, api_key=api_key, ssl_verify=False)
     client = CybsiClient(config)
 
     reporters = [uuid.uuid4(), uuid.uuid4()]
@@ -29,3 +28,4 @@ if __name__ == "__main__":
         next_cur = generic_observations.cursor
         if next_cur == "":
             break
+    client.close()

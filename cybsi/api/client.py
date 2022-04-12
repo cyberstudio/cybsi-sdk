@@ -1,10 +1,11 @@
 from dataclasses import dataclass
-from typing import Callable, Optional
+from typing import Callable, Optional, Union
 
 from .artifact import ArtifactsAPI
-from .auth import APIKeysAPI
+from .auth import APIKeyAuth, APIKeysAPI
 from .data_source import DataSourcesAPI, DataSourceTypesAPI
 from .enrichment import EnrichmentAPI
+from .error import CybsiError
 from .internal import HTTPConnector, JsonObjectView
 from .observable import ObservableAPI
 from .observation import ObservationsAPI
@@ -16,11 +17,22 @@ from .user import UsersAPI
 
 @dataclass
 class Config:
-    """:class:`CybsiClient` config."""
+    """:class:`CybsiClient` config.
 
-    api_url: str  #: Base API URL.
-    auth: Callable  # noqa: E501 #: Callable object :class:`CybsiClient` can use to authenticate requests.
-    ssl_verify: bool = True  #: Enable SSL certificate verification.
+    Args:
+        api_url: Base API URL.
+        auth: Optional callable :class:`CybsiClient` can use to authenticate requests.
+            In most cases it's enough to pass `api_key` instead of this.
+        ssl_verify: Enable SSL certificate verification.
+        api_key: API key. Forces client to use
+            :class:`cybsi.api.auth.APIKeyAuth` for authentication.
+            `auth` parameter is ignored.
+    """
+
+    api_url: str
+    auth: Union[APIKeyAuth, Callable, None] = None
+    ssl_verify: bool = True
+    api_key: str = ""
 
 
 class CybsiClient:
@@ -52,19 +64,38 @@ class CybsiClient:
         >>> from cybsi.api import APIKeyAuth, Config, CybsiClient
         >>> api_url = "http://localhost:80/api"
         >>> api_key = "8Nqjk6V4Q_et_Rf5EPu4SeWy4nKbVPKPzKJESYdRd7E"
-        >>> auth = APIKeyAuth(api_url, api_key)
-        >>> config = Config(api_url, auth)
+        >>> config = Config(api_url, api_key=api_key)
         >>> client = CybsiClient(config)
         >>> client.observations
         <cybsi_sdk.client.observation.ObservationsAPI object at 0x7f57a293c190>
     """
 
     def __init__(self, config: Config):
+        if config.auth is None and not config.api_key:
+            raise CybsiError("No authorization mechanism configured for client")
+
+        auth = APIKeyAuth("", config.api_key) if config.api_key else config.auth
         self._connector = HTTPConnector(
             base_url=config.api_url,
-            auth=config.auth,
+            auth=auth,
             ssl_verify=config.ssl_verify,
         )
+
+    def __enter__(self) -> "CybsiClient":
+        self._connector.__enter__()
+        return self
+
+    def __exit__(
+        self,
+        exc_type=None,
+        exc_value=None,
+        traceback=None,
+    ) -> None:
+        self._connector.__exit__(exc_type, exc_value, traceback)
+
+    def close(self) -> None:
+        """Close client and release connections."""
+        self._connector.close()
 
     @property
     def artifacts(self) -> ArtifactsAPI:

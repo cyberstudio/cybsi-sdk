@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from os import environ
 
-from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api import Config, CybsiClient
 from cybsi.api.data_source import DataSourceForm, DataSourceTypeForm
 from cybsi.api.error import ConflictError
 
@@ -9,8 +9,7 @@ if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")
     api_url = environ.get("CYBSI_API_URL")
 
-    auth = APIKeyAuth(api_url, api_key, ssl_verify=False)
-    config = Config(api_url, auth, ssl_verify=False)
+    config = Config(api_url, api_key=api_key, ssl_verify=False)
     client = CybsiClient(config)
 
     ds_type_uuid = None
@@ -34,3 +33,5 @@ if __name__ == "__main__":
         exit(1)
     view = client.data_sources.view(ds_uuid)
     type_view = client.data_source_types.view(ds_type_uuid)
+
+    client.close()

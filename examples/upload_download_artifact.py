@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import shutil
-from io import BytesIO, StringIO
+from io import BytesIO
 from os import environ
 from zipfile import ZipFile
 
-from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api import Config, CybsiClient
 from cybsi.api.artifact.enums import ArtifactContentDownloadCompressionTypes
 
 
@@ -12,12 +12,11 @@ def main():
     api_key = environ.get("CYBSI_API_KEY")
     api_url = environ.get("CYBSI_API_URL")
 
-    auth = APIKeyAuth(api_url, api_key, ssl_verify=False)
-    config = Config(api_url, auth, ssl_verify=False)
+    config = Config(api_url, api_key=api_key, ssl_verify=False)
     client = CybsiClient(config)
 
-    # Upload artifact. We pass StringIO, but any file-like object will do.
-    content = StringIO("artifact content")
+    # Upload artifact. We pass BytesIO, but any file-like object will do.
+    content = BytesIO(b"artifact content")
     recognized_type_view = client.artifacts.recognize_type(content)
 
     print(recognized_type_view.type)
@@ -31,6 +30,8 @@ def main():
     )
     print_zipped_content(client, artifact_uuid=artifact_ref.uuid)
     print_plain_content(client, artifact_uuid=artifact_ref.uuid)
+
+    client.close()
 
 
 def print_zipped_content(client, artifact_uuid):
