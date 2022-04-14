@@ -24,15 +24,11 @@ class Config:
         auth: Optional callable :class:`CybsiClient` can use to authenticate requests.
             In most cases it's enough to pass `api_key` instead of this.
         ssl_verify: Enable SSL certificate verification.
-        api_key: API key. Forces client to use
-            :class:`cybsi.api.auth.APIKeyAuth` for authentication.
-            `auth` parameter is ignored.
     """
 
     api_url: str
-    auth: Union[APIKeyAuth, Callable, None] = None
+    auth: Union[APIKeyAuth, Callable]
     ssl_verify: bool = True
-    api_key: str = ""
 
 
 class CybsiClient:
@@ -64,20 +60,20 @@ class CybsiClient:
         >>> from cybsi.api import APIKeyAuth, Config, CybsiClient
         >>> api_url = "http://localhost:80/api"
         >>> api_key = "8Nqjk6V4Q_et_Rf5EPu4SeWy4nKbVPKPzKJESYdRd7E"
-        >>> config = Config(api_url, api_key=api_key)
+        >>> auth = APIKeyAuth(api_url, api_key)
+        >>> config = Config(api_url, auth)
         >>> client = CybsiClient(config)
         >>> client.observations
         <cybsi_sdk.client.observation.ObservationsAPI object at 0x7f57a293c190>
     """
 
     def __init__(self, config: Config):
-        if config.auth is None and not config.api_key:
+        if config.auth is None:
             raise CybsiError("No authorization mechanism configured for client")
 
-        auth = APIKeyAuth("", config.api_key) if config.api_key else config.auth
         self._connector = HTTPConnector(
             base_url=config.api_url,
-            auth=auth,
+            auth=config.auth,
             ssl_verify=config.ssl_verify,
         )
 

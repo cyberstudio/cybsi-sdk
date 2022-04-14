@@ -2,7 +2,7 @@
 import datetime as dtm
 from os import environ
 
-from cybsi.api import Config, CybsiClient
+from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.auth import APIKeyForm
 from cybsi.api.error import ConflictError
 from cybsi.api.observable import ShareLevels
@@ -13,7 +13,8 @@ if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")
     api_url = environ.get("CYBSI_API_URL")
 
-    config = Config(api_url, api_key=api_key, ssl_verify=False)
+    auth = APIKeyAuth(api_url, api_key)
+    config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
 
     ref_key = None

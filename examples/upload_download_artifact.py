@@ -4,7 +4,7 @@ from io import BytesIO
 from os import environ
 from zipfile import ZipFile
 
-from cybsi.api import Config, CybsiClient
+from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.artifact.enums import ArtifactContentDownloadCompressionTypes
 
 
@@ -12,7 +12,8 @@ def main():
     api_key = environ.get("CYBSI_API_KEY")
     api_url = environ.get("CYBSI_API_URL")
 
-    config = Config(api_url, api_key=api_key, ssl_verify=False)
+    auth = APIKeyAuth(api_url, api_key)
+    config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
 
     # Upload artifact. We pass BytesIO, but any file-like object will do.

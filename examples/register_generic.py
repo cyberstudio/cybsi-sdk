@@ -2,7 +2,7 @@
 from datetime import datetime, timezone
 from os import environ
 
-from cybsi.api import Config, CybsiClient
+from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.observable import (
     AttributeNames,
     EntityForm,
@@ -54,7 +54,8 @@ if __name__ == "__main__":
     api_key = environ.get("CYBSI_API_KEY")
     api_url = environ.get("CYBSI_API_URL")
 
-    config = Config(api_url, api_key=api_key, ssl_verify=False)
+    auth = APIKeyAuth(api_url, api_key)
+    config = Config(api_url, auth, ssl_verify=False)
 
     with CybsiClient(config) as client:
         generic_observation = create_generic_observation()

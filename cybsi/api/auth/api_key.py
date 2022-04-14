@@ -2,6 +2,7 @@ import logging
 import uuid
 from datetime import datetime
 from typing import Generator, Iterable, List, Optional, Tuple
+from urllib.parse import urljoin
 
 import httpx
 
@@ -27,13 +28,13 @@ class APIKeyAuth(httpx.Auth):
     of :class:`~cybsi.api.CybsiClient` requests using API key.
 
     Args:
-        api_url: Cybsi API URL. Deprecated, has no effect.
-            Uses URL set for CybsiClient config.
+        api_url: Cybsi auth API URL. Usually equal to CybsiClient config API URL.
         api_key: Cybsi API key.
         ssl_verify: enable SSL verification. Deprecated, has no effect.
             Uses value set for CybsiClient config.
     Usage:
         >>> from cybsi.api import APIKeyAuth, Config, CybsiClient
+        >>> api_url = "http://localhost:80/api"
         >>> api_key = "8Nqjk6V4Q_et_Rf5EPu4SeWy4nKbVPKPzKJESYdRd7E"
         >>> auth = APIKeyAuth("", api_key)
         >>> config = Config(api_url, auth)  # Consider using :attr:`Config.api_key`
@@ -44,11 +45,12 @@ class APIKeyAuth(httpx.Auth):
 
     requires_response_body = True  # instructs httpx to pass token request response body
 
-    _get_token_path = "/api/auth/token"
+    _get_token_path = "auth/token"
 
     def __init__(self, api_url: str, api_key: str, ssl_verify: bool = True):
         self._api_key = api_key
         self._token = None  # type: Optional[str]
+        self._api_url = api_url
 
     def auth_flow(
         self, request: httpx.Request
@@ -65,15 +67,14 @@ class APIKeyAuth(httpx.Auth):
         yield request
 
     def _build_token_request(self, req):
-        url = req.url.copy_with(path=self._get_token_path)
-
+        token_url = urljoin(self._api_url, self._get_token_path)
         headers = {
             "Accept": req.headers["Accept"],
             "User-Agent": req.headers["User-Agent"],
         }
         return httpx.Request(
             "GET",
-            url=url,
+            url=token_url,
             params={"apiKey": self._api_key},
             headers=headers,
         )
