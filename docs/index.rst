@@ -5,7 +5,8 @@ Cybsi SDK: **Cyb**\ er\ **s**\ecurity Threat **I**\ntelligence development kit
 
 Release v\ |version|. (:ref:`Installation <install>`)
 
-**Cybsi SDK** is a Python library for communication with Cybsi over HTTP REST API. It supports Python 3.7+.
+**Cybsi SDK** is a Python library for communication with Cybsi over HTTP REST API.
+It supports Python 3.7+, and has both synchronous and asynchronous interface.
 
 
 The User Guide

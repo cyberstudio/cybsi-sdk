@@ -3,14 +3,21 @@ In essence, it's a container of arbitrary facts Cybsi domain model supports.
 
 See Also:
     See :ref:`register-generic-observation-example`
-    for a complete example of generic observation API usage.
+    and :ref:`register-generic-observation-async-example`
+    for a complete examples of generic observation API usage.
 """
 import uuid
 from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Union, cast
 
 from .. import RefView
-from ..internal import BaseAPI, JsonObjectForm, JsonObjectView, rfc3339_timestamp
+from ..internal import (
+    BaseAPI,
+    BaseAsyncAPI,
+    JsonObjectForm,
+    JsonObjectView,
+    rfc3339_timestamp,
+)
 from ..observable import (
     AttributeNames,
     EntityForm,
@@ -19,14 +26,14 @@ from ..observable import (
     RelationshipView,
     ShareLevels,
 )
-from ..pagination import Cursor, Page
+from ..pagination import AsyncPage, Cursor, Page
 from .view import ObservationHeaderView
+
+_PATH = "/enrichment/observations/generics"
 
 
 class GenericObservationsAPI(BaseAPI):
     """Generic observation API."""
-
-    _path = "/enrichment/observations/generics"
 
     def register(self, observation: "GenericObservationForm") -> RefView:
         """Register a generic observation.
@@ -52,7 +59,7 @@ class GenericObservationsAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTime`
         """
-        r = self._connector.do_post(path=self._path, json=observation.json())
+        r = self._connector.do_post(path=_PATH, json=observation.json())
         return RefView(r.json())
 
     def filter(
@@ -94,7 +101,7 @@ class GenericObservationsAPI(BaseAPI):
         if limit:
             params["limit"] = str(limit)
 
-        resp = self._connector.do_get(self._path, params=params)
+        resp = self._connector.do_get(_PATH, params=params)
         page = Page(self._connector.do_get, resp, GenericObservationView)
         return page
 
@@ -110,8 +117,56 @@ class GenericObservationsAPI(BaseAPI):
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Generic observation not found.
         """
-        path = f"{self._path}/{observation_uuid}"
+        path = f"{_PATH}/{observation_uuid}"
         r = self._connector.do_get(path)
+        return GenericObservationView(r.json())
+
+
+class GenericObservationsAsyncAPI(BaseAsyncAPI):
+    """Generic observation asynchronous API."""
+
+    async def register(self, observation: "GenericObservationForm") -> RefView:
+        """
+        Register a generic observation.
+
+        Async analog of :meth:`GenericObservationsAPI.register()`.
+        """
+        r = await self._connector.do_post(path=_PATH, json=observation.json())
+        return RefView(r.json())
+
+    async def filter(
+        self,
+        data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
+        reporter_uuids: Optional[Iterable[uuid.UUID]] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> AsyncPage["GenericObservationView"]:
+        """Get page of filtered generic observation list.
+
+        Async analog of :meth:`GenericObservationsAPI.filter()`.
+        """
+        params: Dict[str, Any] = {}
+
+        if data_source_uuids is not None:
+            params["dataSourceUUID"] = [str(u) for u in data_source_uuids]
+        if reporter_uuids is not None:
+            params["reporterUUID"] = [str(u) for u in reporter_uuids]
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        resp = await self._connector.do_get(_PATH, params=params)
+        page = AsyncPage(self._connector.do_get, resp, GenericObservationView)
+        return page
+
+    async def view(self, observation_uuid: uuid.UUID) -> "GenericObservationView":
+        """Get the generic observation view.
+
+        Async analog of :meth:`GenericObservationsAPI.view()`.
+        """
+        path = f"{_PATH}/{observation_uuid}"
+        r = await self._connector.do_get(path)
         return GenericObservationView(r.json())
 
 

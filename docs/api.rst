@@ -11,6 +11,8 @@ Low-level client
 ----------------
 .. autoclass:: cybsi.api.CybsiClient
     :members:
+.. autoclass:: cybsi.api.CybsiAsyncClient
+    :members:
 .. autoclass:: cybsi.api.Config
     :members:
 .. autoclass:: cybsi.api.VersionView
@@ -237,6 +239,7 @@ Pagination
 ~~~~~~~~~~
 .. automodule:: cybsi.api.pagination
     :members:
+    :inherited-members:
 
 Exceptions
 ----------

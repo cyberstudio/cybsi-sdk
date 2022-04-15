@@ -7,8 +7,9 @@ from .data_source import DataSourcesAPI, DataSourceTypesAPI
 from .enrichment import EnrichmentAPI
 from .error import CybsiError
 from .internal import HTTPConnector, JsonObjectView
+from .internal.connector import AsyncHTTPConnector
 from .observable import ObservableAPI
-from .observation import ObservationsAPI
+from .observation import ObservationsAPI, ObservationsAsyncAPI
 from .replist import ReplistsAPI
 from .report import ReportsAPI
 from .search import SearchAPI
@@ -64,6 +65,7 @@ class CybsiClient:
         >>> config = Config(api_url, auth)
         >>> client = CybsiClient(config)
         >>> client.observations
+        >>> client.close()  # "with" syntax is also supported for CybsiClient
         <cybsi_sdk.client.observation.ObservationsAPI object at 0x7f57a293c190>
     """
 
@@ -160,6 +162,47 @@ class CybsiClient:
         path = "/version"
         resp = self._connector.do_get(path)
         return VersionView(resp.json())
+
+
+class CybsiAsyncClient:
+    """The asynchronous analog of :class:`CybsiClient`.
+
+    As you can see, the asynchronous client has fewer features than synchronous one.
+    This is because we don't simply copy-paste features,
+    but provide them only when they're actually useful in asynchronous applications.
+
+    Args:
+        config: Client config.
+    """
+
+    def __init__(self, config: Config):
+        if config.auth is None:
+            raise CybsiError("No authorization mechanism configured for client")
+
+        self._connector = AsyncHTTPConnector(
+            base_url=config.api_url, auth=config.auth, ssl_verify=config.ssl_verify
+        )
+
+    async def __aenter__(self) -> "CybsiAsyncClient":
+        await self._connector.__aenter__()
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type=None,
+        exc_value=None,
+        traceback=None,
+    ) -> None:
+        await self._connector.__aexit__(exc_type, exc_value, traceback)
+
+    async def aclose(self) -> None:
+        """Close client and release connections."""
+        await self._connector.aclose()
+
+    @property
+    def observations(self) -> ObservationsAsyncAPI:
+        """Observations API handle."""
+        return ObservationsAsyncAPI(self._connector)
 
 
 class VersionView(JsonObjectView):

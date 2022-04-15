@@ -1,8 +1,9 @@
-from .api import ObservationsAPI
+from .api import ObservationsAPI, ObservationsAsyncAPI
 from .enums import ObservationTypes
 from .view import ObservationHeaderView, ObservationCommonView
 from .generic import (
     GenericObservationsAPI,
+    GenericObservationsAsyncAPI,
     GenericObservationForm,
     GenericObservationView,
     GenericObservationContentView,

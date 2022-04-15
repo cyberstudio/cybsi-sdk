@@ -25,6 +25,17 @@ The content of the observation says that "test.com" is IoC and malicious with co
 .. literalinclude:: ../../examples/register_generic.py
 
 
+.. _register-generic-observation-async-example:
+
+Register a generic observation asynchronously
+---------------------------------------------
+
+This one is the same as above, but for code written in asynchronous style.
+It registers multiple observations concurrently.
+
+.. literalinclude:: ../../examples/register_generic_async.py
+
+
 .. _get-attribute-and-relationship-forecasts:
 
 Get attribute and relationship forecasts

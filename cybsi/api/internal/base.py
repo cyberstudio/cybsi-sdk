@@ -6,7 +6,7 @@ import json
 from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 from ..error import CybsiError
-from .connector import HTTPConnector
+from .connector import AsyncHTTPConnector, HTTPConnector
 
 JsonObject = Dict[str, Any]
 
@@ -14,6 +14,12 @@ JsonObject = Dict[str, Any]
 class BaseAPI:
     # Base class for all API handle implementations.
     def __init__(self, connector: HTTPConnector):
+        self._connector = connector
+
+
+class BaseAsyncAPI:
+    # Base class for all async API handle implementations.
+    def __init__(self, connector: AsyncHTTPConnector):
         self._connector = connector
 
 

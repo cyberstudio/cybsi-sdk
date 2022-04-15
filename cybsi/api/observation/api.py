@@ -7,24 +7,24 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, Optional
 from uuid import UUID
 
-from ..internal import BaseAPI, rfc3339_timestamp
+from ..internal import BaseAPI, BaseAsyncAPI, rfc3339_timestamp
 from ..observable import ShareLevels
 from ..pagination import Cursor, Page
 from .archive import ArchiveObservationsAPI
 from .dns_lookup import DNSLookupObservationsAPI
 from .enums import ObservationTypes
-from .generic import GenericObservationsAPI
+from .generic import GenericObservationsAPI, GenericObservationsAsyncAPI
 from .network_session import NetworkSessionObservationsAPI
 from .scan_session import ScanSessionObservationsAPI
 from .threat import ThreatObservationsAPI
 from .view import ObservationHeaderView
 from .whois_lookup import WhoisLookupObservationsAPI
 
+_PATH = "/enrichment/observations"
+
 
 class ObservationsAPI(BaseAPI):
     """Observations API."""
-
-    _path = "/enrichment/observations"
 
     @property
     def archives(self) -> ArchiveObservationsAPI:
@@ -138,6 +138,15 @@ class ObservationsAPI(BaseAPI):
         if limit:
             params["limit"] = str(limit)
 
-        resp = self._connector.do_get(path=self._path, params=params)
+        resp = self._connector.do_get(path=_PATH, params=params)
         page = Page(self._connector.do_get, resp, ObservationHeaderView)
         return page
+
+
+class ObservationsAsyncAPI(BaseAsyncAPI):
+    """Observations asynchronous API."""
+
+    @property
+    def generics(self) -> GenericObservationsAsyncAPI:
+        """Get generic observations route."""
+        return GenericObservationsAsyncAPI(self._connector)

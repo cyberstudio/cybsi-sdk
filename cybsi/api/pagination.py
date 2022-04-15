@@ -5,15 +5,15 @@ See Also:
     See :ref:`pagination-example`
     for complete examples of pagination usage.
 """
-from typing import Callable, Generic, Iterator, List, Optional, TypeVar, cast
+from typing import Callable, Coroutine, Generic, Iterator, List, Optional, TypeVar, cast
 
 import httpx
 
 
 class Cursor:
 
-    """:attr:`Page.cursor` value.
-    Use :meth:`Page` to retrieve it."""
+    """Page cursor value.
+    Use :class:`Page` or :class:`AsyncPage` to retrieve it."""
 
     pass
 
@@ -31,22 +31,8 @@ X_CURSOR_HEADER = "X-Cursor"
 T = TypeVar("T")
 
 
-class Page(Generic[T]):
-    """Page returned by Cybsi API.
-
-    Args:
-        api_call: Callable object for getting next page
-        resp: Response which represents a start page
-        view: View class for page elements
-    """
-
-    def __init__(
-        self,
-        api_call: Callable[..., httpx.Response],
-        resp: httpx.Response,
-        view: Callable[..., T],
-    ):
-        self._api_call = api_call
+class _BasePage(Generic[T]):
+    def __init__(self, resp: httpx.Response, view: Callable[..., T]):
         self._resp = resp
         self._view = view
 
@@ -70,6 +56,29 @@ class Page(Generic[T]):
         """Get page data as a list of items."""
         return list(iter(self))
 
+    def __iter__(self) -> Iterator[T]:
+        yield from (self._view(x) for x in self._resp.json())
+
+
+class Page(_BasePage[T]):
+    """Page returned by Cybsi API.
+       Should not be constructed manually, use filter-like methods provided by SDK.
+
+    Args:
+        api_call: Callable object for getting next page
+        resp: Response which represents a start page
+        view: View class for page elements
+    """
+
+    def __init__(
+        self,
+        api_call: Callable[..., httpx.Response],
+        resp: httpx.Response,
+        view: Callable[..., T],
+    ):
+        super().__init__(resp, view)
+        self._api_call = api_call
+
     def next_page(self) -> "Optional[Page[T]]":
         """Get next page.
         If there is no link to the next page it return None.
@@ -79,8 +88,34 @@ class Page(Generic[T]):
 
         return Page(self._api_call, self._api_call(self.next_link), self._view)
 
-    def __iter__(self) -> Iterator[T]:
-        yield from (self._view(x) for x in self._resp.json())
+
+class AsyncPage(_BasePage[T]):
+    """Page returned by Cybsi API.
+       Should not be constructed manually, use filter-like methods provided by SDK.
+
+    Args:
+        api_call: Callable object for getting next page
+        resp: Response which represents a start page
+        view: View class for page elements
+    """
+
+    def __init__(
+        self,
+        api_call: Callable[..., Coroutine],
+        resp: httpx.Response,
+        view: Callable[..., T],
+    ):
+        super().__init__(resp, view)
+        self._api_call = api_call
+
+    async def next_page(self) -> "Optional[AsyncPage[T]]":
+        """Get next page.
+        If there is no link to the next page it return None.
+        """
+        if self.next_link is None:
+            return None
+        resp = await self._api_call(self.next_link)
+        return AsyncPage(self._api_call, resp, self._view)
 
 
 def chain_pages(start_page: Page[T]) -> Iterator[T]:

@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.8.1a1 (2022-04-19)
+--------------------
+- Implement asynchronous client
+- Add async functions for generic observations
+
 2.8.0a10 (2022-04-19)
 ---------------------
 - Fix replist entities + changes API view
