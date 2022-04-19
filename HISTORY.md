@@ -2,7 +2,7 @@ Release History
 ===============
 
 2.8.0a10 (2022-04-19)
---------------------
+---------------------
 - Fix replist entities + changes API view
 - Update API error message with empty suffix
 
