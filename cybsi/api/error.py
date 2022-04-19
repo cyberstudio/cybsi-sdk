@@ -57,7 +57,11 @@ class APIError(CybsiError):
             if suffix is not None
             else f"code: {self._view.code}, message: {self._view.message}"
         )
-        super().__init__(f"{self._header}, {self._suffix}")
+
+        msg = self._header
+        if self._suffix:
+            msg += f", {self._suffix}"
+        super().__init__(msg)
 
     @property
     def content(self) -> JsonObject:

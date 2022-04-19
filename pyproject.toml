@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cybsi-sdk"
-version = "2.8.0a9"
+version = "2.8.0a10"
 description = "Cybsi development kit"
 authors = ["Cybsi developers"]
 license = "MIT"

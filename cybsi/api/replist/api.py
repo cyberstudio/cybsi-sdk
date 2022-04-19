@@ -121,7 +121,7 @@ class ReplistsAPI(BaseAPI):
 
     def entities(
         self,
-        replist_uuid: str,
+        replist_uuid: uuid.UUID,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Tuple[Page[EntityView], Cursor]:
@@ -153,7 +153,7 @@ class ReplistsAPI(BaseAPI):
 
     def changes(
         self,
-        replist_uuid: str,
+        replist_uuid: uuid.UUID,
         cursor: Cursor,
         limit: Optional[int] = None,
     ) -> Page["EntitySetChangeView"]:
@@ -190,7 +190,7 @@ class ReplistsAPI(BaseAPI):
         if limit:
             params["limit"] = str(limit)
 
-        path = self._replist_entities_tpl.format(replist_uuid)
+        path = self._replist_changes_tpl.format(replist_uuid)
         resp = self._connector.do_get(path, params=params)
         page = Page(self._connector.do_get, resp, EntitySetChangeView)
         return page

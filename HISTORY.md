@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.8.0a10 (2022-04-19)
+--------------------
+- Fix replist entities + changes API view
+- Update API error message with empty suffix
+
 2.8.0a9 (2022-04-12)
 --------------------
 - Change connector library from requests to httpx
