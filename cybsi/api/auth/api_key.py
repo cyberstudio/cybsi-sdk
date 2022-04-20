@@ -72,8 +72,8 @@ class APIKeyAuth(httpx.Auth):
                 token_response = yield self._build_token_request(request)
                 self._update_token(token_response, token_response.read())
 
-            request.headers["Authorization"] = self._token
-            yield request
+                request.headers["Authorization"] = self._token
+                yield request
 
     async def async_auth_flow(
         self, request: httpx.Request
@@ -87,8 +87,8 @@ class APIKeyAuth(httpx.Auth):
                 token_response = yield self._build_token_request(request)
                 self._update_token(token_response, await token_response.aread())
 
-            request.headers["Authorization"] = self._token
-            yield request
+                request.headers["Authorization"] = self._token
+                yield request
 
     def _build_token_request(self, req) -> httpx.Request:
         token_url = urljoin(self._api_url, self._get_token_path)

@@ -1,8 +1,14 @@
 Release History
 ===============
 
+2.8.1a2 (2022-04-20)
+--------------------
+- Fix authorization flow bug causing duplicate requests
+
 2.8.1a1 (2022-04-19)
 --------------------
+**Don't use this version, it has a critical bug, see 2.8.1.a2**
+
 - Implement asynchronous client
 - Add async functions for generic observations
 
