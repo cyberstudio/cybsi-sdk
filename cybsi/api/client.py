@@ -11,7 +11,7 @@ from .internal.connector import AsyncHTTPConnector
 from .observable import ObservableAPI
 from .observation import ObservationsAPI, ObservationsAsyncAPI
 from .replist import ReplistsAPI
-from .report import ReportsAPI
+from .report import ReportsAPI, ReportsAsyncAPI
 from .search import SearchAPI
 from .user import UsersAPI
 
@@ -203,6 +203,11 @@ class CybsiAsyncClient:
     def observations(self) -> ObservationsAsyncAPI:
         """Observations API handle."""
         return ObservationsAsyncAPI(self._connector)
+
+    @property
+    def reports(self) -> ReportsAsyncAPI:
+        """Reports API handle."""
+        return ReportsAsyncAPI(self._connector)
 
 
 class VersionView(JsonObjectView):

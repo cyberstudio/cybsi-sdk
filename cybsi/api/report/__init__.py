@@ -2,6 +2,7 @@
 """
 from .api import (
     ReportsAPI,
+    ReportsAsyncAPI,
     ReportForm,
     ReportView,
     ArtifactShortView,

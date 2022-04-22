@@ -6,6 +6,7 @@ from .. import RefView
 from ..artifact import ArtifactTypes
 from ..internal import (
     BaseAPI,
+    BaseAsyncAPI,
     JsonObject,
     JsonObjectForm,
     JsonObjectView,
@@ -24,14 +25,14 @@ from ..observation import (
     ThreatObservationContentView,
     WhoisLookupObservationContentView,
 )
-from ..pagination import Cursor, Page
+from ..pagination import AsyncPage, Cursor, Page
+
+_REPORTS_PATH = "/enrichment/reports"
+_REPORTS_LABEL_PATH = "/enrichment/report-labels"
 
 
 class ReportsAPI(BaseAPI):
     """Report API."""
-
-    _path = "/enrichment/reports"
-    _label_path = "/enrichment/report-labels"
 
     def register(self, report: "ReportForm") -> RefView:
         """Register report.
@@ -55,7 +56,7 @@ class ReportsAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.UnallowedObservationType`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
         """
-        r = self._connector.do_post(path=self._path, json=report.json())
+        r = self._connector.do_post(path=_REPORTS_PATH, json=report.json())
         return RefView(r.json())
 
     def view(self, report_uuid: uuid.UUID) -> "ReportView":
@@ -70,7 +71,7 @@ class ReportsAPI(BaseAPI):
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Report not found.
         """
-        path = f"{self._path}/{report_uuid}"
+        path = f"{_REPORTS_PATH}/{report_uuid}"
         r = self._connector.do_get(path)
         return ReportView(r.json())
 
@@ -163,7 +164,7 @@ class ReportsAPI(BaseAPI):
         if limit:
             params["limit"] = str(limit)
 
-        resp = self._connector.do_get(path=self._path, params=params)
+        resp = self._connector.do_get(path=_REPORTS_PATH, params=params)
         page = Page(self._connector.do_get, resp, ReportHeaderView)
         return page
 
@@ -201,7 +202,7 @@ class ReportsAPI(BaseAPI):
         if limit:
             params["limit"] = str(limit)
 
-        path = f"{self._path}/{report_uuid}/similar-reports"
+        path = f"{_REPORTS_PATH}/{report_uuid}/similar-reports"
         resp = self._connector.do_get(path, params)
         page = Page(self._connector.do_get, resp, SimilarReportView)
         return page
@@ -224,7 +225,7 @@ class ReportsAPI(BaseAPI):
         Returns:
             View of the report.
         """
-        path = f"{self._path}/{report_uuid}/similar-reports/{similar_report_uuid}"
+        path = f"{_REPORTS_PATH}/{report_uuid}/similar-reports/{similar_report_uuid}"
         r = self._connector.do_get(path)
         return SimilarReportView(r.json())
 
@@ -249,7 +250,7 @@ class ReportsAPI(BaseAPI):
         if limit:
             params["limit"] = str(limit)
 
-        resp = self._connector.do_get(self._label_path, params=params)
+        resp = self._connector.do_get(path=_REPORTS_LABEL_PATH, params=params)
         page = Page(self._connector.do_get, resp, str)
         return page
 
@@ -275,7 +276,7 @@ class ReportsAPI(BaseAPI):
         """
         form: Dict[str, Any] = {"observations": [str(u) for u in observation_uuids]}
 
-        path = f"{self._path}/{report_uuid}/observations"
+        path = f"{_REPORTS_PATH}/{report_uuid}/observations"
         resp = self._connector.do_post(path=path, json=form)
         return RefView(resp.json())
 
@@ -305,9 +306,290 @@ class ReportsAPI(BaseAPI):
         if limit is not None:
             params["limit"] = str(limit)
 
-        path = f"{self._path}/{report_uuid}/observations"
+        path = f"{_REPORTS_PATH}/{report_uuid}/observations"
         resp = self._connector.do_get(path=path, params=params)
         page = Page(self._connector.do_get, resp, ObservationView)
+        return page
+
+
+class ReportsAsyncAPI(BaseAsyncAPI):
+    """Report asynchronous API."""
+
+    async def register(self, report: "ReportForm") -> RefView:
+        """Register report.
+
+        Note:
+            Calls `POST /enrichment/reports`.
+        Args:
+            report: Filled report form.
+        Returns:
+            Reference to the registered report.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.ConflictError`:
+                A report with such external_id and data source is already registered.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTime`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ObservationNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ArtifactNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.UnallowedObservationType`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
+        """
+        r = await self._connector.do_post(path=_REPORTS_PATH, json=report.json())
+        return RefView(r.json())
+
+    async def view(self, report_uuid: uuid.UUID) -> "ReportView":
+        """Get report view.
+
+        Note:
+            Calls `GET /enrichment/reports/{report_uuid}`.
+        Args:
+            report_uuid: Report uuid.
+        Returns:
+            View of the report.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Report not found.
+        """
+        path = f"{_REPORTS_PATH}/{report_uuid}"
+        r = await self._connector.do_get(path)
+        return ReportView(r.json())
+
+    async def filter(
+        self,
+        file_uuid: Optional[uuid.UUID] = None,
+        reporter_uuids: Optional[Iterable[uuid.UUID]] = None,
+        data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
+        entity_uuids: Optional[Iterable[uuid.UUID]] = None,
+        labels: Optional[Iterable[str]] = None,
+        analyzed_artifact_uuid: Optional[uuid.UUID] = None,
+        title: Optional[str] = None,
+        created_before: Optional[datetime] = None,
+        created_after: Optional[datetime] = None,
+        updated_before: Optional[datetime] = None,
+        updated_after: Optional[datetime] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> AsyncPage["ReportHeaderView"]:
+        """Get report header filtration list that matches the specified criteria.
+
+        Reports are returned in reverse order of registration time.
+
+        Note:
+            Calls `GET /enrichment/reports`.
+        Args:
+            file_uuid: File identifier.
+                Filter reports by the artifact of the observed file
+                with the specified identifier.
+            reporter_uuids: Reporter identifiers.
+                Filter reports by reporter data source identifiers.
+            data_source_uuids: Data source identifiers.
+                Filter reports by original data source identifiers.
+            entity_uuids: entity identifiers.
+                Filter reports by at least one of the specified entity.
+            labels: Filter reports by any of the specified labels.
+                Label case is ignored.
+            analyzed_artifact_uuid: Analyzed artifact identifier.
+                Filter reports based on analysis of the specified artifact.
+            title: Filter reports by specified title. Title case is ignored.
+                Allows special symbols '%' and '_'.
+                The '%' symbol replaces any number of title symbols.
+                The '_' symbol replaces only one title symbol.
+                To search for '%' and '_' symbols in the usual sense,
+                you need to prepend them with '\'.
+            created_before: Filter report created before the time (inclusive).
+            created_after: Filter report created after the time (inclusive).
+            updated_before: Filter report updated before the time (inclusive).
+            updated_after: Filter report updated after the time (inclusive).
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of reports list and next page cursor.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Query arguments contain
+                semantic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.FileNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ArtifactNotFound`
+        """
+        params: Dict[str, Any] = {}
+
+        if file_uuid is not None:
+            params["fileUUID"] = str(file_uuid)
+        if reporter_uuids is not None:
+            params["reporterUUID"] = [str(u) for u in reporter_uuids]
+        if data_source_uuids is not None:
+            params["dataSourceUUID"] = [str(u) for u in data_source_uuids]
+        if entity_uuids is not None:
+            params["entityUUID"] = [str(u) for u in entity_uuids]
+        if labels is not None:
+            params["label"] = list(labels)
+        if analyzed_artifact_uuid is not None:
+            params["analyzedArtifactUUID"] = str(analyzed_artifact_uuid)
+        if title is not None:
+            params["title"] = title
+        if created_before is not None:
+            params["createdBefore"] = rfc3339_timestamp(created_before)
+        if created_after is not None:
+            params["createdAfter"] = rfc3339_timestamp(created_after)
+        if updated_before is not None:
+            params["updatedBefore"] = rfc3339_timestamp(updated_before)
+        if updated_after is not None:
+            params["updatedAfter"] = rfc3339_timestamp(updated_after)
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        resp = await self._connector.do_get(path=_REPORTS_PATH, params=params)
+        page = AsyncPage(self._connector.do_get, resp, ReportHeaderView)
+        return page
+
+    async def filter_similar_reports(
+        self,
+        report_uuid: uuid.UUID,
+        reporter_uuid: Optional[uuid.UUID] = None,
+        data_source_uuid: Optional[uuid.UUID] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> AsyncPage["SimilarReportView"]:
+        """Get similar reports filtration list in descending order of similarity.
+
+        Note:
+            Calls `GET /enrichment/reports/{report_uuid}/similar-reports`.
+        Args:
+            report_uuid: Report identifier.
+            reporter_uuid: Reporter identifier.
+                Filter similar reports the reporter data source identifiers.
+            data_source_uuid: Data source identifier.
+                Filter similar reports the original data source identifiers.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of similar reports list and next page cursor.
+        """
+
+        params: Dict[str, Any] = {}
+        if reporter_uuid is not None:
+            params["reporterUUID"] = str(reporter_uuid)
+        if data_source_uuid is not None:
+            params["dataSourceUUID"] = str(data_source_uuid)
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        path = f"{_REPORTS_PATH}/{report_uuid}/similar-reports"
+        resp = await self._connector.do_get(path, params)
+        page = AsyncPage(self._connector.do_get, resp, SimilarReportView)
+        return page
+
+    async def explain_report_similarity(
+        self,
+        report_uuid: uuid.UUID,
+        similar_report_uuid: uuid.UUID,
+    ) -> "SimilarReportView":
+        """Get information about the similarity of reports.
+
+        Note:
+            Report A is similar to report B,
+            but not the same as report B is similar report A.
+        Note:
+            Calls `GET /enrichment/reports/{report_uuid}/similar-reports/{similar_report_uuid}`. # noqa: E501
+        Args:
+            report_uuid: Report identifier.
+            similar_report_uuid: Report identifier for comparison
+        Returns:
+            View of the report.
+        """
+        path = f"{_REPORTS_PATH}/{report_uuid}/similar-reports/{similar_report_uuid}"
+        r = await self._connector.do_get(path)
+        return SimilarReportView(r.json())
+
+    async def search_labels(
+        self, prefix: str, cursor: Optional[Cursor] = None, limit: Optional[int] = None
+    ) -> AsyncPage[str]:
+        """Get report label filtration list.
+
+        Note:
+            Calls `GET /enrichment/report-labels`.
+        Args:
+            prefix: Label prefix.
+                Prefix length must be in range [2;50].
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of reports label list and next page cursor.
+        """
+        params: Dict[str, Any] = {"prefix": prefix}
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        resp = await self._connector.do_get(_REPORTS_LABEL_PATH, params=params)
+        page = AsyncPage(self._connector.do_get, resp, str)
+        return page
+
+    async def attach_observations(
+        self, report_uuid: uuid.UUID, observation_uuids: List[uuid.UUID]
+    ) -> RefView:
+        """Attach observations to existing report.
+
+        Note:
+            Calls `POST /enrichment/reports/{report_uuid}/observations`.
+        Args:
+            report_uuid: Report UUID.
+            observation_uuids: Observation UUIDs.
+        Returns:
+            Reference to the report.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.NotFoundError`: Report not found.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ObservationNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.UnallowedObservationType`
+        """
+        form: Dict[str, Any] = {"observations": [str(u) for u in observation_uuids]}
+
+        path = f"{_REPORTS_PATH}/{report_uuid}/observations"
+        resp = await self._connector.do_post(path=path, json=form)
+        return RefView(resp.json())
+
+    async def filter_observations(
+        self,
+        report_uuid: uuid.UUID,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> AsyncPage["ObservationView"]:
+        """Filter observations in the report.
+
+        Note:
+            Calls `GET /enrichment/reports/{report_uuid}/observations`.
+        Args:
+            report_uuid: Report UUID.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of report observations list and next page cursor.
+                The list of observations is ordered as in the report.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Report not found.
+        """
+        params: Dict[str, Any] = {}
+        if cursor is not None:
+            params["cursor"] = str(cursor)
+        if limit is not None:
+            params["limit"] = str(limit)
+
+        path = f"{_REPORTS_PATH}/{report_uuid}/observations"
+        resp = await self._connector.do_get(path=path, params=params)
+        page = AsyncPage(self._connector.do_get, resp, ObservationView)
         return page
 
 
