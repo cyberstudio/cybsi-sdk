@@ -10,10 +10,16 @@ from typing import Any, Dict, Optional, Union, cast
 from .. import RefView
 from ..artifact import ArtifactTypes
 from ..data_source import DataSourceCommonView
-from ..internal import BaseAPI, JsonObjectForm, JsonObjectView, parse_rfc3339_timestamp
+from ..internal import (
+    BaseAPI,
+    BaseAsyncAPI,
+    JsonObjectForm,
+    JsonObjectView,
+    parse_rfc3339_timestamp,
+)
 from ..observable import EntityView, ShareLevels
 from ..observation import ObservationCommonView
-from ..pagination import Cursor, Page
+from ..pagination import AsyncPage, Cursor, Page
 from .enums import (
     EnrichmentErrorCodes,
     EnrichmentTaskPriorities,
@@ -21,11 +27,11 @@ from .enums import (
     EnrichmentTypes,
 )
 
+_PATH = "/enrichment/tasks"
+
 
 class TasksAPI(BaseAPI):
     """Enrichment task API."""
-
-    _path = "/enrichment/tasks"
 
     def register(self, form: "TaskForm") -> RefView:
         """Register enrichment task to start enrichment forcibly.
@@ -48,7 +54,7 @@ class TasksAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKeySet`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
         """
-        r = self._connector.do_post(path=self._path, json=form.json())
+        r = self._connector.do_post(path=_PATH, json=form.json())
         return RefView(r.json())
 
     def view(self, task_uuid: uuid.UUID) -> "TaskView":
@@ -63,7 +69,7 @@ class TasksAPI(BaseAPI):
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Enrichment task not found.
         """
-        path = f"{self._path}/{task_uuid}"
+        path = f"{_PATH}/{task_uuid}"
         r = self._connector.do_get(path=path)
         return TaskView(r.json())
 
@@ -103,8 +109,92 @@ class TasksAPI(BaseAPI):
         if entity_uuid:
             params["entityUUID"] = str(entity_uuid)
 
-        resp = self._connector.do_get(self._path, params=params)
+        resp = self._connector.do_get(_PATH, params=params)
         page = Page(self._connector.do_get, resp, TaskView)
+        return page
+
+
+class TasksAsyncAPI(BaseAsyncAPI):
+    """Enrichment task API."""
+
+    async def register(self, form: "TaskForm") -> RefView:
+        """Register enrichment task to start enrichment forcibly.
+
+        Note:
+            Calls `POST /enrichment/tasks`.
+        Args:
+            form: Filled enrichment task form.
+        Returns:
+            Reference to enrichment task in API.
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`: Form values are invalid.
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ArtifactNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.EnrichmentNotAllowed`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKeySet`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
+        """
+        r = await self._connector.do_post(path=_PATH, json=form.json())
+        return RefView(r.json())
+
+    async def view(self, task_uuid: uuid.UUID) -> "TaskView":
+        """Get the enrichment task view.
+
+        Note:
+            Calls `GET /enrichment/tasks/{task_uuid}`.
+        Args:
+            task_uuid: enrichment task uuid.
+        Returns:
+            View of the enrichment task.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Enrichment task not found.
+        """
+        path = f"{_PATH}/{task_uuid}"
+        r = await self._connector.do_get(path=path)
+        return TaskView(r.json())
+
+    async def filter(
+        self,
+        artifact_uuid: Optional[uuid.UUID] = None,
+        entity_uuid: Optional[uuid.UUID] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> AsyncPage["TaskView"]:
+        """Get enrichment task filtration list.
+
+        Returns Pending, Completed and Failed enrichment tasks.
+
+        Note:
+            Calls `GET /enrichment/tasks`
+        Args:
+            cursor: Page cursor.
+            limit: Page limit.
+            artifact_uuid: Artifact identifier.
+            entity_uuid: Entity identifier.
+        Returns:
+            Page with enrichment tasks and
+            cursor allowing to get next batch of enrichment tasks.
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Artifact uuid and entity uuid parameters are missing.
+                At least one of these parameters must be specified.
+        """
+        params: Dict[str, Any] = {}
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+        if artifact_uuid:
+            params["artifactUUID"] = str(artifact_uuid)
+        if entity_uuid:
+            params["entityUUID"] = str(entity_uuid)
+
+        resp = await self._connector.do_get(_PATH, params=params)
+        page = AsyncPage(self._connector.do_get, resp, TaskView)
         return page
 
 

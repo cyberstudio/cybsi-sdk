@@ -16,9 +16,11 @@ from typing import Iterable, List, Union, cast
 
 from .. import RefView
 from ..data_source import DataSourceCommonView
-from ..internal import BaseAPI, JsonObjectForm, parse_rfc3339_timestamp
+from ..internal import BaseAPI, BaseAsyncAPI, JsonObjectForm, parse_rfc3339_timestamp
 from .enums import EnrichmentErrorCodes, EnrichmentTaskPriorities, EnrichmentTypes
 from .tasks import ArtifactAnalysisParamsView, ExternalDBLookupParamsView
+
+_PATH = "/enrichment/task-queue"
 
 
 class TaskQueueAPI(BaseAPI):
@@ -26,8 +28,6 @@ class TaskQueueAPI(BaseAPI):
 
     .. versionadded:: 2.7
     """
-
-    _path = "/enrichment/task-queue"
 
     def get_assigned_tasks(self, limit: int = 1) -> List["AssignedTaskView"]:
         """Assign a batch of pending enrichment tasks for execution by client.
@@ -46,7 +46,7 @@ class TaskQueueAPI(BaseAPI):
             Please wait some time if :meth:`get_assigned_tasks`
             returns empty list before calling it again.
         """
-        path = f"{self._path}/executing-tasks"
+        path = f"{_PATH}/executing-tasks"
         r = self._connector.do_post(path=path, json={"limit": limit})
         return [AssignedTaskView(t) for t in r.json()]
 
@@ -75,7 +75,7 @@ class TaskQueueAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTaskResult`
                 -- Result has a broken link to observation, report or artifact.
         """
-        path = f"{self._path}/completed-tasks"
+        path = f"{_PATH}/completed-tasks"
         task_jsons = [r.json() for r in completed_tasks]
         self._connector.do_post(path=path, json={"tasks": task_jsons})
 
@@ -104,9 +104,97 @@ class TaskQueueAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidErrorCode`
                 -- Error code is invalid for tasks of such type.
         """
-        path = f"{self._path}/failed-tasks"
+        path = f"{_PATH}/failed-tasks"
         task_jsons = [r.json() for r in failed_tasks]
         self._connector.do_post(path=path, json={"tasks": task_jsons})
+
+
+class TaskQueueAsyncAPI(BaseAsyncAPI):
+    """Task queue API.
+
+    .. versionadded:: 2.7
+    """
+
+    async def get_assigned_tasks(self, limit: int = 1) -> List["AssignedTaskView"]:
+        """Assign a batch of pending enrichment tasks for execution by client.
+
+        .. versionadded:: 2.7
+
+        All returned tasks have status `Executing`.
+
+        Note:
+            Calls `POST /enrichment/task-queue/executing-tasks`.
+        Args:
+            limit: Maximum task batch size.
+        Returns:
+            A batch of tasks for execution.
+        Warning:
+            Please wait some time if :meth:`get_assigned_tasks`
+            returns empty list before calling it again.
+        """
+        path = f"{_PATH}/executing-tasks"
+        r = await self._connector.do_post(path=path, json={"limit": limit})
+        return [AssignedTaskView(t) for t in r.json()]
+
+    async def complete_tasks(
+        self, completed_tasks: Iterable["CompletedTaskForm"]
+    ) -> None:
+        """Register successful task results.
+
+        .. versionadded:: 2.7
+
+        Note:
+            Calls `POST /enrichment/task-queue/completed-tasks`.
+        Args:
+            completed_tasks: List of filled forms of completed tasks.
+        Returns:
+            None on successful registration of results.
+        Raises:
+            :class:`~cybsi.api.error.ForbiddenError`: Enricher cannot report
+             result of one of tasks.
+            :class:`~cybsi.api.error.SemanticError`: One of forms contains logic errors.
+        Note:
+            ForbiddenError error codes:
+              * :attr:`~cybsi.api.error.ForbiddenErrorCodes.NotOwner`
+                -- Task belongs to other enricher.
+            SemanticError codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTaskStatus`
+                -- Current task status is not ``Executing``.
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTaskResult`
+                -- Result has a broken link to observation, report or artifact.
+        """
+        path = f"{_PATH}/completed-tasks"
+        task_jsons = [r.json() for r in completed_tasks]
+        await self._connector.do_post(path=path, json={"tasks": task_jsons})
+
+    async def fail_tasks(self, failed_tasks: Iterable["FailedTaskForm"]) -> None:
+        """Register failed task errors.
+
+        .. versionadded:: 2.7
+
+        Note:
+            Calls `POST /enrichment/task-queue/failed-tasks`.
+        Args:
+            failed_tasks: List of filled forms of failed tasks.
+        Returns:
+            None on successful registration of errors.
+        Raises:
+            :class:`~cybsi.api.error.ForbiddenError`: Enricher cannot report
+             result of one of tasks.
+            :class:`~cybsi.api.error.SemanticError`: One of forms contains logic errors.
+        Note:
+            ForbiddenError codes:
+              * :attr:`~cybsi.api.error.ForbiddenErrorCodes.NotOwner`
+                -- Task belongs to other enricher.
+            SemanticError codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidTaskStatus`
+                -- Current task status is not ``Executing``.
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidErrorCode`
+                -- Error code is invalid for tasks of such type.
+        """
+        path = f"{_PATH}/failed-tasks"
+        task_jsons = [r.json() for r in failed_tasks]
+        await self._connector.do_post(path=path, json={"tasks": task_jsons})
 
 
 EnrichmentTaskQueueParamsView = Union[

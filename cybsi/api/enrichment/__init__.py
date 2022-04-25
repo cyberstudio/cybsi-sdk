@@ -1,7 +1,7 @@
 """Use this section of API to control
 enrichment configuration and enrichment results.
 """
-from .api import EnrichmentAPI
+from .api import EnrichmentAPI, EnrichmentAsyncAPI
 
 from .config_rules import (
     ConfigRulesAPI,

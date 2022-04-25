@@ -9,7 +9,7 @@ from .data_source import (
     DataSourceTypesAPI,
     DataSourceTypesAsyncAPI,
 )
-from .enrichment import EnrichmentAPI
+from .enrichment import EnrichmentAPI, EnrichmentAsyncAPI
 from .error import CybsiError
 from .internal import HTTPConnector, JsonObjectView
 from .internal.connector import AsyncHTTPConnector
@@ -203,6 +203,11 @@ class CybsiAsyncClient:
     async def aclose(self) -> None:
         """Close client and release connections."""
         await self._connector.aclose()
+
+    @property
+    def enrichment(self) -> EnrichmentAsyncAPI:
+        """Enrichment API handle."""
+        return EnrichmentAsyncAPI(self._connector)
 
     @property
     def observations(self) -> ObservationsAsyncAPI:
