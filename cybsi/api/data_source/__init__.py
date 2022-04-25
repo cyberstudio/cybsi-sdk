@@ -2,6 +2,7 @@
 """
 from .api import (
     DataSourcesAPI,
+    DataSourcesAsyncAPI,
     DataSourceView,
     DataSourceForm,
     DataSourceCommonView,
@@ -10,6 +11,7 @@ from .api import (
 
 from .api_types import (
     DataSourceTypesAPI,
+    DataSourceTypesAsyncAPI,
     DataSourceTypeView,
     DataSourceTypeForm,
     DataSourceTypeCommonView,

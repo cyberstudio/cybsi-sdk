@@ -3,7 +3,12 @@ from typing import Callable, Optional, Union
 
 from .artifact import ArtifactsAPI
 from .auth import APIKeyAuth, APIKeysAPI
-from .data_source import DataSourcesAPI, DataSourceTypesAPI
+from .data_source import (
+    DataSourcesAPI,
+    DataSourcesAsyncAPI,
+    DataSourceTypesAPI,
+    DataSourceTypesAsyncAPI,
+)
 from .enrichment import EnrichmentAPI
 from .error import CybsiError
 from .internal import HTTPConnector, JsonObjectView
@@ -208,6 +213,16 @@ class CybsiAsyncClient:
     def reports(self) -> ReportsAsyncAPI:
         """Reports API handle."""
         return ReportsAsyncAPI(self._connector)
+
+    @property
+    def data_sources(self) -> DataSourcesAsyncAPI:
+        """Data sources API handle."""
+        return DataSourcesAsyncAPI(self._connector)
+
+    @property
+    def data_source_types(self) -> DataSourceTypesAsyncAPI:
+        """Data source types API handle."""
+        return DataSourceTypesAsyncAPI(self._connector)
 
 
 class VersionView(JsonObjectView):
