@@ -3,8 +3,7 @@ import asyncio
 from datetime import datetime, timezone
 from os import environ
 
-from cybsi.api import APIKeyAuth, Config
-from cybsi.api.client import CybsiAsyncClient
+from cybsi.api import APIKeyAuth, Config, CybsiAsyncClient
 from cybsi.api.observable import (
     AttributeNames,
     EntityForm,

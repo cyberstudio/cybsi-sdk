@@ -346,7 +346,7 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
         See Also:
             See :ref:`upload-download-artifact-example`
             for a complete example of this function usage.
-        """
+        """  # noqa: E501
         path = f"{_ARTIFACTS_PATH}/{artifact_uuid}/content"
 
         params = {}
@@ -477,7 +477,8 @@ class ArtifactContent:
 class ArtifactAsyncContent:
     """Binary artifact content with asynchronous API.
 
-    May be packed in archive, if it is requested in :meth:`ArtifactsAsyncAPI.get_content`.
+    May be packed in archive,
+     if it is requested in :meth:`ArtifactsAsyncAPI.get_content`.
     """
 
     def __init__(self, filename: str, raw: Any):

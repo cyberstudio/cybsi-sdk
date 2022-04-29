@@ -27,8 +27,8 @@ from cybsi.api.observation import GenericObservationForm
 
 
 def main():
-    api_key = environ.get("CYBSI_API_KEY")
-    api_url = environ.get("CYBSI_API_URL")
+    api_key = environ["CYBSI_API_KEY"]
+    api_url = environ["CYBSI_API_URL"]
 
     auth = APIKeyAuth(api_url, api_key)
     config = Config(api_url, auth, ssl_verify=False)
@@ -73,7 +73,7 @@ def enrich_ip(task_view: AssignedTaskView) -> "IPEnrichmentTaskResult":
     entity = lookup.entity
 
     # Our enricher works with IPs only.
-    if entity.type != EntityTypes.IP:
+    if entity.type != EntityTypes.IPAddress:
         # Shouldn't happen unless Cybsi enrichment rules are mis-configured.
         raise Exception("unexpected entity type")
 

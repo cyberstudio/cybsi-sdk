@@ -3,10 +3,11 @@ import uuid
 from os import environ
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api.pagination import chain_pages
 
 if __name__ == "__main__":
-    api_key = environ.get("CYBSI_API_KEY")
-    api_url = environ.get("CYBSI_API_URL")
+    api_key = environ["CYBSI_API_KEY"]
+    api_url = environ["CYBSI_API_URL"]
 
     auth = APIKeyAuth(api_url, api_key)
     config = Config(api_url, auth, ssl_verify=False)
@@ -15,18 +16,13 @@ if __name__ == "__main__":
     reporters = [uuid.uuid4(), uuid.uuid4()]
     dataSources = [uuid.uuid4(), uuid.uuid4()]
 
-    next_cur = ""
-    while True:
-        generic_observations = client.observations.generics.filter(
-            data_source_uuids=reporters,
-            reporter_uuids=dataSources,
-            cursor=next_cur,
-            limit=20,
-        )
+    generic_observations = client.observations.generics.filter(
+        data_source_uuids=reporters,
+        reporter_uuids=dataSources,
+        limit=20,
+    )
 
-        [print(x) for x in generic_observations]
+    for obs in chain_pages(generic_observations):
+        print(obs)
 
-        next_cur = generic_observations.cursor
-        if next_cur == "":
-            break
     client.close()

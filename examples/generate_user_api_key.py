@@ -10,8 +10,8 @@ from cybsi.api.user import UserForm
 from cybsi.api.user.enums import ResourceName, RoleName
 
 if __name__ == "__main__":
-    api_key = environ.get("CYBSI_API_KEY")
-    api_url = environ.get("CYBSI_API_URL")
+    api_key = environ["CYBSI_API_KEY"]
+    api_url = environ["CYBSI_API_URL"]
 
     auth = APIKeyAuth(api_url, api_key)
     config = Config(api_url, auth, ssl_verify=False)
@@ -47,5 +47,7 @@ if __name__ == "__main__":
     print(ref_key)
     # do something with api-key, for example, create new client or save it to file
     client.close()
-    config = Config(api_url, api_key=ref_key.key, ssl_verify=False)
+
+    auth = APIKeyAuth(api_url, api_key)
+    config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)

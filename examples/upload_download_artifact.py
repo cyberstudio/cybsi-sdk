@@ -9,8 +9,8 @@ from cybsi.api.artifact.enums import ArtifactContentDownloadCompressionTypes
 
 
 def main():
-    api_key = environ.get("CYBSI_API_KEY")
-    api_url = environ.get("CYBSI_API_URL")
+    api_key = environ["CYBSI_API_KEY"]
+    api_url = environ["CYBSI_API_URL"]
 
     auth = APIKeyAuth(api_url, api_key)
     config = Config(api_url, auth, ssl_verify=False)

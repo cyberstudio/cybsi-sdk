@@ -5,12 +5,13 @@ DOCKER_BUILD_FLAGS ?= --force-rm=true --pull --rm=true
 DOCKER_IMAGE := cybsi/cybsi-sdk
 DOCKER_TAG ?= latest
 VENV_DIR ?= .venv
+SOURCE_DIRS := cybsi examples tests
 
 lint:
-	poetry run black cybsi examples tests
-	poetry run flake8 tests
-	poetry run mypy cybsi tests
-	poetry run isort cybsi tests examples
+	poetry run black $(SOURCE_DIRS)
+	poetry run flake8 $(SOURCE_DIRS)
+	poetry run mypy $(SOURCE_DIRS)
+	poetry run isort $(SOURCE_DIRS)
 
 test:
 	poetry run pytest --tb=native --verbose ./tests/

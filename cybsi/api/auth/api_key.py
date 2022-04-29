@@ -4,7 +4,7 @@ import logging
 import threading
 import uuid
 from datetime import datetime
-from typing import AsyncGenerator, Generator, Iterable, List, Optional, Tuple, cast
+from typing import AsyncGenerator, Generator, Iterable, List, Optional, Tuple
 from urllib.parse import urljoin
 
 import httpx

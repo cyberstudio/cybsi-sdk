@@ -42,15 +42,16 @@ class _BasePage(Generic[T]):
         return cast(str, self._resp.links.get("next", {}).get("url"))
 
     @property
-    def cursor(self) -> Cursor:
+    def cursor(self) -> Optional[Cursor]:
         """Page cursor. The current position in the collection.
 
         The value should be taken from the X-Cursor response header
-        of the previous request. If you pass an empty value,
+        of the previous request. If you pass :data:`None`,
         the first page will be returned.
         """
-
-        return cast(Cursor, self._resp.headers.get(X_CURSOR_HEADER, ""))
+        cursor = self._resp.headers.get(X_CURSOR_HEADER, None)
+        cursor = None if cursor == "" else cursor
+        return cast(Optional[Cursor], cursor)
 
     def data(self) -> List[T]:
         """Get page data as a list of items."""
