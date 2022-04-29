@@ -1,6 +1,13 @@
 Release History
 ===============
 
+2.8.1a3 (2022-04-29)
+--------------------
+- Add reports async API
+- Add data source async API
+- Add enrichment async API
+- Add artifacts async API
+
 2.8.1a2 (2022-04-20)
 --------------------
 - Fix authorization flow bug causing duplicate requests
