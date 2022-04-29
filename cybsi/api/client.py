@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Callable, Optional, Union
 
-from .artifact import ArtifactsAPI
+from .artifact import ArtifactsAPI, ArtifactsAsyncAPI
 from .auth import APIKeyAuth, APIKeysAPI
 from .data_source import (
     DataSourcesAPI,
@@ -203,6 +203,11 @@ class CybsiAsyncClient:
     async def aclose(self) -> None:
         """Close client and release connections."""
         await self._connector.aclose()
+
+    @property
+    def artifacts(self) -> ArtifactsAsyncAPI:
+        """Artifacts API handle."""
+        return ArtifactsAsyncAPI(self._connector)
 
     @property
     def enrichment(self) -> EnrichmentAsyncAPI:

@@ -5,7 +5,7 @@ import httpx
 from cybsi.__version__ import __version__
 
 from ..api import Tag
-from ..error import CybsiError, _raise_for_status
+from ..error import CybsiError, _raise_cybsi_error
 
 _IF_MATCH_HEADER = "If-Match"
 
@@ -79,7 +79,11 @@ class HTTPConnector:
         except Exception as exp:
             raise CybsiError("could not send request", exp) from exp
 
-        _raise_for_status(resp)
+        if not resp.is_success:
+            if resp.stream:
+                # read stream data to raise the error
+                resp.read()
+            _raise_cybsi_error(resp)
 
         return resp
 
@@ -153,6 +157,10 @@ class AsyncHTTPConnector:
         except Exception as exp:
             raise CybsiError("could not send request", exp) from exp
 
-        _raise_for_status(resp)
+        if not resp.is_success:
+            if resp.stream:
+                # read stream data to raise the error
+                await resp.aread()
+            _raise_cybsi_error(resp)
 
         return resp

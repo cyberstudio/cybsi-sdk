@@ -65,6 +65,8 @@ nitpick_ignore = [
     ("py:obj", "cybsi.api.pagination.T"),  # https://github.com/sphinx-doc/sphinx/issues/9705
     ("py:class", "httpx.Response"),
     ("py:class", "enum.EnumMeta"),
+    ("py:class", "typing.AbstractContextManager"),
+    ("py:class", "typing.AbstractAsyncContextManager"),
 ]
 
 # The name of the Pygments (syntax highlighting) style to use.

@@ -2,9 +2,11 @@
 """
 from .api import (
     ArtifactsAPI,
+    ArtifactsAsyncAPI,
     ArtifactView,
     ArtifactCommonView,
     ArtifactContent,
+    ArtifactAsyncContent,
     ArtifactContentView,
     ArtifactRegistrationView,
     ArtifactTypeRecognizedView,

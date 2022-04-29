@@ -240,10 +240,7 @@ _error_mapping = {
 }
 
 
-def _raise_for_status(resp: httpx.Response) -> None:
-    if resp.is_success:
-        return
-
+def _raise_cybsi_error(resp: httpx.Response) -> None:
     err_cls = _error_mapping.get(resp.status_code, None)
     if err_cls is not None:
         raise err_cls(resp.json())

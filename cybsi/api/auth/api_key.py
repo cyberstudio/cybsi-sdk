@@ -9,7 +9,7 @@ from urllib.parse import urljoin
 
 import httpx
 
-from ..error import _raise_for_status
+from ..error import _raise_cybsi_error
 from ..internal import (
     BaseAPI,
     JsonObject,
@@ -106,7 +106,8 @@ class APIKeyAuth(httpx.Auth):
     def _update_token(
         self, token_response: httpx.Response, token_response_content: bytes
     ) -> None:
-        _raise_for_status(token_response)
+        if not token_response.is_success:
+            _raise_cybsi_error(token_response)
         token = TokenView(json.loads(token_response_content))
 
         self._token = f"{token.type.value} {token.access_token}"
