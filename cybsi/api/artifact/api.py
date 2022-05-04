@@ -139,7 +139,7 @@ class ArtifactsAPI(BaseAPI):
             artifact_uuid: Artifact uuid.
             archive: Compress artifact content to archive of chosen type before sending.
             archive_password: Set archive password,
-             if compression was chosen using ``archive`` argument.
+                if compression was chosen using ``archive`` argument.
         Returns:
             Contextmanager of binary file content.
         Raises:
@@ -332,7 +332,7 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
             artifact_uuid: Artifact uuid.
             archive: Compress artifact content to archive of chosen type before sending.
             archive_password: Set archive password,
-             if compression was chosen using ``archive`` argument.
+                if compression was chosen using ``archive`` argument.
         Returns:
             Contextmanager of binary file content.
         Raises:

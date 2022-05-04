@@ -5,22 +5,35 @@ import httpx
 from cybsi.__version__ import __version__
 
 from ..api import Tag
+from ..client_config import DEFAULT_LIMITS, DEFAULT_TIMEOUTS, Limits, Timeouts
 from ..error import CybsiError, _raise_cybsi_error
-
-_IF_MATCH_HEADER = "If-Match"
 
 _BASIC_HEADERS = {
     "Accept": "application/vnd.ptsecurity.app-v2",
     "User-Agent": f"cybsi-sdk-client/v{__version__}",
 }
 
+_IF_MATCH_HEADER = "If-Match"
+
 
 class HTTPConnector:
     """Connector performing round trips to Cybsi."""
 
-    def __init__(self, base_url: str, auth: Any, ssl_verify=True):
+    def __init__(
+        self,
+        base_url: str,
+        auth: Any,
+        ssl_verify=True,
+        timeouts: Timeouts = DEFAULT_TIMEOUTS,
+        limits: Limits = DEFAULT_LIMITS,
+    ):
         self._client = httpx.Client(
-            auth=auth, verify=ssl_verify, base_url=base_url, headers=_BASIC_HEADERS
+            auth=auth,
+            verify=ssl_verify,
+            base_url=base_url,
+            headers=_BASIC_HEADERS,
+            timeout=timeouts._as_httpx_timeouts(),
+            limits=limits._as_httpx_limits(),
         )
 
     def __enter__(self) -> "HTTPConnector":
@@ -40,22 +53,22 @@ class HTTPConnector:
         self._client.close()
 
     def do_get(
-        self, path, params: dict = None, stream=False, **kwargs
+        self, path: str, params: dict = None, stream=False, **kwargs
     ) -> httpx.Response:
         return self._do("GET", path, params=params, stream=stream, **kwargs)
 
-    def do_post(self, path, json=None, **kwargs) -> httpx.Response:
+    def do_post(self, path: str, json=None, **kwargs) -> httpx.Response:
         return self._do("POST", path, json=json, **kwargs)
 
-    def do_patch(self, path, tag: Tag, json=None, **kwargs) -> httpx.Response:
+    def do_patch(self, path: str, tag: Tag, json=None, **kwargs) -> httpx.Response:
         headers = kwargs.setdefault("headers", {})
         headers[_IF_MATCH_HEADER] = tag
         return self._do("PATCH", path, json=json, **kwargs)
 
-    def do_put(self, path, json=None, **kwargs) -> httpx.Response:
+    def do_put(self, path: str, json=None, **kwargs) -> httpx.Response:
         return self._do("PUT", path, json=json, **kwargs)
 
-    def do_delete(self, path, params: dict = None, **kwargs) -> httpx.Response:
+    def do_delete(self, path: str, params: dict = None, **kwargs) -> httpx.Response:
         return self._do("DELETE", path, params=params, **kwargs)
 
     def _do(self, method: str, path: str, stream=False, **kwargs):
@@ -91,14 +104,21 @@ class HTTPConnector:
 class AsyncHTTPConnector:
     """Asynchronous connector performing round trips to Cybsi."""
 
-    def __init__(self, base_url: str, auth: Any, ssl_verify=True):
-        limits = httpx.Limits(max_keepalive_connections=1, max_connections=1)
+    def __init__(
+        self,
+        base_url: str,
+        auth: Any,
+        ssl_verify=True,
+        timeouts: Timeouts = DEFAULT_TIMEOUTS,
+        limits: Limits = DEFAULT_LIMITS,
+    ):
         self._client = httpx.AsyncClient(
             auth=auth,
             verify=ssl_verify,
             base_url=base_url,
             headers=_BASIC_HEADERS,
-            limits=limits,
+            timeout=timeouts._as_httpx_timeouts(),
+            limits=limits._as_httpx_limits(),
         )
 
     async def __aenter__(self) -> "AsyncHTTPConnector":
@@ -118,22 +138,26 @@ class AsyncHTTPConnector:
         await self._client.aclose()
 
     async def do_get(
-        self, path, params: dict = None, stream=False, **kwargs
+        self, path: str, params: dict = None, stream=False, **kwargs
     ) -> httpx.Response:
         return await self._do("GET", path, params=params, stream=stream, **kwargs)
 
-    async def do_post(self, path, json=None, **kwargs) -> httpx.Response:
+    async def do_post(self, path: str, json=None, **kwargs) -> httpx.Response:
         return await self._do("POST", path, json=json, **kwargs)
 
-    async def do_patch(self, path, tag: Tag, json=None, **kwargs) -> httpx.Response:
+    async def do_patch(
+        self, path: str, tag: Tag, json=None, **kwargs
+    ) -> httpx.Response:
         headers = kwargs.setdefault("headers", {})
         headers[_IF_MATCH_HEADER] = tag
         return await self._do("PATCH", path, json=json, **kwargs)
 
-    async def do_put(self, path, json=None, **kwargs) -> httpx.Response:
+    async def do_put(self, path: str, json=None, **kwargs) -> httpx.Response:
         return await self._do("PUT", path, json=json, **kwargs)
 
-    async def do_delete(self, path, params: dict = None, **kwargs) -> httpx.Response:
+    async def do_delete(
+        self, path: str, params: dict = None, **kwargs
+    ) -> httpx.Response:
         return await self._do("DELETE", path, params=params, **kwargs)
 
     async def _do(self, method: str, path: str, stream=False, **kwargs):

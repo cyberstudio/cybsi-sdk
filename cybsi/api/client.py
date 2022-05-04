@@ -3,6 +3,7 @@ from typing import Callable, Optional, Union
 
 from .artifact import ArtifactsAPI, ArtifactsAsyncAPI
 from .auth import APIKeyAuth, APIKeysAPI
+from .client_config import DEFAULT_LIMITS, DEFAULT_TIMEOUTS, Limits, Timeouts
 from .data_source import (
     DataSourcesAPI,
     DataSourcesAsyncAPI,
@@ -30,11 +31,17 @@ class Config:
         auth: Optional callable :class:`CybsiClient` can use to authenticate requests.
             In most cases it's enough to pass `api_key` instead of this.
         ssl_verify: Enable SSL certificate verification.
+        timeouts: Timeout configuration. Default configuration is 5 sec
+            on all operations.
+        limits:  Configuration for limits to various client behaviors.
+            Default configuration is max_connections=100, max_keepalive_connections=20.
     """
 
     api_url: str
     auth: Union[APIKeyAuth, Callable]
     ssl_verify: bool = True
+    timeouts: Timeouts = DEFAULT_TIMEOUTS
+    limits: Limits = DEFAULT_LIMITS
 
 
 class CybsiClient:
@@ -69,7 +76,8 @@ class CybsiClient:
         >>> auth = APIKeyAuth(api_url, api_key)
         >>> config = Config(api_url, auth)
         >>> client = CybsiClient(config)
-        >>> client.observations
+        >>>
+        >>> client.observations.generics.filter()
         >>> client.close()  # "with" syntax is also supported for CybsiClient
         <cybsi_sdk.client.observation.ObservationsAPI object at 0x7f57a293c190>
     """
@@ -82,6 +90,8 @@ class CybsiClient:
             base_url=config.api_url,
             auth=config.auth,
             ssl_verify=config.ssl_verify,
+            timeouts=config.timeouts,
+            limits=config.limits,
         )
 
     def __enter__(self) -> "CybsiClient":
@@ -185,7 +195,11 @@ class CybsiAsyncClient:
             raise CybsiError("No authorization mechanism configured for client")
 
         self._connector = AsyncHTTPConnector(
-            base_url=config.api_url, auth=config.auth, ssl_verify=config.ssl_verify
+            base_url=config.api_url,
+            auth=config.auth,
+            ssl_verify=config.ssl_verify,
+            timeouts=config.timeouts,
+            limits=config.limits,
         )
 
     async def __aenter__(self) -> "CybsiAsyncClient":

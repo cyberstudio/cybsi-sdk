@@ -9,16 +9,24 @@ This part of the documentation covers all the public interfaces of Cybsi SDK.
 
 Low-level client
 ----------------
+
+Client interface
+~~~~~~~~~~~~~~~~
 .. autoclass:: cybsi.api.CybsiClient
     :members:
 .. autoclass:: cybsi.api.CybsiAsyncClient
-    :members:
-.. autoclass:: cybsi.api.Config
     :members:
 .. autoclass:: cybsi.api.VersionView
     :members:
 .. autoclass:: cybsi.api.Version
     :members:
+
+Client configuration
+~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: cybsi.api.Config
+    :members:
+.. autoclass:: cybsi.api.Limits
+.. autoclass:: cybsi.api.Timeouts
 
 Artifacts
 ~~~~~~~~~
