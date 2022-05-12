@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.8.1a4(2022-05-12)
+-------------------
+- Add client timeouts and limits settings
+
 2.8.1a3 (2022-04-29)
 --------------------
 - Add reports async API
