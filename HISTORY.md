@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.8.1a6(2022-05-13)
+-------------------
+- Remove unused build dependencies
+
 2.8.1a5(2022-05-13)
 -------------------
 - Document and improve release process
