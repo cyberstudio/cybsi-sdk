@@ -17,9 +17,9 @@ httpx = "^0.22.0"
 
 [tool.poetry.dev-dependencies]
 isort = "5.10.1"
-black = "21.10b0"
-flake8 = "3.9.2"
-mypy = "0.910"
+black = "22.3.0"
+flake8 = "4.0.1"
+mypy = "0.950"
 Sphinx = "4.2.0"
 sphinx_toolbox = "2.15.2"
 "sphinxjp.themes.basicstrap" = "0.5.0"

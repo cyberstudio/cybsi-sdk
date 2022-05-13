@@ -6,7 +6,7 @@ ARG PIP_INDEX_URL
 # libffi-dev is for poetry.
 RUN apt-get update && \
     apt-get install --no-install-suggests --no-install-recommends --yes \
-    gcc libc-dev make libffi-dev
+    make
 
 RUN pip3 install poetry==1.1.12
 

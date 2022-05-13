@@ -120,8 +120,9 @@ class Timeouts:
             connect=self.connect,
             read=self.read,
             write=self.write,
-            pool=5.0,  # Timeout (in seconds) on acquiring connection from pool.
-                       # Internal default httpx.Timeout setting.
+            # Timeout (in seconds) on acquiring connection from pool.
+            # Internal default httpx.Timeout setting.
+            pool=5.0,
         )
 
 
