@@ -60,6 +60,7 @@ class ReplistsAPI(BaseAPI):
         self,
         replist_uuid: uuid.UUID,
         tag: Tag,
+        *,
         is_enabled: Optional[bool] = None,
         query_uuid: Optional[uuid.UUID] = None,
         share_level: Optional[ShareLevels] = None,
@@ -96,6 +97,7 @@ class ReplistsAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["ReplistCommonView"]:
@@ -122,6 +124,7 @@ class ReplistsAPI(BaseAPI):
     def entities(
         self,
         replist_uuid: uuid.UUID,
+        *,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Tuple[Page[EntityView], Cursor]:
@@ -154,6 +157,7 @@ class ReplistsAPI(BaseAPI):
     def changes(
         self,
         replist_uuid: uuid.UUID,
+        *,
         cursor: Cursor,
         limit: Optional[int] = None,
     ) -> Page["EntitySetChangeView"]:
@@ -228,6 +232,7 @@ class ReplistForm(JsonObjectForm):
         self,
         query_uuid: uuid.UUID,
         share_level: ShareLevels,
+        *,
         is_enabled: Optional[bool] = None,
     ):
         super().__init__()
