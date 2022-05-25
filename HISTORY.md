@@ -1,6 +1,12 @@
 Release History
 ===============
 
+2.8.1a7(2022-05-25)
+-------------------
+- Make some replist API parameters keyword only
+- Update stored query validation error codes
+- Improve cursor documentation
+
 2.8.1a6(2022-05-13)
 -------------------
 - Remove unused build dependencies
