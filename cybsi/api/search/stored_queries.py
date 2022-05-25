@@ -72,6 +72,7 @@ class StoredQueriesAPI(BaseAPI):
         self,
         query_uuid: uuid.UUID,
         tag: Tag,
+        *,
         name: Optional[str] = None,
         text: Optional[str] = None,
     ) -> None:
@@ -105,6 +106,7 @@ class StoredQueriesAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         user_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
