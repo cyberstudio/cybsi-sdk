@@ -134,8 +134,8 @@ class ReplistsAPI(BaseAPI):
             cursor: Page cursor.
             limit: Page limit.
         Return:
-            Page with entities and cursor
-            allowing to get next batch of changes :meth:`changes`.
+            Page with entities and cursor.
+            The cursor can be used to call :meth:`changes`.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
         """
@@ -165,19 +165,21 @@ class ReplistsAPI(BaseAPI):
             replist_uuid: Replist uuid.
             cursor: Page cursor.
                 On the first request you should pass the cursor value
-                obtained when requesting replist entities :meth:`entities`
+                obtained when requesting replist entities :meth:`entities`.
+                Subsequent calls should use cursor property of the page
+                returned by :meth:`changes`.
             limit: Page limit.
         Return:
             Page with changes.
         Warning:
             Cursor behaviour differs from other API methods.
 
-            Do not save returned cursor if it's empty.
-            Empty cursor value means that all changes **for this moment** are received.
-            But more changes can arrive later. Pass your previous non-empty ``cursor``
-            value in loop, until non-empty cursor is returned.
+            Do not save returned page cursor if it is :data:`None`.
+            :data:`None` means that all changes **for this moment** are received.
+            More changes can arrive later. Pass your previous non-none ``cursor``
+            value in loop, until non-none cursor is returned.
 
-            Please wait some time if method returns an empty cursor.
+            Please wait some time if method returns a page with :data:`None` cursor.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
             :class:`~cybsi.api.error.SemanticError`: Semantic request error.

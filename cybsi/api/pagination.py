@@ -13,7 +13,16 @@ import httpx
 class Cursor:
 
     """Page cursor value.
-    Use :class:`Page` or :class:`AsyncPage` to retrieve it."""
+
+    If :data:`None` cursor value is **passed** to SDK
+    (as a parameter to filter-like functions), SDK retrieves the first page.
+
+    Typically, SDK does not **return** cursors as function return values.
+    SDK returns :class:`Page` or :class:`AsyncPage`, and
+    cursor is a property of the page.
+
+    :data:`None` cursor value of a page means last page.
+    """
 
     pass
 
@@ -22,7 +31,7 @@ class Cursor:
 # If we simply alias Cursor = str, it inlines str everywhere,
 # and functions lose descriptive parameter and return value types.
 # Additionally, this hack prevents SDK users from creating Cursor instances.
-# Users have to call view()-like methods.
+# Users have to call filter()-like methods.
 Cursor.__supertype__ = str  # type: ignore
 
 DEFAULT_PAGE_LIMIT = 30
@@ -45,9 +54,7 @@ class _BasePage(Generic[T]):
     def cursor(self) -> Optional[Cursor]:
         """Page cursor. The current position in the collection.
 
-        The value should be taken from the X-Cursor response header
-        of the previous request. If you pass :data:`None`,
-        the first page will be returned.
+        :data:`None` means the page is last one.
         """
         cursor = self._resp.headers.get(X_CURSOR_HEADER, None)
         cursor = None if cursor == "" else cursor
