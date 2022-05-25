@@ -24,9 +24,13 @@ class CybsiLangErrorCodes(CybsiAPIEnum):
     EmptyEntityBody = "EmptyEntityBody"  # doc: Semantic error: entity has empty body
     EmptyExpressionResult = "EmptyExpressionResult"  # noqa: E501 doc: Semantic error: expression produces empty result
     EntityTypeNotFound = "EntityTypeNotFound"  # noqa: E501 doc: Semantic error: entity type not found
-    InvalidExpressionScope = "InvalidExpressionScope"  # noqa: E501 doc: Semantic error: expression is invalid in parent scope
+    NoValidRelations = "NoValidRelations"  # noqa: E501 doc: Semantic error: allowed relations for such source and target not found
     InvalidOperation = "InvalidOperation"  # noqa: E501 doc: Semantic error: operation is invalid for provided types
     InvalidValue = "InvalidValue"  # doc: Semantic error: value is invalid
     InvalidValueType = "InvalidValueType"  # doc: Semantic error: value type is invalid
+    RelationKindNotFound = "RelationKindNotFound"  # noqa: E501 doc: Semantic error: relation kind not found
     UnsupportedAttribute = "UnsupportedAttribute"  # noqa: E501 doc: Semantic error: attribute is not supported
+
+    EmptyQueryResult = "EmptyQueryResult"  # doc: Query result is always empty
+    UnsupportedExpression = "UnsupportedExpression"  # noqa: E501 doc: The expression is allowed by grammar but not supported yet.
     # fmt: on
