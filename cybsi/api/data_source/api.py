@@ -366,7 +366,7 @@ class DataSourceForm(JsonObjectForm):
         manual_confidence: Optional[float] = None,
     ):
         super().__init__()
-        self._data["typeUUID"] = type_uuid
+        self._data["typeUUID"] = str(type_uuid)
         self._data["name"] = name
         self._data["longName"] = long_name
         if manual_confidence is not None:

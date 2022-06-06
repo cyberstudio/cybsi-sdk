@@ -24,9 +24,11 @@ class HTTPConnector:
         base_url: str,
         auth: Any,
         ssl_verify=True,
+        embed_object_url=False,
         timeouts: Timeouts = DEFAULT_TIMEOUTS,
         limits: Limits = DEFAULT_LIMITS,
     ):
+        self._embed_object_url = embed_object_url
         self._client = httpx.Client(
             auth=auth,
             verify=ssl_verify,
@@ -55,6 +57,10 @@ class HTTPConnector:
     def do_get(
         self, path: str, params: dict = None, stream=False, **kwargs
     ) -> httpx.Response:
+        if params is None:
+            params = {}
+        if not self._embed_object_url:
+            params["embedObjectURL"] = self._embed_object_url
         return self._do("GET", path, params=params, stream=stream, **kwargs)
 
     def do_post(self, path: str, json=None, **kwargs) -> httpx.Response:
@@ -109,9 +115,11 @@ class AsyncHTTPConnector:
         base_url: str,
         auth: Any,
         ssl_verify=True,
+        embed_object_url=False,
         timeouts: Timeouts = DEFAULT_TIMEOUTS,
         limits: Limits = DEFAULT_LIMITS,
     ):
+        self._embed_object_url = embed_object_url
         self._client = httpx.AsyncClient(
             auth=auth,
             verify=ssl_verify,
@@ -140,6 +148,10 @@ class AsyncHTTPConnector:
     async def do_get(
         self, path: str, params: dict = None, stream=False, **kwargs
     ) -> httpx.Response:
+        if params is None:
+            params = {}
+        if not self._embed_object_url:
+            params["embedObjectURL"] = self._embed_object_url
         return await self._do("GET", path, params=params, stream=stream, **kwargs)
 
     async def do_post(self, path: str, json=None, **kwargs) -> httpx.Response:

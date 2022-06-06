@@ -35,11 +35,15 @@ class Config:
             on all operations.
         limits:  Configuration for limits to various client behaviors.
             Default configuration is max_connections=100, max_keepalive_connections=20.
+        embed_object_url: Initialize URL property for all objects having uuid property
+            (including :class:`~cybsi.api.view.RefView`).
+            Views are compact if it's set to False.
     """
 
     api_url: str
     auth: Union[APIKeyAuth, Callable]
     ssl_verify: bool = True
+    embed_object_url: bool = False
     timeouts: Timeouts = DEFAULT_TIMEOUTS
     limits: Limits = DEFAULT_LIMITS
 
@@ -90,6 +94,7 @@ class CybsiClient:
             base_url=config.api_url,
             auth=config.auth,
             ssl_verify=config.ssl_verify,
+            embed_object_url=config.embed_object_url,
             timeouts=config.timeouts,
             limits=config.limits,
         )

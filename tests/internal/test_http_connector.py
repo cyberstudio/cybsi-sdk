@@ -12,7 +12,9 @@ from cybsi.api.internal.connector import HTTPConnector
 class HTTPConnectorTest(unittest.TestCase):
     def setUp(self) -> None:
         self.base_url = "http://localhost"
-        self.connector = HTTPConnector(base_url=self.base_url, auth=None)
+        self.connector = HTTPConnector(
+            base_url=self.base_url, auth=None, embed_object_url=True
+        )
 
     @patch.object(httpx.Client, "send")
     def test_connector_default_headers(self, mock):

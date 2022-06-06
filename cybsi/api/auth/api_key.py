@@ -258,9 +258,12 @@ class APIKeyRefView(JsonObjectView):
         return uuid.UUID(self._get("id"))
 
     @property
-    def url(self) -> str:
-        """URL to get full API-Key view."""
-        return self._get("url")
+    def url(self) -> Optional[str]:
+        """URL to get full API-Key view.
+        Property is presented if :class:`~cybsi.api.client.Config`
+        embed_object_url is True.
+        """
+        return self._get_optional("url")
 
     @property
     def key(self) -> str:
@@ -277,9 +280,12 @@ class APIKeyCommonView(JsonObjectView):
         return uuid.UUID(self._get("id"))
 
     @property
-    def url(self) -> str:
-        """URL to get API-Key full view."""
-        return self._get("url")
+    def url(self) -> Optional[str]:
+        """URL to get API-Key full view.
+        Property is presented if :class:`~cybsi.api.client.Config`
+        embed_object_url is True.
+        """
+        return self._get_optional("url")
 
     @property
     def description(self) -> Optional[str]:

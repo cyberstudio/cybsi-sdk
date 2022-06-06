@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.8.1a8(2022-06-03)
+-------------------
+- Add embed object URL setting to global SDK config
+
 2.8.1a7(2022-05-25)
 -------------------
 - Make some replist API parameters keyword only

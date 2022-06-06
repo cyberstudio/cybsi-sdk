@@ -1,5 +1,5 @@
 import uuid
-from typing import cast
+from typing import Optional, cast
 
 import httpx
 
@@ -20,11 +20,13 @@ class RefView(JsonObjectView):
         return uuid.UUID(self._get("uuid"))
 
     @property
-    def url(self) -> str:
+    def url(self) -> Optional[str]:
         """URL of the resource in API.
         Can be used to retrieve complete view of the resource.
+        Property is presented if :class:`~cybsi.api.client.Config`
+        embed_object_url is True.
         """
-        return self._get("url")
+        return self._get_optional("url")
 
 
 class _TaggedRefView(RefView):
