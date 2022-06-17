@@ -85,6 +85,9 @@ class UsersAPI(BaseAPI):
         self,
         user_uuids: Optional[Iterable[uuid.UUID]] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
+        query: Optional[str] = None,
+        providers: Optional[Iterable[str]] = None,
+        is_disabled: Optional[bool] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["UserCommonView"]:
@@ -97,6 +100,12 @@ class UsersAPI(BaseAPI):
                 Filter users by specified user UUIDs.
             data_source_uuid: Data source identifier.
                 Filter users by associated data source UUID.
+            query: Filter users by substring.
+                Filter users whoes login, name or email starts with query.
+            providers: Provider identifiers.
+                Filter user by authentication provider ids.
+            is_disabled: Disabled user flag.
+                If true filter disabled users.
             cursor: Page cursor.
             limit: Page limit.
         Return:
@@ -131,6 +140,12 @@ class UsersAPI(BaseAPI):
             params["cursor"] = str(cursor)
         if limit is not None:
             params["limit"] = str(limit)
+        if is_disabled is not None:
+            params["isDisabled"] = is_disabled
+        if providers is not None:
+            params["providerID"] = providers
+        if query is not None:
+            params["query"] = query
 
         resp = self._connector.do_get(path=self._path, params=params)
         page = Page(self._connector.do_get, resp, UserCommonView)
@@ -195,6 +210,39 @@ class UsersAPI(BaseAPI):
 
         path = f"{self._path}/{user_uuid}"
         self._connector.do_patch(path=path, tag=tag, json=form)
+
+    def edit_me(
+        self,
+        tag: Tag,
+        full_name: Nullable[str] = None,
+        email: Nullable[str] = None,
+    ):
+        """Edit API-Client user.
+
+        Note:
+            Calls `PATCH /users/me`.
+            Doesn't require any permissions.
+        Args:
+            tag: :attr:`UserView.tag` value. Use :meth:`view` to retrieve it.
+            full_name: User full name.
+                Name must be less than or equal to 250 characters.
+            email: User email. Email length must be in range [3, 254].
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.ResourceModifiedError`:
+                User changed since last request. Retry using updated tag.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.NonLocalUser`
+        .. versionadded:: 2.8
+        """
+        form: JsonObject = {}
+        if full_name is not None:
+            form["fullName"] = _unwrap_nullable(full_name)
+        if email is not None:
+            form["email"] = _unwrap_nullable(email)
+
+        self._connector.do_patch(path=self._me_path, tag=tag, json=form)
 
     def change_my_password(self, old_password: str, new_password: str):
         """Change password of current client.

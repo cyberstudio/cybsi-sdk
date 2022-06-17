@@ -69,7 +69,7 @@ class ApiKeyTest(BaseTest):
         )
 
         user_uuid = uuid.UUID(int=123)
-        res = self.api_keys_api.filter(user_uuid)
+        res = self.api_keys_api.filter(user_uuid=user_uuid)
 
         _, kwargs = mock.call_args
 

@@ -118,6 +118,7 @@ class APIKeysAPI(BaseAPI):
 
     _path = "/api-keys"
     _users_path = "/users"
+    _me_path = f"{_users_path}/me"
 
     def generate(self, user_uuid: uuid.UUID, form: "APIKeyForm") -> "APIKeyRefView":
         """Generate API-Key for user.
@@ -143,8 +144,21 @@ class APIKeysAPI(BaseAPI):
         resp = self._connector.do_post(path=path, json=form.json())
         return APIKeyRefView(resp.json())
 
+    def _filter(
+        self, path: str, cursor: Optional[Cursor] = None, limit: Optional[int] = None
+    ) -> Page["APIKeyCommonView"]:
+        params: JsonObject = {}
+        if cursor is not None:
+            params["cursor"] = str(cursor)
+        if limit is not None:
+            params["limit"] = str(limit)
+        resp = self._connector.do_get(path=path, params=params)
+        page = Page(self._connector.do_get, resp, APIKeyCommonView)
+        return page
+
     def filter(
         self,
+        *,
         user_uuid: uuid.UUID,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
@@ -160,16 +174,29 @@ class APIKeysAPI(BaseAPI):
         Return:
             Page with user API-Key common views and next page cursor.
         """
-        params: JsonObject = {}
-        if cursor is not None:
-            params["cursor"] = str(cursor)
-        if limit is not None:
-            params["limit"] = str(limit)
-
         path = f"{self._users_path}/{user_uuid}/api-keys"
-        resp = self._connector.do_get(path=path, params=params)
-        page = Page(self._connector.do_get, resp, APIKeyCommonView)
-        return page
+        return self._filter(path, cursor, limit)
+
+    def filter_my(
+        self,
+        *,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> Page["APIKeyCommonView"]:
+        """Get API keys which API-Client owns.
+
+        Note:
+            Calls `GET /users/me/api-keys`.
+            Doesn't require any permissions.
+        Args:
+            cursor: Page cursor.
+            limit: Page limit.
+        Return:
+            Page with user API-Key common views and next page cursor.
+        .. versionadded:: 2.8
+        """
+        path = f"{self._me_path}/api-keys"
+        return self._filter(path, cursor, limit)
 
     def view(self, api_key_id: uuid.UUID) -> "APIKeyView":
         """Get the API-Key view.
@@ -187,6 +214,40 @@ class APIKeysAPI(BaseAPI):
         path = f"{self._path}/{api_key_id}"
         resp = self._connector.do_get(path)
         return APIKeyView(resp)
+
+    def view_my(self, api_key_uuid) -> "APIKeyView":
+        """Get the API-Key view which API-Client owns.
+
+        Note:
+            Calls `GET /users/me/api-keys/{api_key_id}`.
+            Doesn't require any permissions.
+        Args:
+            api_key_uuid: API-Key identifier.
+        Returns:
+            Full view of the API-Key include ETag value.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: User API-Key not found.
+            :class:`~cybsi.api.error.SemanticError`: Semantic error.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.NotOwner`.
+        .. versionadded:: 2.8
+        """
+
+        path = f"{self._me_path}/api-keys/{api_key_uuid}"
+        resp = self._connector.do_get(path)
+        return APIKeyView(resp)
+
+    @staticmethod
+    def _build_edit_api_key_form(
+        description: Optional[str] = None, revoked: Optional[bool] = None
+    ) -> JsonObject:
+        form: JsonObject = {}
+        if description is not None:
+            form["description"] = description
+        if revoked is not None:
+            form["revoked"] = revoked
+        return form
 
     def edit(
         self,
@@ -207,16 +268,47 @@ class APIKeysAPI(BaseAPI):
             description: API-Key description.
             revoked: API-Key revoked flag. Key revocation is an irreversible operation.
         Raises:
+            :class:`~cybsi.api.error.ResourceModifiedError`:
+                API-Key changed since last request. Retry using updated tag.
             :class:`~cybsi.api.error.NotFoundError`: User API-Key not found.
         """
 
-        form: JsonObject = {}
-        if description is not None:
-            form["description"] = description
-        if revoked is not None:
-            form["revoked"] = revoked
-
         path = f"{self._path}/{api_key_id}"
+        form = self._build_edit_api_key_form(description, revoked)
+        self._connector.do_patch(path=path, tag=tag, json=form)
+
+    def edit_my(
+        self,
+        api_key_id: uuid.UUID,
+        tag: Tag,
+        description: Optional[str] = None,
+        revoked: Optional[bool] = None,
+    ):
+        """Edit API-Key which API-Client owns.
+
+        Warning:
+            Key revocation is an irreversible operation.
+        Note:
+            Calls `PATCH /users/me/api-keys/{api_key_id}`.
+            Doesn't require any permissions.
+        Args:
+            api_key_id: API-Key identifier.
+            tag: :attr:`APIKeyView.tag` value. Use :meth:`view` to retrieve it.
+            description: API-Key description.
+            revoked: API-Key revoked flag. Key revocation is an irreversible operation.
+        Raises:
+            :class:`~cybsi.api.error.ResourceModifiedError`:
+                API-Key changed since last request. Retry using updated tag.
+            :class:`~cybsi.api.error.NotFoundError`: User API-Key not found.
+            :class:`~cybsi.api.error.SemanticError`: Semantic error.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.NotOwner`.
+        .. versionadded:: 2.8
+        """
+
+        path = f"{self._me_path}/api-keys/{api_key_id}"
+        form = self._build_edit_api_key_form(description, revoked)
         self._connector.do_patch(path=path, tag=tag, json=form)
 
 

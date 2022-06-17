@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.8.1a9(2022-06-17)
+-------------------
+- Add managing user profile API
+
 2.8.1a8(2022-06-03)
 -------------------
 - Add embed object URL setting to global SDK config
