@@ -60,20 +60,36 @@ class ConfigRulesAPI(BaseAPI):
 
     def filter(
         self,
-        data_source_uuid: Optional[uuid.UUID] = None,
-        trigger_data_source_uuid: Optional[uuid.UUID] = None,
+        data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
+        trigger_data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
+        enrichment_types: Optional[Iterable[EnrichmentTypes]] = None,
+        artifact_types: Optional[Iterable[ArtifactTypes]] = None,
+        entity_types: Optional[Iterable[EntityTypes]] = None,
+        trigger_types: Optional[Iterable[EnrichmentTriggerTypes]] = None,
+        is_disabled: Optional[bool] = None,
+        name: Optional[str] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["ConfigRuleCommonView"]:
         """Filter config rules.
 
+        .. versionchanged:: 2.8
+            Added new parameters: `enrichment_types`, `artifact_types`, `entity_types`,
+            `trigger_types`,`is_disabled`, `rule_name`.
+            Parameters `data_source_uuids`, `trigger_data_source_uuids` changed to list.
+
         Note:
             Calls `GET /enrichment/config/rules`.
         Args:
-            data_source_uuid: Data source identifier.
-                Filter config rules by the associated data source.
-            trigger_data_source_uuid: Data source identifier.
-                Filter config rules by the data source which is the trigger for rules.
+            data_source_uuids: Filter config rules by list of associated data sources.
+            trigger_data_source_uuids: Filter config rules by list of data sources
+                which is the trigger for rules.
+            enrichment_types: Filter config rules by list of enrichment type.
+            artifact_types: Filter config rules by list of artifact type.
+            entity_types: Filter config rules by list of entity type.
+            trigger_types: Filter config rules by list of enrichment trigger type.
+            is_disabled: Filter config rules by disabled status.
+            name: Filter config rules by name.
             cursor: Page cursor.
             limit: Page limit.
         Returns:
@@ -86,10 +102,22 @@ class ConfigRulesAPI(BaseAPI):
         """
 
         params: JsonObject = {}
-        if data_source_uuid is not None:
-            params["dataSourceUUID"] = str(data_source_uuid)
-        if trigger_data_source_uuid is not None:
-            params["triggerDataSourceUUID"] = str(trigger_data_source_uuid)
+        if data_source_uuids is not None:
+            params["dataSourceUUID"] = [str(u) for u in data_source_uuids]
+        if trigger_data_source_uuids is not None:
+            params["triggerDataSourceUUID"] = [str(u) for u in trigger_data_source_uuids]
+        if enrichment_types is not None:
+            params["enrichmentType"] = list(enrichment_types)
+        if artifact_types is not None:
+            params["artifactType"] = list(artifact_types)
+        if entity_types is not None:
+            params["entityType"] = list(entity_types)
+        if trigger_types is not None:
+            params["triggerType"] = list(trigger_types)
+        if is_disabled is not None:
+            params["isDisabled"] = is_disabled
+        if name is not None:
+            params["name"] = name
         if limit is not None:
             params["limit"] = str(limit)
         if cursor is not None:

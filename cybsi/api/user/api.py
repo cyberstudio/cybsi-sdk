@@ -93,6 +93,11 @@ class UsersAPI(BaseAPI):
     ) -> Page["UserCommonView"]:
         """Filter users.
 
+        .. versionchanged:: 2.8
+            Added new parameters: `data_source_uuid`, `query`, `providers`,
+            `is_disabled`.
+            Added semantic error: `UserNotFound`.
+
         Note:
             Calls `GET /users`.
         Args:
@@ -115,6 +120,7 @@ class UsersAPI(BaseAPI):
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.UserNotFound`
         Usage:
             >>> import uuid
             >>> from cybsi.api import CybsiClient

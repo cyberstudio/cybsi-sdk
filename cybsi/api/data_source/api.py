@@ -124,6 +124,10 @@ class DataSourcesAPI(BaseAPI):
     ) -> Page["DataSourceCommonView"]:
         """Get a filtered list of data sources.
 
+        .. versionchanged:: 2.8
+            Added new parameters: `query`, `type_uuids`, `order_by`.
+            Added semantic error `DataSourceNotFound`
+
         Note:
             Calls `GET /data-sources`.
         Args:
@@ -148,6 +152,7 @@ class DataSourcesAPI(BaseAPI):
         Note:
             Semantic error codes:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceTypeNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
         Usage:
             >>> import uuid
             >>> from cybsi.api import CybsiClient

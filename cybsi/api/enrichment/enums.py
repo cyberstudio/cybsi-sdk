@@ -32,7 +32,7 @@ class EnrichmentErrorCodes(CybsiAPIEnum):
     TemporaryError = "TemporaryError"  # noqa: E501 #doc: Task timed out, network connectivity issues and so on.
     NotFound = "NotFound"  # noqa: E501 #doc: Requested entity wasn't found in external database.
     UnsupportedArtifact = "UnsupportedArtifact"  # noqa: E501 #doc: :attr:`EnrichmentTypes.ArtifactAnalysis` only. Enricher doesn't support such artifacts (invalid archive format, artifact size is too big).
-    Unavailable = "Unavailable"  # noqa: E501 #doc: :attr:`EnrichmentTypes.ArtifactDownload` only. Resource under provided URL is not available.
+    Unavailable = "Unavailable"  # noqa: E501 #doc: :attr:`EnrichmentTypes.ArtifactDownload`, :attr:`EnrichmentTypes.WhoisLookup` only. Resource under provided URL is not available.
     CorruptedArchive = "CorruptedArchive"   # noqa: E501 #doc: Only in task API. Archive is corrupted.
     InvalidPassword = "InvalidPassword"  # noqa: E501 #doc: :attr:`EnrichmentTypes.ArchiveUnpack` only in task API. An incorrect archive password is specified or a password is required to unpack (not specified).
     # fmt: on

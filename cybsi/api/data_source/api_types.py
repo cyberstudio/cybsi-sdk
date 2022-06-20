@@ -90,6 +90,9 @@ class DataSourceTypesAPI(BaseAPI):
     ) -> Page["DataSourceTypeCommonView"]:
         """Get a filtered list of data source type.
 
+        .. versionchanged:: 2.8
+            Added new parameters: `order_by`.
+
         Note:
             Calls `GET /data-source-types`.
         Args:

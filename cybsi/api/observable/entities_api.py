@@ -150,7 +150,11 @@ class EntitiesAPI(BaseAPI):
 
     def aggregate(
         self,
-        entity_uuids: Iterable[uuid.UUID],
+        *,
+        entity_uuids: Optional[Iterable[uuid.UUID]],
+        entity_type: Optional[EntityTypes] = None,
+        key_type: Optional[EntityKeyTypes] = None,
+        key: Optional[str] = None,
         sections: Optional[Iterable[EntityAggregateSections]] = None,
         forecast_at: Optional[datetime] = None,
         cursor: Optional[Cursor] = None,
@@ -158,10 +162,29 @@ class EntitiesAPI(BaseAPI):
     ) -> Page[EntityAggregateView]:
         """Get list of aggregated entities.
 
+        .. versionchanged:: 2.8
+            Added new parameters: `ent_type`, `key_type`, `key`.
+            Parameter `entity_uuids` changed to Optional.
+
         Note:
             Calls `GET /observable/entities`.
+
+            To get entity aggregate, only one of [key, entity_uuids] parameters
+            should be specified else Cybsi API will return error.
         Args:
-            entity_uuids: Entity uuids. At least one must be provided.
+            entity_uuids: Entity uuids.
+                Excludes parameters: `entity_type`, `key_type`, `key`.
+            entity_type: Entity type.
+                Excludes parameter `entity_uuids` and requires parameter `key`.
+                The parameter is not required if the `entity_type` can be
+                uniquely determined by `key_type`.
+            key_type: Entity natural key type.
+                Excludes parameter `entity_uuids` and requires parameter `key`.
+                The parameter is not required if only one `key_type` is used for
+                the specified `entity_type`.
+            key: Entity natural key value. Required if `entity_type` or `key_type`
+                parameter is specified.
+                It is possible to pass a key value in a non-canonical representation.
             sections: Sections to be aggregated.
             forecast_at: Point of time to aggregate sections at.
             cursor: Page cursor.
@@ -186,16 +209,38 @@ class EntitiesAPI(BaseAPI):
             >>>     UUID("85fca85e-0036-488d-9dcf-35970d182afc"),
             >>> ]
             >>> filter_sections = [EntityAggregateSections.AssociatedAttributes]
+            >>> # You can aggregate entities by entity_uuids. Be aware that
+            >>> # optional parameters such as entity_type, key_type or key are excluded.
+            >>> # Cybsi API will return an error if you specify
+            >>> # one of these with entity_uuids.
             >>> aggregates = client.observable.entities.aggregate(
-            >>>     entities,
+            >>>     entity_uuids=entities,
             >>>     sections=filter_sections
             >>> )
             >>> for item in chain_pages(aggregates):
             >>>     # Do something with an aggregate
             >>>     pass
+            >>>
+            >>> # Also you can aggregate entities by natural key, but for this
+            >>> # you need to specified one of parameters entity_type or key_type.
+            >>> # Keep in mind that Cybsi API will return error if you provide
+            >>> # entity_uuids with natural key.
+            >>> aggregates = client.observable.entities.aggregate(
+            >>>     entity_type=EntityTypes.URL,
+            >>>     key_type=EntityKeyTypes.String,
+            >>>     key="http://young.biz/wp-content/index/",
+            >>> )
         """
 
-        params: Dict[str, Any] = {"uuid": entity_uuids}
+        params: Dict[str, Any] = {}
+        if entity_uuids is not None:
+            params["uuid"] = [str(u) for u in entity_uuids]
+        if entity_type is not None:
+            params["type"] = entity_type.value
+        if key_type is not None:
+            params["keyType"] = key_type.value
+        if key is not None:
+            params["key"] = key
         if sections is not None:
             params["section"] = [section.value for section in sections]
         if forecast_at is not None:
