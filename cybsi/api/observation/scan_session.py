@@ -14,6 +14,7 @@ class ScanSessionObservationsAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         entity_uuid: Optional[UUID] = None,
         data_source_uuids: Optional[Iterable[UUID]] = None,
         reporter_uuids: Optional[Iterable[UUID]] = None,

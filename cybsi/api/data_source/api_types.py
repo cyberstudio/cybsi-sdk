@@ -84,6 +84,7 @@ class DataSourceTypesAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         order_by: Optional[DataSourceTypeListOrder] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
@@ -210,6 +211,7 @@ class DataSourceTypesAsyncAPI(BaseAsyncAPI):
 
     async def filter(
         self,
+        *,
         order_by: Optional[DataSourceTypeListOrder] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,

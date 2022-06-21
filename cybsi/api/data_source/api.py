@@ -116,6 +116,7 @@ class DataSourcesAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         query: Optional[str] = None,
         type_uuids: Optional[Iterable[uuid.UUID]] = None,
         order_by: Optional[DataSourceListOrder] = None,
@@ -292,6 +293,7 @@ class DataSourcesAsyncAPI(BaseAsyncAPI):
 
     async def filter(
         self,
+        *,
         query: Optional[str] = None,
         type_uuids: Optional[Iterable[uuid.UUID]] = None,
         order_by: Optional[DataSourceListOrder] = None,

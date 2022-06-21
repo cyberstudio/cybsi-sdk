@@ -60,6 +60,7 @@ class ConfigRulesAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
         trigger_data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
         enrichment_types: Optional[Iterable[EnrichmentTypes]] = None,
@@ -105,15 +106,17 @@ class ConfigRulesAPI(BaseAPI):
         if data_source_uuids is not None:
             params["dataSourceUUID"] = [str(u) for u in data_source_uuids]
         if trigger_data_source_uuids is not None:
-            params["triggerDataSourceUUID"] = [str(u) for u in trigger_data_source_uuids]
+            params["triggerDataSourceUUID"] = [
+                str(u) for u in trigger_data_source_uuids
+            ]
         if enrichment_types is not None:
-            params["enrichmentType"] = list(enrichment_types)
+            params["enrichmentType"] = [t.value for t in enrichment_types]
         if artifact_types is not None:
-            params["artifactType"] = list(artifact_types)
+            params["artifactType"] = [t.value for t in artifact_types]
         if entity_types is not None:
-            params["entityType"] = list(entity_types)
+            params["entityType"] = [t.value for t in entity_types]
         if trigger_types is not None:
-            params["triggerType"] = list(trigger_types)
+            params["triggerType"] = [t.value for t in trigger_types]
         if is_disabled is not None:
             params["isDisabled"] = is_disabled
         if name is not None:

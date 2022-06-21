@@ -12,6 +12,7 @@ class AnnotationsAPI(BaseAPI):
     def filter(
         self,
         prefix: str,
+        *,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page[str]:

@@ -83,6 +83,7 @@ class UsersAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         user_uuids: Optional[Iterable[uuid.UUID]] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
         query: Optional[str] = None,

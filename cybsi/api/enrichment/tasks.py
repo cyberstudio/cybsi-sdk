@@ -75,6 +75,7 @@ class TasksAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         artifact_uuid: Optional[uuid.UUID] = None,
         entity_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,
@@ -159,6 +160,7 @@ class TasksAsyncAPI(BaseAsyncAPI):
 
     async def filter(
         self,
+        *,
         artifact_uuid: Optional[uuid.UUID] = None,
         entity_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,

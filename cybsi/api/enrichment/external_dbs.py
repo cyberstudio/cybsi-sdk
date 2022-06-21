@@ -121,6 +121,7 @@ class ExternalDBsAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         entity_types: Optional[Iterable[EntityTypes]] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,

@@ -173,6 +173,7 @@ class ArtifactsAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         artifact_type: Optional[ArtifactTypes] = None,
         data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
         file_uuid: Optional[uuid.UUID] = None,
@@ -368,6 +369,7 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
 
     async def filter(
         self,
+        *,
         artifact_type: Optional[ArtifactTypes] = None,
         data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
         file_uuid: Optional[uuid.UUID] = None,

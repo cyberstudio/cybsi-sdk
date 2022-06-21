@@ -77,6 +77,7 @@ class ReportsAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         file_uuid: Optional[uuid.UUID] = None,
         reporter_uuids: Optional[Iterable[uuid.UUID]] = None,
         data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
@@ -358,6 +359,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
 
     async def filter(
         self,
+        *,
         file_uuid: Optional[uuid.UUID] = None,
         reporter_uuids: Optional[Iterable[uuid.UUID]] = None,
         data_source_uuids: Optional[Iterable[uuid.UUID]] = None,

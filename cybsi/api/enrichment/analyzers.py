@@ -127,6 +127,7 @@ class AnalyzersAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         artifact_types: Optional[Iterable[ArtifactTypes]] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,

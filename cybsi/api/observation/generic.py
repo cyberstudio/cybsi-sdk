@@ -64,6 +64,7 @@ class GenericObservationsAPI(BaseAPI):
 
     def filter(
         self,
+        *,
         data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
         reporter_uuids: Optional[Iterable[uuid.UUID]] = None,
         cursor: Optional[Cursor] = None,
