@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.8.1a10(2022-06-20)
+--------------------
+- Add keyword-only args to filters
+- Expand filters parameters of API resources for cybsi 2.8.0
+
 2.8.1a9(2022-06-17)
 -------------------
 - Add managing user profile API
