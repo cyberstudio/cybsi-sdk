@@ -63,6 +63,7 @@ class ObservationsAPI(BaseAPI):
 
     def search(
         self,
+        *,
         types: Optional[Iterable[ObservationTypes]] = None,
         data_source_uuids: Optional[Iterable[UUID]] = None,
         reporter_uuids: Optional[Iterable[UUID]] = None,

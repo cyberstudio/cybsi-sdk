@@ -22,7 +22,7 @@ if __name__ == "__main__":
     api_key = environ["CYBSI_API_KEY"]
     api_url = environ["CYBSI_API_URL"]
 
-    auth = APIKeyAuth(api_url, api_key)
+    auth = APIKeyAuth(api_url=api_url, api_key=api_key)
     config = Config(api_url, auth, embed_object_url=True, ssl_verify=False)
 
     # create client with embed object URL

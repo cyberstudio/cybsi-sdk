@@ -12,7 +12,7 @@ def main():
     api_key = environ["CYBSI_API_KEY"]
     api_url = environ["CYBSI_API_URL"]
 
-    auth = APIKeyAuth(api_url, api_key)
+    auth = APIKeyAuth(api_url=api_url, api_key=api_key)
     config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
 

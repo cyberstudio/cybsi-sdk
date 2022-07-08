@@ -5,7 +5,7 @@ from cybsi.api import APIKeyAuth, Config, CybsiClient
 
 if __name__ == "__main__":
     api_url = "http://127.0.0.1/api"
-    auth = APIKeyAuth(api_url, api_key="api_key")
+    auth = APIKeyAuth(api_url=api_url, api_key="api_key")
     config = Config(api_url, auth, ssl_verify=False)
 
     replist_uuid = uuid.uuid4()

@@ -15,7 +15,7 @@ if __name__ == "__main__":
     api_key = environ["CYBSI_API_KEY"]
     api_url = environ["CYBSI_API_URL"]
 
-    auth = APIKeyAuth(api_url, api_key)
+    auth = APIKeyAuth(api_url=api_url, api_key=api_key)
     config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
 
@@ -79,7 +79,9 @@ if __name__ == "__main__":
 
     # Get forecast of relationship (domain name entity resolves ip-address entity).
     relationship_forecast = client.observable.relationships.forecast(
-        domain_ref.uuid, ip_address_ref.uuid, RelationshipKinds.ResolvesTo
+        source_entity_uuid=domain_ref.uuid,
+        target_entity_uuid=ip_address_ref.uuid,
+        kind=RelationshipKinds.ResolvesTo,
     )
     print(relationship_forecast)
     # {

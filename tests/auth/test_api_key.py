@@ -20,8 +20,8 @@ class ApiKeyTest(BaseTest):
     def test_api_key_generate(self, mock):
         api_key_generate_form = APIKeyForm(
             dtm.datetime(2022, 6, 1, 0, 0, 0, 0, dtm.timezone.utc),
-            "test",
-            [
+            description="test",
+            permissions=[
                 (ResourceName.DataSources, "r"),
                 (ResourceName.Observable, "r"),
             ],
@@ -155,8 +155,8 @@ class ApiKeyTest(BaseTest):
         res = self.api_keys_api.edit(
             api_key_uuid,
             tag,
-            api_key_edit_form["description"],
-            api_key_edit_form["revoked"],
+            description=api_key_edit_form["description"],
+            revoked=api_key_edit_form["revoked"],
         )
 
         _, kwargs = mock.call_args

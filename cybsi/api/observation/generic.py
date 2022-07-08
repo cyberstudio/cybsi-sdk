@@ -137,6 +137,7 @@ class GenericObservationsAsyncAPI(BaseAsyncAPI):
 
     async def filter(
         self,
+        *,
         data_source_uuids: Optional[Iterable[uuid.UUID]] = None,
         reporter_uuids: Optional[Iterable[uuid.UUID]] = None,
         cursor: Optional[Cursor] = None,
@@ -230,6 +231,7 @@ class GenericObservationForm(JsonObjectForm):
         entity: Union[uuid.UUID, EntityForm],
         attribute_name: AttributeNames,
         value: Any,
+        *,
         confidence: Optional[float] = None,
     ) -> "GenericObservationForm":
         """Add attribute value fact to the observation.
@@ -267,6 +269,7 @@ class GenericObservationForm(JsonObjectForm):
 
     def add_entity_relationship(
         self,
+        *,
         source: Union[uuid.UUID, EntityForm],
         kind: RelationshipKinds,
         target: Union[uuid.UUID, EntityForm],

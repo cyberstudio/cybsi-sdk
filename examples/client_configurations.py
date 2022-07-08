@@ -6,7 +6,7 @@ if __name__ == "__main__":
     api_key = environ["CYBSI_API_KEY"]
     api_url = environ["CYBSI_API_URL"]
 
-    auth = APIKeyAuth(api_url, api_key)
+    auth = APIKeyAuth(api_url=api_url, api_key=api_key)
 
     # Set custom timeouts and limits of HTTP client
     limits = Limits(max_connections=100, max_keepalive_connections=20)

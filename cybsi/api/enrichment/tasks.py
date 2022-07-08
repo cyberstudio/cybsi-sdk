@@ -258,6 +258,7 @@ class ArtifactDownloadParamsForm(JsonObjectForm):
         self,
         url: str,
         share_level: ShareLevels,
+        *,
         artifact_type: Optional[ArtifactTypes] = None,
     ):
         super().__init__()
@@ -494,6 +495,7 @@ class TaskForm(JsonObjectForm):
         self,
         task_type: EnrichmentTypes,
         params: "EnrichmentTaskParamsForm",
+        *,
         data_source: Optional[uuid.UUID] = None,
     ):
         super().__init__()

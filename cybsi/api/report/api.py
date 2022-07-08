@@ -172,6 +172,7 @@ class ReportsAPI(BaseAPI):
     def filter_similar_reports(
         self,
         report_uuid: uuid.UUID,
+        *,
         reporter_uuid: Optional[uuid.UUID] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,
@@ -231,7 +232,11 @@ class ReportsAPI(BaseAPI):
         return SimilarReportView(r.json())
 
     def search_labels(
-        self, prefix: str, cursor: Optional[Cursor] = None, limit: Optional[int] = None
+        self,
+        prefix: str,
+        *,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
     ) -> Page[str]:
         """Get report label filtration list.
 
@@ -284,6 +289,7 @@ class ReportsAPI(BaseAPI):
     def filter_observations(
         self,
         report_uuid: uuid.UUID,
+        *,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["ObservationView"]:
@@ -454,6 +460,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
     async def filter_similar_reports(
         self,
         report_uuid: uuid.UUID,
+        *,
         reporter_uuid: Optional[uuid.UUID] = None,
         data_source_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,
@@ -513,7 +520,11 @@ class ReportsAsyncAPI(BaseAsyncAPI):
         return SimilarReportView(r.json())
 
     async def search_labels(
-        self, prefix: str, cursor: Optional[Cursor] = None, limit: Optional[int] = None
+        self,
+        prefix: str,
+        *,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
     ) -> AsyncPage[str]:
         """Get report label filtration list.
 
@@ -566,6 +577,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
     async def filter_observations(
         self,
         report_uuid: uuid.UUID,
+        *,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> AsyncPage["ObservationView"]:
@@ -616,6 +628,7 @@ class ReportForm(JsonObjectForm):
     def __init__(
         self,
         share_level: ShareLevels,
+        *,
         title: Optional[str] = None,
         description: Optional[str] = None,
         external_id: Optional[str] = None,

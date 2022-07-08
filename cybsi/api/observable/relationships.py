@@ -45,6 +45,7 @@ class RelationshipsAPI(BaseAPI):
 
     def forecast(
         self,
+        *,
         source_entity_uuid: uuid.UUID,
         target_entity_uuid: uuid.UUID,
         kind: RelationshipKinds,
@@ -74,8 +75,8 @@ class RelationshipsAPI(BaseAPI):
             >>> from cybsi.api.observable import RelationshipKinds
             >>> client: CybsiClient
             >>> forecasts = client.observable.relationships.forecast(
-            >>>     UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
-            >>>     UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
+            >>>     source_entity_uuid = UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
+            >>>     target_entity_uuid = UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
             >>>     RelationshipKinds.ResolvesTo,
             >>> )
             >>> # Do something with the forecast

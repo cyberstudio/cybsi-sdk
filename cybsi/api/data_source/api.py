@@ -81,6 +81,7 @@ class DataSourcesAPI(BaseAPI):
         self,
         type_uuid: uuid.UUID,
         tag: Tag,
+        *,
         long_name: Optional[str] = None,
         manual_confidence: Nullable[float] = None,
     ) -> None:
@@ -258,6 +259,7 @@ class DataSourcesAsyncAPI(BaseAsyncAPI):
         self,
         type_uuid: uuid.UUID,
         tag: Tag,
+        *,
         long_name: Optional[str] = None,
         manual_confidence: Nullable[float] = None,
     ) -> None:
@@ -368,6 +370,7 @@ class DataSourceForm(JsonObjectForm):
     def __init__(
         self,
         type_uuid: uuid.UUID,
+        *,
         name: str,
         long_name: str,
         manual_confidence: Optional[float] = None,

@@ -51,7 +51,7 @@ class APIKeyAuth(httpx.Auth):
 
     _get_token_path = "auth/token"
 
-    def __init__(self, api_url: str, api_key: str, ssl_verify: bool = True):
+    def __init__(self, *, api_url: str, api_key: str, ssl_verify: bool = True):
         # See https://www.python-httpx.org/advanced/#customizing-authentication
         self._api_key = api_key
         self._api_url = api_url
@@ -253,6 +253,7 @@ class APIKeysAPI(BaseAPI):
         self,
         api_key_id: uuid.UUID,
         tag: Tag,
+        *,
         description: Optional[str] = None,
         revoked: Optional[bool] = None,
     ):
@@ -281,6 +282,7 @@ class APIKeysAPI(BaseAPI):
         self,
         api_key_id: uuid.UUID,
         tag: Tag,
+        *,
         description: Optional[str] = None,
         revoked: Optional[bool] = None,
     ):
@@ -328,6 +330,7 @@ class APIKeyForm(JsonObjectForm):
     def __init__(
         self,
         expires_at: datetime,
+        *,
         description: Optional[str] = None,
         permissions: Iterable[Tuple[ResourceName, ActionSet]] = [],
     ):

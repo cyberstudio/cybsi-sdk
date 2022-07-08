@@ -162,6 +162,7 @@ class UsersAPI(BaseAPI):
         self,
         user_uuid: uuid.UUID,
         tag: Tag,
+        *,
         full_name: Nullable[str] = None,
         email: Nullable[str] = None,
         data_source_uuid: Nullable[uuid.UUID] = None,
@@ -221,6 +222,7 @@ class UsersAPI(BaseAPI):
     def edit_me(
         self,
         tag: Tag,
+        *,
         full_name: Nullable[str] = None,
         email: Nullable[str] = None,
     ):
@@ -251,7 +253,7 @@ class UsersAPI(BaseAPI):
 
         self._connector.do_patch(path=self._me_path, tag=tag, json=form)
 
-    def change_my_password(self, old_password: str, new_password: str):
+    def change_my_password(self, *, old_password: str, new_password: str):
         """Change password of current client.
 
         Note:
@@ -320,6 +322,7 @@ class UserForm(JsonObjectForm):
         login: str,
         access_level: ShareLevels,
         roles: Iterable[RoleName],
+        *,
         password: Optional[str] = None,
         full_name: Optional[str] = None,
         email: Optional[str] = None,

@@ -95,6 +95,7 @@ class EntitiesAPI(BaseAPI):
     def view(
         self,
         entity_uuid: uuid.UUID,
+        *,
         sections: Optional[Iterable[EntityAggregateSections]] = None,
         forecast_at: Optional[datetime] = None,
         with_valuable_facts: Optional[bool] = None,

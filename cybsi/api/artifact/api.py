@@ -128,6 +128,7 @@ class ArtifactsAPI(BaseAPI):
     def get_content(
         self,
         artifact_uuid: uuid.UUID,
+        *,
         archive: ArtifactContentDownloadCompressionTypes = None,
         archive_password: str = None,
     ) -> ContextManager["ArtifactContent"]:
@@ -283,6 +284,7 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
 
     async def upload(
         self,
+        *,
         filename: str,
         data: Any,
         artifact_type: ArtifactTypes = None,
@@ -321,6 +323,7 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
 
     def get_content(
         self,
+        *,
         artifact_uuid: uuid.UUID,
         archive: ArtifactContentDownloadCompressionTypes = None,
         archive_password: str = None,
