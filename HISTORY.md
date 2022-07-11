@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.8.2(2022-07-11)
+--------------------
+- First stable version of SDK
+- Use keyword-only args for public methods
+
 2.8.1a10(2022-06-20)
 --------------------
 - Add keyword-only args to filters
