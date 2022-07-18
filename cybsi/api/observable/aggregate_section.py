@@ -1,12 +1,47 @@
+import uuid
 from datetime import datetime
-from typing import Any, Callable, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Callable, Dict, Generic, List, Optional, TypeVar, Union
 
 from .. import RefView
 from ..internal import JsonObject, JsonObjectView, list_mapper, parse_rfc3339_timestamp
-from .enums import EntityAggregateSections, ShareLevels, ThreatStatus
+from .enums import (
+    AttributeNames,
+    EntityAggregateSections,
+    IdentityClass,
+    IndustrySector,
+    NodeRole,
+    ShareLevels,
+    ThreatStatus,
+)
 
 T = TypeVar("T")
 """Type of section data. Depends on section name."""
+
+
+AttributeValueView = Union[str, bool, int, uuid.UUID, RefView]
+
+
+def _convert_attribute_value_type(
+    attribute_name: AttributeNames, val: Any
+) -> AttributeValueView:
+    _attribute_value_types = {
+        AttributeNames.Names: str,
+        AttributeNames.DisplayNames: str,
+        AttributeNames.IsIoC: bool,
+        AttributeNames.IsMalicious: bool,
+        AttributeNames.IsDGA: bool,
+        AttributeNames.IsTrusted: bool,
+        AttributeNames.MalwareFamilyAliases: uuid.UUID,
+        AttributeNames.Size: int,
+        AttributeNames.MalwareClasses: RefView,
+        AttributeNames.MalwareFamilies: RefView,
+        AttributeNames.RelatedMalwareFamilies: RefView,
+        AttributeNames.NodeRoles: NodeRole,
+        AttributeNames.Sectors: IndustrySector,
+        AttributeNames.Class: IdentityClass,
+    }
+
+    return _attribute_value_types[attribute_name](val)
 
 
 class SectionView(JsonObjectView, Generic[T]):
@@ -66,19 +101,61 @@ class ValuableFactView(JsonObjectView):
 class AttributeValuableFactView(ValuableFactView):
     """Valuable fact of attribute forecast view."""
 
+    def __init__(self, data: JsonObject, attribute_name: AttributeNames):
+        super().__init__(data)
+        self._attribute_name = attribute_name
+
     @property
-    def value(self) -> Any:
-        """Facts attribute value."""
-        return self._get("value")
+    def value(self) -> "AttributeValueView":
+        """Facts attribute value. Returned value type depends on attribute.
+
+        Note:
+            Return :class:`~cybsi.api.RefView` type
+            is used to get the value of a dictionary item attribute.
+            You can resolve the ref
+            using :meth:`~cybsi.api.dictionary.DictionariesAPI.view_item`.
+        Usage:
+            >>> from typing import cast
+            >>> from cybsi.api.observable import AttributeValuableFactView
+            >>> from cybsi.api import RefView
+            >>>
+            >>> view = AttributesSectionData()
+            >>> if view.attribute_name == AttributeNames.MalwareFamilies:
+            >>>     for v in view.values:
+            >>>         value = cast(RefView, v.value)
+            >>>         print(value)
+        """
+        return _convert_attribute_value_type(self._attribute_name, self._get("value"))
 
 
 class AttributeAggregatedValue(JsonObjectView):
     """View for attribute value aggregated data."""
 
+    def __init__(self, data: JsonObject, attribute_name: AttributeNames):
+        super().__init__(data)
+        self._attribute_name = attribute_name
+
     @property
-    def value(self) -> Any:
-        """Attribute value."""
-        return self._get("value")
+    def value(self) -> "AttributeValueView":
+        """Attribute value. Returned value type depends on attribute.
+
+        Note:
+            Return :class:`~cybsi.api.RefView` type
+            is used to get the value of a dictionary item attribute.
+            You can resolve the ref
+            using :meth:`~cybsi.api.dictionary.DictionariesAPI.view_item`.
+        Usage:
+            >>> from typing import cast
+            >>> from cybsi.api.observable import AttributeValuableFactView
+            >>> from cybsi.api import RefView
+            >>>
+            >>> view = AttributesSectionData()
+            >>> if view.attribute_name == AttributeNames.MalwareFamilies:
+            >>>     for v in view.values:
+            >>>         value = cast(RefView, v.value)
+            >>>         print(value)
+        """
+        return _convert_attribute_value_type(self._attribute_name, self._get("value"))
 
     @property
     def confidence(self) -> float:
@@ -95,7 +172,7 @@ class AttributeAggregatedValue(JsonObjectView):
         """
         facts = self._get("valuableFacts")
         return (
-            [AttributeValuableFactView(fact) for fact in facts]
+            [AttributeValuableFactView(fact, self._attribute_name) for fact in facts]
             if facts is not None
             else None
         )
@@ -105,9 +182,9 @@ class AttributesSectionData(JsonObjectView):
     """View for attributes section data."""
 
     @property
-    def attribute_name(self) -> str:
+    def attribute_name(self) -> AttributeNames:
         """Attribute name."""
-        return self._get("attributeName")
+        return AttributeNames(self._get("attributeName"))
 
     @property
     def has_conflicts(self) -> bool:
@@ -117,7 +194,10 @@ class AttributesSectionData(JsonObjectView):
     @property
     def values(self) -> List[AttributeAggregatedValue]:
         """Attribute values."""
-        return [AttributeAggregatedValue(value) for value in self._get("values")]
+        return [
+            AttributeAggregatedValue(value, self.attribute_name)
+            for value in self._get("values")
+        ]
 
 
 class ThreatSectionData(JsonObjectView):

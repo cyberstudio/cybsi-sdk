@@ -9,4 +9,5 @@ from .api import (
     DictionaryView,
     DictionaryItemView,
     DictionaryCommonItemView,
+    DictItemAttributeValue,
 )

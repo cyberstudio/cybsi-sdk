@@ -379,7 +379,7 @@ class EntitiesAPI(BaseAPI):
         kebab_attr_name = _convert_attribute_name_kebab(attr_name)
         path = f"{self._path}/{entity_uuid}/attributes/{kebab_attr_name}"
         r = self._connector.do_get(path=path, params=params)
-        return EntityAttributeForecastView(r.json())
+        return EntityAttributeForecastView(r.json(), attr_name)
 
     def forecast_links(
         self,

@@ -2,12 +2,15 @@ import uuid
 from typing import Any, Dict, Optional
 
 from .. import RefView
-from ..internal import BaseAPI
+from ..internal import BaseAPI, JsonObjectForm
 from ..pagination import Cursor, Page
 
 
 class DictionariesAPI(BaseAPI):
-    """API to operate dictionaries."""
+    """API to operate dictionaries.
+
+    .. versionadded:: 2.9
+    """
 
     _path = "/dictionaries"
     _path_dictionary_items = "/dictionary-items"
@@ -162,3 +165,16 @@ class DictionaryItemView(DictionaryCommonItemView):
     def dictionary(self) -> RefView:
         """Reference to dictionary."""
         return self._get("dictionary")
+
+
+class DictItemAttributeValue(JsonObjectForm):
+    """Dictionary item. Used as attribute value to create a general observation.
+    See :meth:`~cybsi.api.observation.generic.GenericObservationForm.add_attribute_fact`
+
+    Args:
+       key: Dictionary item key.
+    """
+
+    def __init__(self, *, key: str):
+        super().__init__()
+        self._data["key"] = key

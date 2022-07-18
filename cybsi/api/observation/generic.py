@@ -11,6 +11,7 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Union, cast
 
 from .. import RefView
+from ..dictionary import DictItemAttributeValue
 from ..internal import (
     BaseAPI,
     BaseAsyncAPI,
@@ -20,12 +21,14 @@ from ..internal import (
 )
 from ..observable import (
     AttributeNames,
+    AttributeValueView,
     EntityForm,
     EntityView,
     RelationshipKinds,
     RelationshipView,
     ShareLevels,
 )
+from ..observable.aggregate_section import _convert_attribute_value_type
 from ..pagination import AsyncPage, Cursor, Page
 from .view import ObservationHeaderView
 
@@ -172,6 +175,9 @@ class GenericObservationsAsyncAPI(BaseAsyncAPI):
         return GenericObservationView(r.json())
 
 
+AttributeValueForm = Union[int, str, bool, uuid.UUID, DictItemAttributeValue]
+
+
 class GenericObservationForm(JsonObjectForm):
     """Generic observation form.
 
@@ -185,10 +191,11 @@ class GenericObservationForm(JsonObjectForm):
         seen_at: Date and time when facts were seen.
     Usage:
         >>> from datetime import datetime, timezone
+        >>> from cybsi.api.dictionary import DictItemAttributeValue
         >>> from cybsi.api.observable import (
         >>>     AttributeNames, EntityForm,
         >>>     EntityKeyTypes, EntityTypes,
-        >>>     ShareLevels, RelationshipKinds
+        >>>     ShareLevels, RelationshipKinds,
         >>> )
         >>> from cybsi.api.observation import GenericObservationForm
         >>> domain = EntityForm(EntityTypes.DomainName)
@@ -202,6 +209,11 @@ class GenericObservationForm(JsonObjectForm):
         >>>     entity=domain,
         >>>     attribute_name=AttributeNames.IsIoC,
         >>>     value=True,
+        >>>     confidence=0.9
+        >>> ).add_attribute_fact(
+        >>>     entity=domain,
+        >>>     attribute_name=AttributeNames.RelatedMalwareFamilies,
+        >>>     value=DictItemAttributeValue(key="Aware"),
         >>>     confidence=0.9
         >>> ).add_entity_relationship(
         >>>     source=domain,
@@ -230,14 +242,15 @@ class GenericObservationForm(JsonObjectForm):
         self,
         entity: Union[uuid.UUID, EntityForm],
         attribute_name: AttributeNames,
-        value: Any,
+        value: AttributeValueForm,
         *,
         confidence: Optional[float] = None,
     ) -> "GenericObservationForm":
         """Add attribute value fact to the observation.
 
         See Also:
-            See :ref:`attributes`
+            See :ref:`attributes` and
+            :class:`~cybsi.api.observable.enums.AttributeNames`
             for complete information about available attributes.
 
         Args:
@@ -256,6 +269,12 @@ class GenericObservationForm(JsonObjectForm):
             ent = {"uuid": str(entity)}
         else:
             ent = entity.json()
+
+        if isinstance(value, uuid.UUID):
+            value = str(value)
+
+        if isinstance(value, DictItemAttributeValue):
+            value = value.json()
 
         attribute_facts.append(
             {
@@ -339,14 +358,14 @@ class GenericObservationContentView(JsonObjectView):
         return [RelationshipView(x) for x in relationships]
 
     @property
-    def entity_attribute_values(self) -> List["AttributeValueView"]:
+    def entity_attribute_values(self) -> List["AttributeValueFactView"]:
         """Entity attribute values."""
 
         attributes = self._get("entityAttributeValues")
-        return [AttributeValueView(x) for x in attributes]
+        return [AttributeValueFactView(x) for x in attributes]
 
 
-class AttributeValueView(JsonObjectView):
+class AttributeValueFactView(JsonObjectView):
     """Attribute value fact view."""
 
     @property
@@ -367,13 +386,26 @@ class AttributeValueView(JsonObjectView):
         return AttributeNames(self._get("attributeName"))
 
     @property
-    def value(self) -> Any:
-        """Value of the attribute.
+    def value(self) -> AttributeValueView:
+        """Value of the attribute.  Return type depends on attribute name and entity type.
 
-        Return type depends on attribute name and entity type.
+        Note:
+            Return :class:`~cybsi.api.RefView` type
+            is used to get the value of a dictionary item attribute.
+            You can resolve the ref using
+            :meth:`~cybsi.api.dictionary.DictionariesAPI.view_item`.
+        Usage:
+            >>> from typing import cast
+            >>> from cybsi.api.observation import GenericObservationContentView
+            >>> from cybsi.api import RefView
+            >>>
+            >>> view = GenericObservationContentView()
+            >>> for v in view.entity_attribute_values:
+            >>>     if v.attribute_name == AttributeNames.MalwareFamilies:
+            >>>         value = cast(RefView, v.value)
+            >>>         print(value)
         """
-
-        return self._get("value")
+        return _convert_attribute_value_type(self.attribute_name, self._get("value"))
 
     @property
     def confidence(self) -> float:

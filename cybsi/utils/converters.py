@@ -4,6 +4,7 @@ a string to a valid value of a chosen type.
 """
 from typing import Any, Callable, Dict, Type
 
+from cybsi.api.dictionary import DictItemAttributeValue
 from cybsi.api.enum import CybsiAPIEnum
 from cybsi.api.observable.enums import (
     AttributeNames,
@@ -29,7 +30,7 @@ def _bool_converter(val: str):
         return val
 
     if not isinstance(val, str):
-        raise ValueError(f"value {val} is not boolean")
+        raise ValueError(f"value {val} is not string")
 
     if val.lower() == "true":
         return True
@@ -43,6 +44,13 @@ def _new_enum_value_converter(api_enum: Type[CybsiAPIEnum], ignore_case=False):
         return api_enum.from_string(str(val), ignore_case=ignore_case).value
 
     return _enum_converter
+
+
+def _dict_item_value_converter(val: str):
+    if isinstance(val, str):
+        return DictItemAttributeValue(key=val)
+
+    raise ValueError(f"value {val} is not a string")
 
 
 _entity_key_converters: Dict[EntityKeyTypes, Callable[[Any], Any]] = {
@@ -89,6 +97,9 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.Class: _new_enum_value_converter(IdentityClass, ignore_case=True),
     AttributeNames.NodeRoles: _new_enum_value_converter(NodeRole, ignore_case=True),
     AttributeNames.Sectors: _new_enum_value_converter(IndustrySector, ignore_case=True),
+    AttributeNames.MalwareClasses: _dict_item_value_converter,
+    AttributeNames.MalwareFamilies: _dict_item_value_converter,
+    AttributeNames.RelatedMalwareFamilies: _dict_item_value_converter,
 }
 
 

@@ -1,9 +1,14 @@
-from typing import Any, Iterable, List, Optional, Tuple
+from typing import Iterable, List, Optional, Tuple
 
 from .. import RefView
-from ..internal import JsonObjectForm, JsonObjectView
-from .aggregate_section import AttributeValuableFactView, SectionsView
-from .enums import EntityKeyTypes, EntityTypes
+from ..internal import JsonObject, JsonObjectForm, JsonObjectView
+from .aggregate_section import (
+    AttributeValuableFactView,
+    AttributeValueView,
+    SectionsView,
+    _convert_attribute_value_type,
+)
+from .enums import AttributeNames, EntityKeyTypes, EntityTypes
 
 
 class EntityForm(JsonObjectForm):
@@ -78,6 +83,10 @@ class EntityAggregateView(EntityView):
 class EntityAttributeForecastView(JsonObjectView):
     """Entity attribute forecast view."""
 
+    def __init__(self, data: JsonObject, attribute_name: AttributeNames):
+        super().__init__(data)
+        self._attribute_name = attribute_name
+
     @property
     def has_conflicts(self) -> bool:
         """Entity has conflicting facts about attribute."""
@@ -86,16 +95,29 @@ class EntityAttributeForecastView(JsonObjectView):
     @property
     def values(self) -> List["AttributeForecastView"]:
         """Attribute values forecast in descending order of confidence."""
-        return [AttributeForecastView(x) for x in self._get("values")]
+        return [
+            AttributeForecastView(x, self._attribute_name) for x in self._get("values")
+        ]
 
 
 class AttributeForecastView(JsonObjectView):
     """Single attribute value forecast."""
 
+    def __init__(self, data: JsonObject, attribute_name: AttributeNames):
+        super().__init__(data)
+        self._attribute_name = attribute_name
+
     @property
-    def value(self) -> Any:
-        """Returned value type depends on attribute."""
-        return self._get("value")
+    def value(self) -> AttributeValueView:
+        """Return value type depends on attribute.
+
+        Note:
+            Return :class:`~cybsi.api.RefView` type
+            is used to get the value of a dictionary item attribute.
+            You can resolve the ref
+            using :meth:`~cybsi.api.dictionary.DictionariesAPI.view_item`.
+        """
+        return _convert_attribute_value_type(self._attribute_name, self._get("value"))
 
     @property
     def confidence(self) -> float:
@@ -105,4 +127,10 @@ class AttributeForecastView(JsonObjectView):
     @property
     def valuable_facts(self) -> Optional[List[AttributeValuableFactView]]:
         """List of forecast valuable facts in descending order of confidence."""
-        return self._map_list_optional("valuableFacts", AttributeValuableFactView)
+        values = self._get_optional("valuableFacts")
+        if values is not None:
+            return [
+                AttributeValuableFactView(value, self._attribute_name)
+                for value in values
+            ]
+        return None

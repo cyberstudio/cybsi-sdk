@@ -7,7 +7,7 @@ from .generic import (
     GenericObservationForm,
     GenericObservationView,
     GenericObservationContentView,
-    AttributeValueView,
+    AttributeValueFactView,
 )
 from .archive import (
     ArchiveObservationsAPI,

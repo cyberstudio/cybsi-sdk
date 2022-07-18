@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from os import environ
 
 from cybsi.api import APIKeyAuth, Config, CybsiAsyncClient
+from cybsi.api.dictionary import DictItemAttributeValue
 from cybsi.api.observable import (
     AttributeNames,
     EntityForm,
@@ -40,6 +41,12 @@ def create_generic_observation(domain, ip):
             attribute_name=AttributeNames.IsMalicious,
             value=True,
             confidence=0.9,
+        )
+        .add_attribute_fact(
+            entity=domain,
+            attribute_name=AttributeNames.RelatedMalwareFamilies,
+            value=DictItemAttributeValue(key="Aware"),
+            confidence=0.8,
         )
         .add_entity_relationship(
             source=domain,

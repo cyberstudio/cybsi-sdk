@@ -23,6 +23,7 @@ from .aggregate_section import (
     AVScanStatisticsSectionData,
     GeoIPSectionData,
     LabelsSectionData,
+    AttributeValueView,
 )
 
 from .links import (
