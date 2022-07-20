@@ -232,6 +232,13 @@ Users
     :members:
     :show-inheritance:
 
+Dictionaries
+~~~~~~~~~~~~
+.. automodule:: cybsi.api.dictionary
+    :members:
+    :imported-members:
+    :inherited-members:
+
 Common views and data types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: cybsi.api.Null
