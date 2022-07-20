@@ -7,13 +7,15 @@ from cybsi.api.enum import CybsiAPIEnum
 class DataSourceListOrder(CybsiAPIEnum):
     """Sorting field of data sources."""
 
-    UUID = "UUID"  #: doc: Sort by UUID field.
-    FullName = "FullName"  # noqa: E501 doc: Sort by FullName means sort by `LongName` of type + `LongName` of datasource.
+    UUID = "UUID"
+    """Sort by UUID field."""
+    FullName = "FullName"
+    """Sort by FullName means sort by `LongName` of type + `LongName` of datasource."""
 
 
 @document_enum
 class DataSourceTypeListOrder(CybsiAPIEnum):
     """Sorting field of data source types."""
 
-    ShortName = "ShortName"  #: doc: Sort by ShortName field.
-    LongName = "LongName"  #: doc: Sort by LongName field.
+    ShortName = "ShortName"  # doc: Sort by ShortName field.
+    LongName = "LongName"  # doc: Sort by LongName field.

@@ -165,8 +165,8 @@ class ForbiddenErrorCodes(CybsiAPIEnum):
     """Possible error codes of :class:`ForbiddenError`."""
 
     InvalidCredentials = "InvalidCredentials"  # doc: User provided invalid credentials.
-    InsufficientAccessLevel = "InsufficientAccessLevel"  # noqa: E501 #doc: User authenticated but has insufficient access level to access the resource.
-    MissingPermissions = "MissingPermissions"  # noqa: E501 #doc: User authenticated but not authorized to perform operation.
+    InsufficientAccessLevel = "InsufficientAccessLevel"  # noqa: E501 doc: User authenticated but has insufficient access level to access the resource.
+    MissingPermissions = "MissingPermissions"  # noqa: E501 doc: User authenticated but not authorized to perform operation.
     NotOwner = "NotOwner"  # doc: Only owner can edit the resource.
     Forbidden = "Forbidden"  # doc: Other cases.
 
@@ -181,12 +181,12 @@ class SemanticErrorCodes(CybsiAPIEnum):
     DataSourceNotFound = "DataSourceNotFound"  # doc: Data source not found.
     DataSourceTypeNotFound = "DataSourceTypeNotFound"  # doc: Data source type not found
     DuplicatedEntityAttribute = "DuplicatedEntityAttribute"  # noqa: E501 doc: Entity attribute was specified several times, and attribute is not an array.
-    EnrichmentNotAllowed = "EnrichmentNotAllowed"  # noqa: E501 #doc: Enrichment using provided parameters is not possible.
+    EnrichmentNotAllowed = "EnrichmentNotAllowed"  # noqa: E501 doc: Enrichment using provided parameters is not possible.
     EntityNotFound = "EntityNotFound"  # doc: Entity not found.
     FileNotFound = "FileNotFound"  # doc: File entity not found.
     ImmutableValue = "ImmutableValue"  # doc: Resource attribute edits are blocked.
-    InvalidAttribute = "InvalidAttribute"  #: doc: Invalid attribute for such entity.
-    InvalidAttributeValue = "InvalidAttributeValue"  #: doc: Invalid attribute value.
+    InvalidAttribute = "InvalidAttribute"  # doc: Invalid attribute for such entity.
+    InvalidAttributeValue = "InvalidAttributeValue"  # doc: Invalid attribute value.
     InvalidErrorCode = "InvalidErrorCode"  # noqa: E501 doc: Invalid task error code reported by enricher.
     InvalidKey = "InvalidKey"  # noqa: E501 doc: Invalid key value for such entity or entity key type.
     InvalidKeySet = "InvalidKeySet"  # noqa: E501 doc: Entity has invalid set of keys (invalid key type for such entity, invalid number of keys, and so on).
@@ -210,7 +210,7 @@ class SemanticErrorCodes(CybsiAPIEnum):
     UnallowedObservationType = "UnallowedObservationType"  # noqa: E501 doc: Observation of such type cannot be attached to report.
     UserDisabled = "UserDisabled"  # doc: User disabled.
     UserNotFound = "UserNotFound"  # doc: User not found.
-    WrongEntityAttribute = "WrongEntityAttribute"  # noqa: E501 #doc: The attribute is not registered for provided entity.
+    WrongEntityAttribute = "WrongEntityAttribute"  # noqa: E501 doc: The attribute is not registered for provided entity.
 
 
 class _ErrorView(dict):

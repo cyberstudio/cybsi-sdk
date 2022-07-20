@@ -7,4 +7,4 @@ from cybsi.api.enum import CybsiAPIEnum
 class QueryCompatibility(CybsiAPIEnum):
     """Stored query compatibility."""
 
-    Replist = "Replist"  #: doc: Replists.
+    Replist = "Replist"  # doc: Replists.

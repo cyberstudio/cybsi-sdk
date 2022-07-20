@@ -5,9 +5,9 @@ from cybsi.api.enum import CybsiAPIEnum
 
 @document_enum
 class ArtifactTypes(CybsiAPIEnum):
-    Archive = "Archive"  #: doc: Archive.
-    FileSample = "FileSample"  #: doc: File sample.
-    NetworkTraffic = "NetworkTraffic"  #: doc: Network traffic.
+    Archive = "Archive"  # doc: Archive.
+    FileSample = "FileSample"  # doc: File sample.
+    NetworkTraffic = "NetworkTraffic"  # doc: Network traffic.
 
 
 @document_enum
