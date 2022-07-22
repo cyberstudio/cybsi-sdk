@@ -1,6 +1,12 @@
 Release History
 ===============
 
+2.9.0a1(2022-07-22)
+-------------------
+- Add dictionary API
+- Allow registrate fact value of dictionary item
+- Remove datasource sorting by uuid
+
 2.8.2(2022-07-11)
 --------------------
 - First stable version of SDK
