@@ -138,8 +138,12 @@ class DataSourcesAPI(BaseAPI):
                 Filtering is performed by specified substring in data source names or
                 its type names.
             type_uuids: List of data source type UUIDs.
-            order_by: The field to sort the list. Default value is "UUID".
-                The sort is performed in case-insensitive manner in lexicographic order.
+            order_by: Data source list sort key.
+                If ``order_by`` is :data:`None` then the order is not specified.
+                But results are stable sorted when paging.
+
+                For "FullName" key, sorting is performed in case-insensitive manner
+                in lexicographic order.
 
                 If ``order_by`` is not :data:`None` then it is necessary to pass
                 the parameter to each next request along with a non-empty cursor.
@@ -312,8 +316,12 @@ class DataSourcesAsyncAPI(BaseAsyncAPI):
                 Filtering is performed by specified substring in data source names or
                 its type names.
             type_uuids: List of data source type UUIDs.
-            order_by: The field to sort the list. Default value is "UUID".
-                The sort is performed in case-insensitive manner in lexicographic order.
+            order_by: Data source list sort key.
+                If ``order_by`` is :data:`None` then the order is not specified.
+                But results are stable sorted when paging.
+
+                For "FullName" key, sorting is performed in case-insensitive manner
+                in lexicographic order.
 
                 If ``order_by`` is not :data:`None` then it is necessary to pass
                 the parameter to each next request along with a non-empty cursor.

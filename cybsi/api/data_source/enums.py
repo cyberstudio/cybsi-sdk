@@ -7,8 +7,6 @@ from cybsi.api.enum import CybsiAPIEnum
 class DataSourceListOrder(CybsiAPIEnum):
     """Sorting field of data sources."""
 
-    UUID = "UUID"
-    """Sort by UUID field."""
     FullName = "FullName"
     """Sort by FullName means sort by `LongName` of type + `LongName` of datasource."""
 

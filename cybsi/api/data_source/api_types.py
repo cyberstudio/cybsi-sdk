@@ -98,7 +98,7 @@ class DataSourceTypesAPI(BaseAPI):
         Note:
             Calls `GET /data-source-types`.
         Args:
-            order_by: The field to sort the list. Default value is "ShortName".
+            order_by: Data source type list sort key. Default value is "ShortName".
                 The sort is performed in case-insensitive manner in lexicographic order.
 
                 If ``order_by`` is not :data:`None` then it is necessary to pass
@@ -223,7 +223,7 @@ class DataSourceTypesAsyncAPI(BaseAsyncAPI):
         Note:
             Calls `GET /data-source-types`.
         Args:
-            order_by: The field to sort the list. Default value is "ShortName".
+            order_by: Data source type list sort key. Default value is "ShortName".
                 The sort is performed in case-insensitive manner in lexicographic order.
 
                 If ``order_by`` is not :data:`None` then it is necessary to pass
