@@ -1,12 +1,16 @@
 """Use this section of API to operate dictionaries and their items.
-    Dictionary item is a fact value about certain entity attribute types.
+    Dictionary is an open set of string values. Dictionary items are used
+    as attribute values. For example, dictionary "MalwareFamilies" contains names
+    of malware families known by system.
     Use :meth:`cybsi.api.observation.generic.GenericObservationForm.add_attribute_fact`
-    to add items to dictionary.
+    or :meth:`~DictionariesAPI.register_item()` to add items to a dictionary.
 """
 
 from .api import (
     DictionariesAPI,
+    DictionaryItemForm,
     DictionaryView,
+    DictionaryCommonView,
     DictionaryItemView,
     DictionaryCommonItemView,
     DictItemAttributeValue,

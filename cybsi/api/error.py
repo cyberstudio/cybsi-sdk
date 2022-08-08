@@ -164,53 +164,126 @@ class SemanticError(APIError):
 class ForbiddenErrorCodes(CybsiAPIEnum):
     """Possible error codes of :class:`ForbiddenError`."""
 
-    InvalidCredentials = "InvalidCredentials"  # doc: User provided invalid credentials.
-    InsufficientAccessLevel = "InsufficientAccessLevel"  # noqa: E501 doc: User authenticated but has insufficient access level to access the resource.
-    MissingPermissions = "MissingPermissions"  # noqa: E501 doc: User authenticated but not authorized to perform operation.
-    NotOwner = "NotOwner"  # doc: Only owner can edit the resource.
-    Forbidden = "Forbidden"  # doc: Other cases.
+    InvalidCredentials = "InvalidCredentials"
+    """User provided invalid credentials."""
+    InsufficientAccessLevel = "InsufficientAccessLevel"
+    """User authenticated but has insufficient access level to access the resource."""
+    MissingPermissions = "MissingPermissions"
+    """User authenticated but not authorized to perform operation."""
+    NotOwner = "NotOwner"
+    """Only owner can edit the resource."""
+    Forbidden = "Forbidden"
+    """Other cases."""
 
 
 @document_enum
 class SemanticErrorCodes(CybsiAPIEnum):
     """Common semantic error codes."""
 
-    ArtifactNotFound = "ArtifactNotFound"  # doc: Artifact not found.
-    BrokenKeySet = "BrokenKeySet"  # doc: Key set identifies multiple entities.
-    CursorOutOfRange = "CursorOutOfRange"  # doc: Cursor points outside of event list.
-    DataSourceNotFound = "DataSourceNotFound"  # doc: Data source not found.
-    DataSourceTypeNotFound = "DataSourceTypeNotFound"  # doc: Data source type not found
-    DuplicatedEntityAttribute = "DuplicatedEntityAttribute"  # noqa: E501 doc: Entity attribute was specified several times, and attribute is not an array.
-    EnrichmentNotAllowed = "EnrichmentNotAllowed"  # noqa: E501 doc: Enrichment using provided parameters is not possible.
-    EntityNotFound = "EntityNotFound"  # doc: Entity not found.
-    FileNotFound = "FileNotFound"  # doc: File entity not found.
-    ImmutableValue = "ImmutableValue"  # doc: Resource attribute edits are blocked.
-    InvalidAttribute = "InvalidAttribute"  # doc: Invalid attribute for such entity.
-    InvalidAttributeValue = "InvalidAttributeValue"  # doc: Invalid attribute value.
-    InvalidErrorCode = "InvalidErrorCode"  # noqa: E501 doc: Invalid task error code reported by enricher.
-    InvalidKey = "InvalidKey"  # noqa: E501 doc: Invalid key value for such entity or entity key type.
-    InvalidKeySet = "InvalidKeySet"  # noqa: E501 doc: Entity has invalid set of keys (invalid key type for such entity, invalid number of keys, and so on).
-    InvalidQueryText = "InvalidQueryText"  # noqa: E501 doc: Query text is invalid CybsiLang expression.
-    InvalidRelationship = "InvalidRelationship"  # doc: Relationship is invalid.
-    InvalidRule = "InvalidRule"  # doc: Enrichment configuration rule is invalid.
-    InvalidShareLevel = "InvalidShareLevel"  # noqa: E501 doc: Specified share level is above API client share level.
-    InvalidTaskResult = "InvalidTaskResult"  # noqa: E501 doc: Invalid task result was reported by enricher.
-    InvalidTaskStatus = "InvalidTaskStatus"  # noqa: E501 doc: Could not accept enrichment result, task status is not ``Executing``.
-    InvalidTime = "InvalidTime"  # noqa: E501 doc: Timestamp is invalid (for example, it's in the future)
-    KeyConflict = "KeyConflict"  # noqa: E501 doc: Provided entity key conflicts with key already registered in the system.
-    MisconfiguredDataSource = "MisconfiguredDataSource"  # noqa: E501 doc: Enrichment rule is invalid for such data source.
-    NonLocalUser = "NonLocalUser"  # noqa: E501 doc: Impossible to change user attribute because this attribute is managed by external provider.
-    NotOwner = "NotOwner"  # doc: Only owner can edit the resource.
-    ObservationNotFound = "ObservationNotFound"  # doc: Observation not found.
-    PasswordAuthDisabled = "PasswordAuthDisabled"  # noqa: E501 doc: Impossible to change the password because password auth for such user is disabled.
-    PermissionsExceeded = "PermissionsExceeded"  # noqa: E501 doc: Provided set of permissions exceeds user permissions.
-    ReportNotFound = "ReportNotFound"  # doc: Report not found.
-    StoredQueryNotFound = "StoredQueryNotFound"  # doc: Stored query not found.
-    TaskNotFound = "TaskNotFound"  # doc: Enrichment task not found.
-    UnallowedObservationType = "UnallowedObservationType"  # noqa: E501 doc: Observation of such type cannot be attached to report.
-    UserDisabled = "UserDisabled"  # doc: User disabled.
-    UserNotFound = "UserNotFound"  # doc: User not found.
-    WrongEntityAttribute = "WrongEntityAttribute"  # noqa: E501 doc: The attribute is not registered for provided entity.
+    ArtifactNotFound = "ArtifactNotFound"
+    """Artifact not found."""
+    BrokenKeySet = "BrokenKeySet"
+    """Key set identifies multiple entities."""
+    CursorOutOfRange = "CursorOutOfRange"
+    """Cursor points outside of event list."""
+    DataSourceNotFound = "DataSourceNotFound"
+    """Data source not found."""
+    DataSourceTypeNotFound = "DataSourceTypeNotFound"
+    """Data source type not found"""
+    DictionaryItemNotFound = "DictionaryItemNotFound"
+    """Synonym not found."""
+    DuplicatedEntityAttribute = "DuplicatedEntityAttribute"
+    """
+        Entity attribute was specified several times
+        and attribute is not an array.
+    """
+    EnrichmentNotAllowed = "EnrichmentNotAllowed"
+    """Enrichment using provided parameters is not possible."""
+    EntityNotFound = "EntityNotFound"
+    """Entity not found."""
+    FileNotFound = "FileNotFound"
+    """File entity not found."""
+    ImmutableValue = "ImmutableValue"
+    """Resource attribute edits are blocked."""
+    InvalidAttribute = "InvalidAttribute"
+    """Invalid attribute for such entity."""
+    InvalidAttributeValue = "InvalidAttributeValue"
+    """Invalid attribute value."""
+    InvalidDictionary = "InvalidDictionary"
+    """
+        The specified dictionary item and the synonym
+        refer to different directories.
+    """
+    InvalidErrorCode = "InvalidErrorCode"
+    """Invalid task error code reported by enricher."""
+    InvalidKey = "InvalidKey"
+    """Invalid key value for such entity or entity key type."""
+    InvalidKeySet = "InvalidKeySet"
+    """
+        Entity has invalid set of keys
+        (invalid key type for such entity,
+        invalid number of keys, and so on).
+    """
+    InvalidQueryText = "InvalidQueryText"
+    """Query text is invalid CybsiLang expression."""
+    InvalidRelationship = "InvalidRelationship"
+    """Relationship is invalid."""
+    InvalidRule = "InvalidRule"
+    """Enrichment configuration rule is invalid."""
+    InvalidShareLevel = "InvalidShareLevel"
+    """Specified share level is above API client share level."""
+    InvalidTaskResult = "InvalidTaskResult"
+    """Invalid task result was reported by enricher."""
+    InvalidTaskStatus = "InvalidTaskStatus"
+    """
+        Could not accept enrichment result,
+        task status is not ``Executing``.
+    """
+    InvalidSynonym = "InvalidSynonym"
+    """
+        The specified element is an invalid synonym (for example,
+        the element and the synonym have the same key).
+    """
+    InvalidTime = "InvalidTime"
+    """Timestamp is invalid (for example, it's in the future)"""
+    KeyConflict = "KeyConflict"
+    """
+        Provided entity key conflicts with key
+        already registered in the system."""
+    MisconfiguredDataSource = "MisconfiguredDataSource"
+    """Enrichment rule is invalid for such data source."""
+    NonLocalUser = "NonLocalUser"
+    """
+        Impossible to change user attribute because
+        this attribute is managed by external provider.
+    """
+    NotOwner = "NotOwner"
+    """Only owner can edit the resource."""
+    ObservationNotFound = "ObservationNotFound"
+    """Observation not found."""
+    PasswordAuthDisabled = "PasswordAuthDisabled"
+    """
+        Impossible to change the password because
+        password auth for such user is disabled.
+    """
+    PermissionsExceeded = "PermissionsExceeded"
+    """Provided set of permissions exceeds user permissions."""
+    ReportNotFound = "ReportNotFound"
+    """Report not found."""
+    StoredQueryNotFound = "StoredQueryNotFound"
+    """Stored query not found."""
+    SynonymConflict = "SynonymConflict"
+    """The specified item is a synonym for another dictionary item."""
+    TaskNotFound = "TaskNotFound"
+    """Enrichment task not found."""
+    UnallowedObservationType = "UnallowedObservationType"
+    """Observation of such type cannot be attached to report."""
+    UserDisabled = "UserDisabled"
+    """User disabled."""
+    UserNotFound = "UserNotFound"
+    """User not found."""
+    WrongEntityAttribute = "WrongEntityAttribute"
+    """The attribute is not registered for provided entity."""
 
 
 class _ErrorView(dict):
