@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a2(2022-08-10)
+-------------------
+- Expand dictionary API
+
 2.9.0a1(2022-07-22)
 -------------------
 - Add dictionary API
