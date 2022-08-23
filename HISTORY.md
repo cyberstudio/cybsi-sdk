@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a3(2022-08-10)
+-------------------
+- Fix dictionary item view initialization
+
 2.9.0a2(2022-08-10)
 -------------------
 - Expand dictionary API

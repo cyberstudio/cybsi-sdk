@@ -117,7 +117,7 @@ class DictionariesAPI(BaseAPI):
         """
         path = f"{self._path_dictionary_items}/{item_uuid}"
         r = self._connector.do_get(path)
-        return DictionaryItemView(r.json())
+        return DictionaryItemView(r)
 
     def edit_item(
         self,
