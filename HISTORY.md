@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a4(2022-08-31)
+-------------------
+- Add MF/MC attributes to kebab converter
+
 2.9.0a3(2022-08-10)
 -------------------
 - Fix dictionary item view initialization
