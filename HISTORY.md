@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.9.0a5(2022-09-10)
+-------------------
+- Remove dictionary item description registration
+- Split SynonymConflict error
+
 2.9.0a4(2022-08-31)
 -------------------
 - Add MF/MC attributes to kebab converter

@@ -203,7 +203,9 @@ class DictionariesAPI(BaseAPI):
         page = Page(self._connector.do_get, resp, DictionaryCommonItemView)
         return page
 
-    def add_item_synonym(self, *, item_uuid: uuid.UUID, synonym_uuid: uuid.UUID) -> None:
+    def add_item_synonym(
+        self, *, item_uuid: uuid.UUID, synonym_uuid: uuid.UUID
+    ) -> None:
         """Add dictionary item to synonym group.
 
         .. versionadded:: 2.9
@@ -220,7 +222,8 @@ class DictionariesAPI(BaseAPI):
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidDictionary`
-              * :attr:`~cybsi.api.error.SemanticErrorCodes.SynonymConflict`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.SynonymGroupConflict`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ItemAlreadyInSynonymGroup`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidSynonym`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
         """
@@ -299,20 +302,11 @@ class DictionaryItemForm(JsonObjectForm):
             according to the pattern `[a-zA-Z0-9_ -]` and
             have length in the range `[1;30]`.
             User-specified key case is preserved.
-        description: Dictionary item description.
-            Length must be in range [1;3000].
     """
 
-    def __init__(
-        self,
-        *,
-        key: str,
-        description: Optional[str] = None,
-    ):
+    def __init__(self, *, key: str):
         super().__init__()
         self._data["key"] = key
-        if description is not None:
-            self._data["description"] = description
 
 
 class DictItemAttributeValue(JsonObjectForm):
