@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a6(2022-09-19)
+-------------------
+- Add dictionary not found API error
+
 2.9.0a5(2022-09-10)
 -------------------
 - Remove dictionary item description registration

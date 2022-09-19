@@ -189,9 +189,11 @@ class SemanticErrorCodes(CybsiAPIEnum):
     DataSourceNotFound = "DataSourceNotFound"
     """Data source not found."""
     DataSourceTypeNotFound = "DataSourceTypeNotFound"
-    """Data source type not found"""
+    """Data source type not found."""
     DictionaryItemNotFound = "DictionaryItemNotFound"
-    """Synonym not found."""
+    """Dictionary item not found."""
+    DictionaryNotFound = "DictionaryNotFound"
+    """Dictionary not found."""
     DuplicatedEntityAttribute = "DuplicatedEntityAttribute"
     """
         Entity attribute was specified several times

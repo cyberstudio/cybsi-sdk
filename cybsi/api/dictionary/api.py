@@ -90,12 +90,12 @@ class DictionariesAPI(BaseAPI):
         Returns:
             Reference to a newly added dictionary item.
         Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
             :class:`~cybsi.api.error.InvalidRequestError`:
                 Provided values are invalid (see form value requirements).
-            :class:`~cybsi.api.error.ConflictError`: Dictionary item already exists
-                for the specified dictionary with the same key and
-                a different non-empty description. An empty description in the form
-                does not cause the conflict.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryNotFound`
         """
 
         item._data["dictionaryUUID"] = dictionary_uuid
