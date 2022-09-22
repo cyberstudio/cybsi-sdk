@@ -50,7 +50,7 @@ _attr_value_kebab_converters: Dict[AttributeNames, str] = {
     AttributeNames.IsDelegated: "is-delegated",
     AttributeNames.Statuses: "statuses",
     AttributeNames.ASN: "asn",
-    AttributeNames.RegionalInternetRegistry: "regional-internet-registry"
+    AttributeNames.RegionalInternetRegistry: "regional-internet-registry",
 }
 
 

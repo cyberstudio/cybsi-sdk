@@ -39,7 +39,6 @@ class EntityKeyTypes(CybsiAPIEnum):
     SHA1 = "SHA1Hash"  # doc: File SHA1 hash.
     SHA256 = "SHA256Hash"  # doc: File SHA256 hash.
     IANAID = "IANAID"  # doc: Identity identifier in IANA registry.
-    RIPEID = "RIPEID"  # doc: Identity identifier in RIPE database.
     NICHandle = "NICHandle"  # doc: Identity identifier in NIC database.
 
 

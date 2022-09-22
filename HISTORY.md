@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a8(2022-09-22)
+-------------------
+- Remove ripeID identity key
+
 2.9.0a7(2022-09-22)
 -------------------
 - Add new attributes obtained from DNS/Whois

@@ -61,7 +61,6 @@ _entity_key_converters: Dict[EntityKeyTypes, Callable[[Any], Any]] = {
     EntityKeyTypes.SHA256: _str_converter,
     EntityKeyTypes.IANAID: _str_converter,
     EntityKeyTypes.NICHandle: _str_converter,
-    EntityKeyTypes.RIPEID: _str_converter,
 }
 
 
@@ -104,9 +103,9 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.IsDelegated: _bool_converter,
     AttributeNames.Statuses: _dict_item_value_converter,
     AttributeNames.ASN: _int_converter,
-    AttributeNames.RegionalInternetRegistry:
-        _new_enum_value_converter(RegionalInternetRegistry, ignore_case=True),
-
+    AttributeNames.RegionalInternetRegistry: _new_enum_value_converter(
+        RegionalInternetRegistry, ignore_case=True
+    ),
 }
 
 
