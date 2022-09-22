@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a7(2022-09-22)
+-------------------
+- Add new attributes obtained from DNS/Whois
+
 2.9.0a6(2022-09-19)
 -------------------
 - Add dictionary not found API error

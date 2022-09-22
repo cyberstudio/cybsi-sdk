@@ -144,6 +144,40 @@ class AttributeNames(CybsiAPIEnum):
        Attribute belongs to `DomainName`, `IPAddress`, `URL`,
        `EmailAddress` entity type.
     """
+    IsDelegated = "IsDelegated"
+    """
+      .. versionadded:: 2.9
+
+      Domain name is delegated if DNS servers are specified.
+      Attribute value type is :class:`bool`.
+      Attribute belongs to `DomainName` entity type.
+    """
+    Statuses = "Statuses"
+    """
+      .. versionadded:: 2.9
+
+      Domain name or IP address status obtained from Whois.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `DomainName`, `IPAddress` entity type.
+    """
+    ASN = "ASN"
+    """
+      .. versionadded:: 2.9
+
+      Autonomous system number.
+      Attribute value type is :class:`int`.
+      Attribute belongs to `IPAddress` entity type.
+    """
+    RegionalInternetRegistry = "RegionalInternetRegistry"
+    """
+      .. versionadded:: 2.9
+
+      IP address belongs to one of the regional internet registrars.
+      Attribute value type is
+      :class:`~cybsi.api.observable.enums.RegionalInternetRegistry`.
+      Attribute belongs to `IPAddress` entity type.
+    """
 
 
 @document_enum
@@ -263,3 +297,14 @@ class LinkDirection(CybsiAPIEnum):
 
     Forward = "Forward"
     Reverse = "Reverse"
+
+
+@document_enum
+class RegionalInternetRegistry(CybsiAPIEnum):
+    """Regional internet registrars."""
+
+    RIPE = "RIPE"
+    APNIC = "APNIC"
+    ARIN = "ARIN"
+    AFRINIC = "AFRINIC"
+    LACNIC = "LACNIC"

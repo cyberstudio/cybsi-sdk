@@ -47,6 +47,10 @@ _attr_value_kebab_converters: Dict[AttributeNames, str] = {
     AttributeNames.IsTrusted: "is-trusted",
     AttributeNames.IsMalicious: "is-malicious",
     AttributeNames.IsDGA: "is-dga",
+    AttributeNames.IsDelegated: "is-delegated",
+    AttributeNames.Statuses: "statuses",
+    AttributeNames.ASN: "asn",
+    AttributeNames.RegionalInternetRegistry: "regional-internet-registry"
 }
 
 

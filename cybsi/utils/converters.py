@@ -12,6 +12,7 @@ from cybsi.api.observable.enums import (
     IdentityClass,
     IndustrySector,
     NodeRole,
+    RegionalInternetRegistry,
 )
 
 
@@ -100,6 +101,12 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.MalwareClasses: _dict_item_value_converter,
     AttributeNames.MalwareFamilies: _dict_item_value_converter,
     AttributeNames.RelatedMalwareFamilies: _dict_item_value_converter,
+    AttributeNames.IsDelegated: _bool_converter,
+    AttributeNames.Statuses: _dict_item_value_converter,
+    AttributeNames.ASN: _int_converter,
+    AttributeNames.RegionalInternetRegistry:
+        _new_enum_value_converter(RegionalInternetRegistry, ignore_case=True),
+
 }
 
 
