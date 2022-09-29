@@ -125,7 +125,8 @@ latex_documents = [
 
 # LaTeX document customization
 latex_elements = {
-    'fontenc': '\\usepackage[X2,T1]{fontenc}'
+    # \\usepackage[X2,T1]{fontenc} if you need Cyrillic letters (Cybsi работает)
+    'fontenc': '\\usepackage[T1]{fontenc}'
 }
 
 # -- Options for manual page output ---------------------------------------
