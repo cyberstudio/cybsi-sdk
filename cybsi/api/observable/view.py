@@ -1,7 +1,8 @@
-from typing import Any, Dict, Optional
+import abc
+import uuid
+from typing import Any, Dict, Optional, TypeVar
 
-from .. import RefView
-from ..internal import BaseAPI
+from ..internal import BaseAPI, JsonObjectView
 from ..pagination import Cursor, Page
 
 
@@ -17,6 +18,8 @@ class EntityViewsAPI(BaseAPI):
     but custom views can contain much more information about entity.
     The example of a method utilizing custom views is
     :meth:`~cybsi.api.replist.ReplistsAPI.entities`.
+
+    Extend :class:`AbstractEntityView` to implement a custom entity view.
     """
 
     _path = "/observable/entity-views"
@@ -48,12 +51,39 @@ class EntityViewsAPI(BaseAPI):
         return page
 
 
-class EntityViewView(RefView):
+class EntityViewView(JsonObjectView):
     """
     View of the entity view.
     """
 
     @property
+    def uuid(self) -> uuid.UUID:
+        """Entity view UUID."""
+        return uuid.UUID(self._get("uuid"))
+
+    @property
     def name(self) -> str:
         """Entity view name."""
         return str(self._get("name"))
+
+
+class AbstractEntityView(JsonObjectView, metaclass=abc.ABCMeta):
+    """
+    This is the class you need to extend to implement a custom entity view.
+
+    .. automethod:: _view_uuid
+    """
+
+    @classmethod
+    @abc.abstractmethod
+    def _view_uuid(cls) -> uuid.UUID:
+        """
+        UUID of the view in API. Usually well-known.
+        """
+        pass
+
+
+EntityViewT = TypeVar("EntityViewT", bound=AbstractEntityView)
+"""
+Any class implementing entity view.
+"""

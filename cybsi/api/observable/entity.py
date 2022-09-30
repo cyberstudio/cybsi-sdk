@@ -1,6 +1,6 @@
 from typing import Iterable, List, Optional, Tuple
+from uuid import UUID
 
-from .. import RefView
 from ..internal import JsonObject, JsonObjectForm, JsonObjectView
 from .aggregate_section import (
     AttributeValuableFactView,
@@ -9,6 +9,7 @@ from .aggregate_section import (
     _convert_attribute_value_type,
 )
 from .enums import AttributeNames, EntityKeyTypes, EntityTypes
+from .view import AbstractEntityView
 
 
 class EntityForm(JsonObjectForm):
@@ -57,8 +58,18 @@ class EntityKeyView(JsonObjectView):
         return self._get("value")
 
 
-class EntityView(RefView):
-    """Complete entity view."""
+class EntityView(AbstractEntityView):
+    """Default and complete entity view."""
+
+    @property
+    def uuid(self) -> UUID:
+        """Entity UUID."""
+        return UUID(self._get("uuid"))
+
+    @classmethod
+    def _view_uuid(cls) -> UUID:
+        # The default entity view has no view uuid
+        return None  # type: ignore
 
     @property
     def type(self) -> EntityTypes:

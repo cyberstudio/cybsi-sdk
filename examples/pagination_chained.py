@@ -2,7 +2,8 @@
 import uuid
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
-from cybsi.api.pagination import chain_pages
+from cybsi.api.observable import EntityView
+from cybsi.api.pagination import Page, chain_pages
 
 if __name__ == "__main__":
     api_url = "http://127.0.0.1/api"
@@ -10,6 +11,7 @@ if __name__ == "__main__":
     config = Config(api_url, auth, ssl_verify=False)
 
     replist_uuid = uuid.uuid4()
+    start_page: Page[EntityView]
 
     with CybsiClient(config) as client:
         start_page, _ = client.replists.entities(replist_uuid)

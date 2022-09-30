@@ -20,7 +20,7 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "enum_tools.autoenum",
-    "sphinxjp.themes.basicstrap"
+    "sphinxjp.themes.basicstrap",
 ]
 
 # A list of regular expressions that match anchors Sphinx should skip
@@ -63,6 +63,7 @@ nitpick_ignore = [
     ("py:class", "T"),  # Ignore classic typevar
     ("py:obj", "cybsi.api.api.T"),  # https://github.com/sphinx-doc/sphinx/issues/9705
     ("py:obj", "cybsi.api.pagination.T"),  # https://github.com/sphinx-doc/sphinx/issues/9705
+    ("py:class", "EntityViewT"),  # https://github.com/sphinx-doc/sphinx/issues/9705
     ("py:class", "httpx.Response"),
     ("py:class", "enum.EnumMeta"),
     ("py:class", "typing.AbstractContextManager"),

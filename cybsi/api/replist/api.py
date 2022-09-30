@@ -1,11 +1,17 @@
 import uuid
 from datetime import datetime
-from typing import List, Optional, Tuple, cast
+from typing import Generic, List, Optional, Tuple, Type, cast
 
 from .. import RefView
 from ..api import Tag
-from ..internal import BaseAPI, JsonObjectForm, JsonObjectView, parse_rfc3339_timestamp
-from ..observable import EntityTypes, EntityView, ShareLevels
+from ..internal import (
+    BaseAPI,
+    JsonObject,
+    JsonObjectForm,
+    JsonObjectView,
+    parse_rfc3339_timestamp,
+)
+from ..observable import EntityTypes, EntityView, EntityViewT, ShareLevels
 from ..pagination import Cursor, Page
 from ..search import StoredQueryCommonView
 from ..view import _TaggedRefView
@@ -125,25 +131,31 @@ class ReplistsAPI(BaseAPI):
         self,
         replist_uuid: uuid.UUID,
         *,
+        # see https://github.com/python/mypy/issues/3737
+        entity_view: Type[EntityViewT] = EntityView,  # type: ignore
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
-    ) -> Tuple[Page[EntityView], Cursor]:
+    ) -> Tuple[Page[EntityViewT], Cursor]:
         """Get replist entities.
 
         Note:
             Calls `GET /replist/{replist_uuid}/entities`
         Args:
             replist_uuid: Replist uuid.
+            entity_view: Entity view to use.
+                See :class:`~cybsi.api.observable.EntityViewsAPI` for details.
             cursor: Page cursor.
             limit: Page limit.
         Return:
-            Page with entities and cursor.
+            Page with entity views and cursor.
             The cursor can be used to call :meth:`changes`.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
         """
 
         params = {}
+        if entity_view is not EntityView:
+            params["viewUUID"] = str(entity_view._view_uuid())
         if cursor:
             params["cursor"] = str(cursor)
         if limit:
@@ -151,7 +163,8 @@ class ReplistsAPI(BaseAPI):
 
         path = self._replist_entities_tpl.format(replist_uuid)
         resp = self._connector.do_get(path, params=params)
-        page = Page(self._connector.do_get, resp, EntityView)
+
+        page = Page(self._connector.do_get, resp, entity_view)
         return page, cast(Cursor, resp.headers.get(X_CHANGE_CURSOR, ""))
 
     def changes(
@@ -159,14 +172,18 @@ class ReplistsAPI(BaseAPI):
         replist_uuid: uuid.UUID,
         *,
         cursor: Cursor,
+        # see https://github.com/python/mypy/issues/3737
+        entity_view: Type[EntityViewT] = EntityView,  # type: ignore
         limit: Optional[int] = None,
-    ) -> Page["EntitySetChangeView"]:
+    ) -> Page["EntitySetChangeView[EntityViewT]"]:
         """Get replist changes
 
         Note:
             Calls `GET /replist/{replist_uuid}/changes`
         Args:
             replist_uuid: Replist uuid.
+            entity_view: Entity view to use.
+                See :class:`~cybsi.api.observable.EntityViewsAPI` for details.
             cursor: Page cursor.
                 On the first request you should pass the cursor value
                 obtained when requesting replist entities :meth:`entities`.
@@ -193,12 +210,18 @@ class ReplistsAPI(BaseAPI):
         """
 
         params = {"cursor": str(cursor)}
+        if entity_view is not EntityView:
+            params["viewUUID"] = str(entity_view._view_uuid())
         if limit:
             params["limit"] = str(limit)
 
         path = self._replist_changes_tpl.format(replist_uuid)
         resp = self._connector.do_get(path, params=params)
-        page = Page(self._connector.do_get, resp, EntitySetChangeView)
+
+        def entity_view_converter(entity_data):
+            return EntitySetChangeView(entity_view, entity_data)
+
+        page = Page(self._connector.do_get, resp, entity_view_converter)
         return page
 
     def statistic(self, replist_uuid: uuid.UUID) -> "ReplistStatisticView":
@@ -280,8 +303,14 @@ class ReplistView(_TaggedRefView, ReplistCommonView):
         return ReplistStatus(self._get("status"))
 
 
-class EntitySetChangeView(JsonObjectView):
+class EntitySetChangeView(JsonObjectView, Generic[EntityViewT]):
     """Replist change."""
+
+    def __init__(
+        self, entity_view: Type[EntityViewT], data: Optional[JsonObject] = None
+    ):
+        super(EntitySetChangeView, self).__init__(data)
+        self._entity_view = entity_view
 
     @property
     def operation(self) -> EntitySetOperations:
@@ -289,9 +318,10 @@ class EntitySetChangeView(JsonObjectView):
         return EntitySetOperations(self._get("operation"))
 
     @property
-    def entity(self) -> EntityView:
-        """Get entity."""
-        return self._get("entity")
+    def entity(self) -> EntityViewT:
+        """Get entity view."""
+        en = self._get("entity")
+        return self._entity_view(en)
 
 
 class ReplistStatisticView(JsonObjectView):
