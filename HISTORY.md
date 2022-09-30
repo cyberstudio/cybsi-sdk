@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.9.0a9(2022-09-22)
+-------------------
+- Add Entity view API
+- Add ability to change entity views for replist entities and changes
+
 2.9.0a8(2022-09-22)
 -------------------
 - Remove ripeID identity key
