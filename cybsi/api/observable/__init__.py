@@ -3,6 +3,7 @@ and retrieve aggregates about entities.
 """
 from .api import ObservableAPI
 from .entities_api import EntitiesAPI
+from .view import EntityViewsAPI, EntityViewView
 from .entity import (
     EntityForm,
     EntityKeyView,

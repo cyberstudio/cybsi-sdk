@@ -2,6 +2,7 @@ from ..internal import BaseAPI
 from .annotations import AnnotationsAPI
 from .entities_api import EntitiesAPI
 from .relationships import RelationshipsAPI
+from .view import EntityViewsAPI
 
 
 class ObservableAPI(BaseAPI):
@@ -11,6 +12,11 @@ class ObservableAPI(BaseAPI):
     def entities(self) -> EntitiesAPI:
         """Entities API."""
         return EntitiesAPI(self._connector)
+
+    @property
+    def entity_views(self) -> EntityViewsAPI:
+        """Entity views API."""
+        return EntityViewsAPI(self._connector)
 
     @property
     def relationships(self) -> RelationshipsAPI:
