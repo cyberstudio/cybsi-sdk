@@ -50,7 +50,5 @@ class CybsiLangErrorCodes(CybsiAPIEnum):
     UnsupportedAttribute = "UnsupportedAttribute"
     """Semantic error: attribute is not supported"""
 
-    EmptyQueryResult = "EmptyQueryResult"
-    """Query result is always empty"""
     UnsupportedExpression = "UnsupportedExpression"
     """The expression is allowed by grammar but not supported yet."""
