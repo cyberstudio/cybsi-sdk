@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a10(2022-10-11)
+--------------------
+- Entity view API route fixup
+
 2.9.0a9(2022-09-22)
 -------------------
 - Add Entity view API

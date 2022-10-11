@@ -22,7 +22,7 @@ class EntityViewsAPI(BaseAPI):
     Extend :class:`AbstractEntityView` to implement a custom entity view.
     """
 
-    _path = "/observable/entity-views"
+    _path = "/entity-views"
 
     def filter(
         self,
@@ -33,7 +33,7 @@ class EntityViewsAPI(BaseAPI):
         """Filter views of observable entities.
 
         Note:
-            Calls `GET /observable/entity-views`.
+            Calls `GET /entity-views`.
         Args:
             cursor: Page cursor.
             limit: Page limit.
