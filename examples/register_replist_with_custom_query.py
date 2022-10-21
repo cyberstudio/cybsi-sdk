@@ -16,7 +16,7 @@ if __name__ == "__main__":
     config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
 
-    query_text = "ENT { IsMalicious }"
+    query_text = "ENT { IsIoC }"
     validate_view = client.search.stored_queries.validate(
         query_text, QueryCompatibility.Replist
     )

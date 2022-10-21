@@ -143,7 +143,9 @@ class ReplistsAPI(BaseAPI):
         Args:
             replist_uuid: Replist uuid.
             entity_view: Entity view to use.
-                See :class:`~cybsi.api.observable.EntityViewsAPI` for details.
+                Default is :class:`~cybsi.api.observable.EntityView` -
+                - only natural keys.
+                You can specify one of builtin views in :mod:`~cybsi.utils.views`.
             cursor: Page cursor.
             limit: Page limit.
         Return:
@@ -151,6 +153,8 @@ class ReplistsAPI(BaseAPI):
             The cursor can be used to call :meth:`changes`.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
+        .. versionchanged:: 2.9
+            Add entity view support. See :mod:`~cybsi.utils.views` for details.
         """
 
         params = {}
@@ -183,7 +187,9 @@ class ReplistsAPI(BaseAPI):
         Args:
             replist_uuid: Replist uuid.
             entity_view: Entity view to use.
-                See :class:`~cybsi.api.observable.EntityViewsAPI` for details.
+                Default is :class:`~cybsi.api.observable.EntityView` -
+                - only natural keys.
+                You can specify one of builtin views in :mod:`~cybsi.utils.views`.
             cursor: Page cursor.
                 On the first request you should pass the cursor value
                 obtained when requesting replist entities :meth:`entities`.
@@ -207,6 +213,8 @@ class ReplistsAPI(BaseAPI):
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.CursorOutOfRange`
+        .. versionchanged:: 2.9
+            Add entity view support. See :mod:`~cybsi.utils.views` for details.
         """
 
         params = {"cursor": str(cursor)}

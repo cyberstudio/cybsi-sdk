@@ -59,7 +59,11 @@ class EntityKeyView(JsonObjectView):
 
 
 class EntityView(AbstractEntityView):
-    """Default and complete entity view."""
+    """Default and complete entity view.
+    Includes entity types and natural keys.
+
+    .. versionadded:: 2.9
+    """
 
     @property
     def uuid(self) -> UUID:

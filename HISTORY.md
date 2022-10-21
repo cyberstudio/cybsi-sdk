@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a11(2022-10-21)
+--------------------
+- Add PTMS entity view support
+
 2.9.0a10(2022-10-11)
 --------------------
 - Entity view API route fixup

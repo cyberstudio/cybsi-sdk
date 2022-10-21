@@ -268,6 +268,10 @@ Converters
 .. automodule:: cybsi.utils.converters
     :members:
 
+Entity views
+------------
+.. automodule:: cybsi.utils.views
+    :members:
 
 API Changes
 -----------

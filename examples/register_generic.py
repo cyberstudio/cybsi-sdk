@@ -18,11 +18,11 @@ from cybsi.api.observation import GenericObservationForm
 def create_generic_observation():
     domain = EntityForm(
         EntityTypes.DomainName,
-        [(EntityKeyTypes.String, "test.com")],
+        [(EntityKeyTypes.String, "test.com1")],
     )
     ip_address = EntityForm(
         EntityTypes.IPAddress,
-        [(EntityKeyTypes.String, "8.8.8.8")],
+        [(EntityKeyTypes.String, "8.8.8.1")],
     )
 
     observation = (

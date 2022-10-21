@@ -20,6 +20,8 @@ class EntityViewsAPI(BaseAPI):
     :meth:`~cybsi.api.replist.ReplistsAPI.entities`.
 
     Extend :class:`AbstractEntityView` to implement a custom entity view.
+
+    .. versionadded:: 2.9
     """
 
     _path = "/entity-views"
@@ -32,6 +34,7 @@ class EntityViewsAPI(BaseAPI):
     ) -> Page["EntityViewView"]:
         """Filter views of observable entities.
 
+        .. versionadded:: 2.9
         Note:
             Calls `GET /entity-views`.
         Args:
@@ -54,6 +57,8 @@ class EntityViewsAPI(BaseAPI):
 class EntityViewView(JsonObjectView):
     """
     View of the entity view.
+
+    .. versionadded:: 2.9
     """
 
     @property
@@ -72,6 +77,7 @@ class AbstractEntityView(JsonObjectView, metaclass=abc.ABCMeta):
     This is the class you need to extend to implement a custom entity view.
 
     .. automethod:: _view_uuid
+    .. versionadded:: 2.9
     """
 
     @classmethod

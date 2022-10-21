@@ -24,3 +24,14 @@ In the example below you can see datasource type common view response with (and 
 
 .. literalinclude:: ../../examples/data_source_embed_url.py
 
+Custom entity views
+-------------------
+
+You can configure entity view in some Cybsi API methods: :meth:`~cybsi.api.replist.ReplistsAPI.entities` and :meth:`~cybsi.api.replist.ReplistsAPI.changes`.
+
+Specify `entity_view` parameter in API method. Default basic view includes only entity types and natural keys.
+You can find builtin views in :mod:`~cybsi.utils.views` or use :meth:`~cybsi.api.observable.view.EntityViewsAPI` to retrieve information about them.
+
+In the example below you can see replist entities in PT Multiscanner view:
+
+.. literalinclude:: ../../examples/register_replist_with_custom_query.py
