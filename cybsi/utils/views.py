@@ -5,29 +5,6 @@ from cybsi.api.internal import JsonObject, JsonObjectView
 from cybsi.api.observable import AbstractEntityView, EntityKeyView, EntityTypes
 
 
-class BasicEntityView(JsonObjectView):
-    """Builtin basic entity view.
-    Includes only entity type and natual keys.
-
-    .. versionadded:: 2.9
-    """
-
-    @property
-    def uuid(self) -> uuid.UUID:
-        """Entity UUID."""
-        return uuid.UUID(self._get("uuid"))
-
-    @property
-    def type(self) -> EntityTypes:
-        """Entity type."""
-        return EntityTypes(self._get("type"))
-
-    @property
-    def keys(self) -> List[EntityKeyView]:
-        """Entity natural keys."""
-        return [EntityKeyView(x) for x in self._get("naturalKeys")]
-
-
 class PTMSEntityView(AbstractEntityView):
     """Entity view tailored for consumption by PT Multiscanner.
 
@@ -53,7 +30,7 @@ class PTMSEntityView(AbstractEntityView):
         return uuid.UUID("190b4e72-7887-4555-a9a9-6bec33c6529d")
 
     @property
-    def entity(self) -> BasicEntityView:
+    def entity(self) -> "BasicEntityView":
         """Basic entity view."""
         return BasicEntityView(self._get("entity"))
 
@@ -79,3 +56,26 @@ class PTMSEntityView(AbstractEntityView):
         IPAddress, EmailAddress entity types.
         :data:`None` for other entity types."""
         return self._related_malware_names
+
+
+class BasicEntityView(JsonObjectView):
+    """Builtin basic entity view.
+    Includes only entity type and natual keys.
+
+    .. versionadded:: 2.9
+    """
+
+    @property
+    def uuid(self) -> uuid.UUID:
+        """Entity UUID."""
+        return uuid.UUID(self._get("uuid"))
+
+    @property
+    def type(self) -> EntityTypes:
+        """Entity type."""
+        return EntityTypes(self._get("type"))
+
+    @property
+    def keys(self) -> List[EntityKeyView]:
+        """Entity natural keys."""
+        return [EntityKeyView(x) for x in self._get("naturalKeys")]

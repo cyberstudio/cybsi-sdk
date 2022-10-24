@@ -34,4 +34,4 @@ You can find builtin views in :mod:`~cybsi.utils.views` or use :meth:`~cybsi.api
 
 In the example below you can see replist entities in PT Multiscanner view:
 
-.. literalinclude:: ../../examples/register_replist_with_custom_query.py
+.. literalinclude:: ../../examples/get_entity_view.py

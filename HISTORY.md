@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a12(2022-10-24)
+--------------------
+- PTMS entity view example description fixup
+
 2.9.0a11(2022-10-21)
 --------------------
 - Add PTMS entity view support
