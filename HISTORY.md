@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a13(2022-10-24)
+--------------------
+- Add async replist API
+
 2.9.0a12(2022-10-24)
 --------------------
 - PTMS entity view example description fixup

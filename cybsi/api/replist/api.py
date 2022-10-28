@@ -6,26 +6,27 @@ from .. import RefView
 from ..api import Tag
 from ..internal import (
     BaseAPI,
+    BaseAsyncAPI,
     JsonObject,
     JsonObjectForm,
     JsonObjectView,
     parse_rfc3339_timestamp,
 )
 from ..observable import EntityTypes, EntityView, EntityViewT, ShareLevels
-from ..pagination import Cursor, Page
+from ..pagination import AsyncPage, Cursor, Page
 from ..search import StoredQueryCommonView
 from ..view import _TaggedRefView
 from .enums import EntitySetOperations, ReplistStatus
 
 X_CHANGE_CURSOR = "X-Change-Cursor"
 
+_REPLIST_BASE_PATH = "/replists"
+_REPLIST_CHANGES_PATH_TPL = _REPLIST_BASE_PATH + "/{}/changes"
+_REPLIST_ENTITIES_PATH_TPL = _REPLIST_BASE_PATH + "/{}/entities"
+
 
 class ReplistsAPI(BaseAPI):
     """Reputation list API."""
-
-    _replist_base_url = "/replists"
-    _replist_entities_tpl = _replist_base_url + "/{}/entities"
-    _replist_changes_tpl = _replist_base_url + "/{}/changes"
 
     def register(self, replist: "ReplistForm") -> RefView:
         """Register reputation list.
@@ -43,7 +44,7 @@ class ReplistsAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.StoredQueryNotFound`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
         """
-        resp = self._connector.do_post(path=self._replist_base_url, json=replist.json())
+        resp = self._connector.do_post(path=_REPLIST_BASE_PATH, json=replist.json())
         return RefView(resp.json())
 
     def view(self, replist_uuid: uuid.UUID) -> "ReplistView":
@@ -58,7 +59,7 @@ class ReplistsAPI(BaseAPI):
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
         """
-        path = f"{self._replist_base_url}/{replist_uuid}"
+        path = f"{_REPLIST_BASE_PATH}/{replist_uuid}"
         resp = self._connector.do_get(path)
         return ReplistView(resp)
 
@@ -98,7 +99,7 @@ class ReplistsAPI(BaseAPI):
             form["shareLevel"] = share_level.value
         if is_enabled is not None:
             form["isEnabled"] = is_enabled  # type: ignore
-        path = f"{self._replist_base_url}/{replist_uuid}"
+        path = f"{_REPLIST_BASE_PATH}/{replist_uuid}"
         self._connector.do_patch(path=path, tag=tag, json=form)
 
     def filter(
@@ -123,7 +124,7 @@ class ReplistsAPI(BaseAPI):
         if limit:
             params["limit"] = str(limit)
 
-        resp = self._connector.do_get(self._replist_base_url, params=params)
+        resp = self._connector.do_get(path=_REPLIST_BASE_PATH, params=params)
         page = Page(self._connector.do_get, resp, ReplistCommonView)
         return page
 
@@ -165,7 +166,7 @@ class ReplistsAPI(BaseAPI):
         if limit:
             params["limit"] = str(limit)
 
-        path = self._replist_entities_tpl.format(replist_uuid)
+        path = _REPLIST_ENTITIES_PATH_TPL.format(replist_uuid)
         resp = self._connector.do_get(path, params=params)
 
         page = Page(self._connector.do_get, resp, entity_view)
@@ -223,7 +224,7 @@ class ReplistsAPI(BaseAPI):
         if limit:
             params["limit"] = str(limit)
 
-        path = self._replist_changes_tpl.format(replist_uuid)
+        path = _REPLIST_CHANGES_PATH_TPL.format(replist_uuid)
         resp = self._connector.do_get(path, params=params)
 
         def entity_view_converter(entity_data):
@@ -245,8 +246,134 @@ class ReplistsAPI(BaseAPI):
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
         """
 
-        path = f"{self._replist_base_url}/{replist_uuid}/statistic"
+        path = f"{_REPLIST_BASE_PATH}/{replist_uuid}/statistic"
         resp = self._connector.do_get(path)
+        return ReplistStatisticView(resp.json())
+
+
+class ReplistsAsyncAPI(BaseAsyncAPI):
+    """Replists asynchronous API."""
+
+    async def entities(
+        self,
+        replist_uuid: uuid.UUID,
+        *,
+        # see https://github.com/python/mypy/issues/3737
+        entity_view: Type[EntityViewT] = EntityView,  # type: ignore
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> Tuple[AsyncPage[EntityViewT], Cursor]:
+        """Get replist entities.
+
+        Note:
+            Calls `GET /replist/{replist_uuid}/entities`
+        Args:
+            replist_uuid: Replist uuid.
+            entity_view: Entity view to use.
+                Default is :class:`~cybsi.api.observable.EntityView` -
+                - only natural keys.
+                You can specify one of builtin views in :mod:`~cybsi.utils.views`.
+            cursor: Page cursor.
+            limit: Page limit.
+        Return:
+            Page with entity views and cursor.
+            The cursor can be used to call :meth:`changes`.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Replist not found.
+        .. versionchanged:: 2.9
+            Add entity view support. See :mod:`~cybsi.utils.views` for details.
+        """
+
+        params = {}
+        if entity_view is not EntityView:
+            params["viewUUID"] = str(entity_view._view_uuid())
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        path = _REPLIST_ENTITIES_PATH_TPL.format(replist_uuid)
+        resp = await self._connector.do_get(path, params=params)
+
+        page = AsyncPage(self._connector.do_get, resp, entity_view)
+        return page, cast(Cursor, resp.headers.get(X_CHANGE_CURSOR, ""))
+
+    async def changes(
+        self,
+        replist_uuid: uuid.UUID,
+        *,
+        cursor: Cursor,
+        # see https://github.com/python/mypy/issues/3737
+        entity_view: Type[EntityViewT] = EntityView,  # type: ignore
+        limit: Optional[int] = None,
+    ) -> AsyncPage["EntitySetChangeView[EntityViewT]"]:
+        """Get replist changes
+
+        Note:
+            Calls `GET /replist/{replist_uuid}/changes`
+        Args:
+            replist_uuid: Replist uuid.
+            entity_view: Entity view to use.
+                Default is :class:`~cybsi.api.observable.EntityView` -
+                - only natural keys.
+                You can specify one of builtin views in :mod:`~cybsi.utils.views`.
+            cursor: Page cursor.
+                On the first request you should pass the cursor value
+                obtained when requesting replist entities :meth:`entities`.
+                Subsequent calls should use cursor property of the page
+                returned by :meth:`changes`.
+            limit: Page limit.
+        Return:
+            Page with changes.
+        Warning:
+            Cursor behaviour differs from other API methods.
+
+            Do not save returned page cursor if it is :data:`None`.
+            :data:`None` means that all changes **for this moment** are received.
+            More changes can arrive later. Pass your previous non-none ``cursor``
+            value in loop, until non-none cursor is returned.
+
+            Please wait some time if method returns a page with :data:`None` cursor.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Replist not found.
+            :class:`~cybsi.api.error.SemanticError`: Semantic request error.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.CursorOutOfRange`
+        .. versionchanged:: 2.9
+            Add entity view support. See :mod:`~cybsi.utils.views` for details.
+        """
+
+        params = {"cursor": str(cursor)}
+        if entity_view is not EntityView:
+            params["viewUUID"] = str(entity_view._view_uuid())
+        if limit:
+            params["limit"] = str(limit)
+
+        path = _REPLIST_CHANGES_PATH_TPL.format(replist_uuid)
+        resp = await self._connector.do_get(path, params=params)
+
+        def entity_view_converter(entity_data):
+            return EntitySetChangeView(entity_view, entity_data)
+
+        page = AsyncPage(self._connector.do_get, resp, entity_view_converter)
+        return page
+
+    async def statistic(self, replist_uuid: uuid.UUID) -> "ReplistStatisticView":
+        """Get replist statistic.
+
+        Note:
+            Calls `GET /replists/{replist_uuid}/statistic`.
+        Args:
+            replist_uuid: Replist uuid.
+        Returns:
+            Replist statistic view.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Replist not found.
+        """
+
+        path = f"{_REPLIST_BASE_PATH}/{replist_uuid}/statistic"
+        resp = await self._connector.do_get(path)
         return ReplistStatisticView(resp.json())
 
 

@@ -17,7 +17,7 @@ from .internal import HTTPConnector, JsonObjectView
 from .internal.connector import AsyncHTTPConnector
 from .observable import ObservableAPI
 from .observation import ObservationsAPI, ObservationsAsyncAPI
-from .replist import ReplistsAPI
+from .replist import ReplistsAPI, ReplistsAsyncAPI
 from .report import ReportsAPI, ReportsAsyncAPI
 from .search import SearchAPI
 from .user import UsersAPI
@@ -258,6 +258,11 @@ class CybsiAsyncClient:
     def data_source_types(self) -> DataSourceTypesAsyncAPI:
         """Data source types API handle."""
         return DataSourceTypesAsyncAPI(self._connector)
+
+    @property
+    def replists(self) -> ReplistsAsyncAPI:
+        """Replists API handle."""
+        return ReplistsAsyncAPI(self._connector)
 
 
 class VersionView(JsonObjectView):
