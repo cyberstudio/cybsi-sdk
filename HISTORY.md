@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a15(2022-11-02)
+--------------------
+- Remove AVScanStatistic section in observable entity api
+
 2.9.0a14(2022-11-02)
 --------------------
 - Add ThreatCategory attribute
