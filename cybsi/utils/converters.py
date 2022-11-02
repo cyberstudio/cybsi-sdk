@@ -13,6 +13,8 @@ from cybsi.api.observable.enums import (
     IndustrySector,
     NodeRole,
     RegionalInternetRegistry,
+    RelatedThreatCategory,
+    ThreatCategory,
 )
 
 
@@ -89,10 +91,8 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.Size: _int_converter,
     AttributeNames.DisplayNames: _str_converter,
     AttributeNames.Names: _str_converter,
-    AttributeNames.MalwareFamilyAliases: _str_converter,
     AttributeNames.IsIoC: _bool_converter,
     AttributeNames.IsTrusted: _bool_converter,
-    AttributeNames.IsMalicious: _bool_converter,
     AttributeNames.IsDGA: _bool_converter,
     AttributeNames.Class: _new_enum_value_converter(IdentityClass, ignore_case=True),
     AttributeNames.NodeRoles: _new_enum_value_converter(NodeRole, ignore_case=True),
@@ -103,6 +103,13 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.IsDelegated: _bool_converter,
     AttributeNames.Statuses: _dict_item_value_converter,
     AttributeNames.ASN: _int_converter,
+    AttributeNames.RelatedThreatCategory: _new_enum_value_converter(
+        RelatedThreatCategory, ignore_case=True
+    ),
+    AttributeNames.ThreatCategory: _new_enum_value_converter(
+        ThreatCategory, ignore_case=True
+    ),
+    AttributeNames.MalwareNames: _str_converter,
     AttributeNames.RegionalInternetRegistry: _new_enum_value_converter(
         RegionalInternetRegistry, ignore_case=True
     ),

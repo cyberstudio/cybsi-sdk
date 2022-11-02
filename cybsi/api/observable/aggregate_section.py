@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from enum import Enum
 from typing import Any, Callable, Dict, Generic, List, Optional, TypeVar, Union
 
 from .. import RefView
@@ -10,7 +11,9 @@ from .enums import (
     IdentityClass,
     IndustrySector,
     NodeRole,
+    RelatedThreatCategory,
     ShareLevels,
+    ThreatCategory,
     ThreatStatus,
 )
 
@@ -18,7 +21,7 @@ T = TypeVar("T")
 """Type of section data. Depends on section name."""
 
 
-AttributeValueView = Union[str, bool, int, uuid.UUID, RefView]
+AttributeValueView = Union[str, bool, int, uuid.UUID, RefView, Enum]
 
 
 def _convert_attribute_value_type(
@@ -28,15 +31,16 @@ def _convert_attribute_value_type(
         AttributeNames.Names: str,
         AttributeNames.DisplayNames: str,
         AttributeNames.IsIoC: bool,
-        AttributeNames.IsMalicious: bool,
         AttributeNames.IsDGA: bool,
         AttributeNames.IsTrusted: bool,
-        AttributeNames.MalwareFamilyAliases: uuid.UUID,
         AttributeNames.Size: int,
+        AttributeNames.MalwareNames: str,
         AttributeNames.MalwareClasses: RefView,
         AttributeNames.MalwareFamilies: RefView,
         AttributeNames.RelatedMalwareFamilies: RefView,
         AttributeNames.NodeRoles: NodeRole,
+        AttributeNames.ThreatCategory: ThreatCategory,
+        AttributeNames.RelatedThreatCategory: RelatedThreatCategory,
         AttributeNames.Sectors: IndustrySector,
         AttributeNames.Class: IdentityClass,
     }

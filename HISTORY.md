@@ -1,6 +1,12 @@
 Release History
 ===============
 
+2.9.0a14(2022-11-02)
+--------------------
+- Add ThreatCategory attribute
+- Add MalwareName attribute
+- Add Enum as allowed attribute value type in generic observation builder.
+
 2.9.0a13(2022-10-24)
 --------------------
 - Add async replist API

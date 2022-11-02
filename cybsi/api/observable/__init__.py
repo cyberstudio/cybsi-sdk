@@ -52,6 +52,8 @@ from .enums import (
     ShareLevels,
     EntityAggregateSections,
     ThreatStatus,
+    ThreatCategory,
+    RelatedThreatCategory,
     LinkDirection,
     IndustrySector,
     NodeRole,

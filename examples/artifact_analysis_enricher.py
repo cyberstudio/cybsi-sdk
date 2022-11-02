@@ -24,6 +24,7 @@ from cybsi.api.observable import (
     EntityKeyTypes,
     EntityTypes,
     ShareLevels,
+    ThreatCategory,
 )
 from cybsi.api.observation import GenericObservationForm
 from cybsi.api.report import ReportForm
@@ -136,8 +137,8 @@ def register_report(
         report_description = "File sample is malicious"
         observation.add_attribute_fact(
             entity=file_form,
-            attribute_name=AttributeNames.IsMalicious,
-            value=True,
+            attribute_name=AttributeNames.ThreatCategory,
+            value=ThreatCategory.Malware,
             confidence=0.9,
         )
     observation_ref = client.observations.generics.register(observation)

@@ -38,12 +38,6 @@ def create_generic_observation(domain, ip):
         )
         .add_attribute_fact(
             entity=domain,
-            attribute_name=AttributeNames.IsMalicious,
-            value=True,
-            confidence=0.9,
-        )
-        .add_attribute_fact(
-            entity=domain,
             attribute_name=AttributeNames.RelatedMalwareFamilies,
             value=DictItemAttributeValue(key="Aware"),
             confidence=0.8,

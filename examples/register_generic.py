@@ -9,6 +9,7 @@ from cybsi.api.observable import (
     EntityForm,
     EntityKeyTypes,
     EntityTypes,
+    RelatedThreatCategory,
     RelationshipKinds,
     ShareLevels,
 )
@@ -37,8 +38,8 @@ def create_generic_observation():
         )
         .add_attribute_fact(
             entity=domain,
-            attribute_name=AttributeNames.IsMalicious,
-            value=True,
+            attribute_name=AttributeNames.RelatedThreatCategory,
+            value=RelatedThreatCategory.Malware,
             confidence=0.9,
         )
         .add_attribute_fact(

@@ -8,6 +8,7 @@ See Also:
 """
 import uuid
 from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, Iterable, List, Optional, Union, cast
 
 from .. import RefView
@@ -175,7 +176,7 @@ class GenericObservationsAsyncAPI(BaseAsyncAPI):
         return GenericObservationView(r.json())
 
 
-AttributeValueForm = Union[int, str, bool, uuid.UUID, DictItemAttributeValue]
+AttributeValueForm = Union[int, str, bool, uuid.UUID, DictItemAttributeValue, Enum]
 
 
 class GenericObservationForm(JsonObjectForm):
@@ -272,6 +273,9 @@ class GenericObservationForm(JsonObjectForm):
 
         if isinstance(value, uuid.UUID):
             value = str(value)
+
+        if isinstance(value, Enum):
+            value = str(value.value)
 
         if isinstance(value, DictItemAttributeValue):
             value = value.json()

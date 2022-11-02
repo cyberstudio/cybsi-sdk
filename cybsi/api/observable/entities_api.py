@@ -40,17 +40,18 @@ _attr_value_kebab_converters: Dict[AttributeNames, str] = {
     AttributeNames.DisplayNames: "display-names",
     AttributeNames.Names: "names",
     AttributeNames.NodeRoles: "node-roles",
-    AttributeNames.MalwareFamilies: "malware-families",
     AttributeNames.RelatedMalwareFamilies: "related-malware-families",
     AttributeNames.MalwareClasses: "malware-classes",
     AttributeNames.IsIoC: "is-ioc",
     AttributeNames.IsTrusted: "is-trusted",
-    AttributeNames.IsMalicious: "is-malicious",
     AttributeNames.IsDGA: "is-dga",
     AttributeNames.IsDelegated: "is-delegated",
     AttributeNames.Statuses: "statuses",
     AttributeNames.ASN: "asn",
     AttributeNames.RegionalInternetRegistry: "regional-internet-registry",
+    AttributeNames.RelatedThreatCategory: "related-threat-category",
+    AttributeNames.ThreatCategory: "threat-category",
+    AttributeNames.MalwareNames: "malware-names",
 }
 
 
@@ -372,7 +373,7 @@ class EntitiesAPI(BaseAPI):
             >>> client: CybsiClient
             >>> attr_forecast = client.observable.entities.forecast_attribute_values(
             >>>     entity_uuid=UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
-            >>>     attr_name=AttributeNames.IsMalicious,
+            >>>     attr_name=AttributeNames.IsIoC,
             >>> )
             >>> # Do something with the forecast
             >>> print(attr_forecast)

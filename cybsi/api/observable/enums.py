@@ -74,14 +74,6 @@ class AttributeNames(CybsiAPIEnum):
       Attribute belongs to `DomainName`, `IPAddress`, `URL`,
       `EmailAddress`, `File` entity type.
     """
-    MalwareFamilyAliases = "MalwareFamilyAliases"
-    """
-     .. deprecated:: 2.9
-
-     Aliases of malware family. Attribute value type is :class:`uuid.UUID`.
-     Attribute belongs to `DomainName`, `IPAddress`, `URL`,
-     `EmailAddress`, `File` entity type.
-    """
     Names = "Names"
     """
       Names of the entity. Attribute value type is :class:`str`.
@@ -103,12 +95,6 @@ class AttributeNames(CybsiAPIEnum):
     """
       Entity size. Attribute value type is :class:`int`.
       Attribute belongs to `File` entity type.
-    """
-    IsMalicious = "IsMalicious"
-    """
-      The entity is malicious. Attribute value type is :class:`bool`.
-      Attribute belongs to `DomainName`, `IPAddress`, `URL`,
-      `EmailAddress`, `File` entity type.
     """
     IsDGA = "IsDGA"
     """
@@ -176,6 +162,31 @@ class AttributeNames(CybsiAPIEnum):
       Attribute value type is
       :class:`~cybsi.api.observable.enums.RegionalInternetRegistry`.
       Attribute belongs to `IPAddress` entity type.
+    """
+    ThreatCategory = "ThreatCategory"
+    """
+      .. versionadded:: 2.9
+
+      The entity threat category.
+      Attribute value type is  :class:`~cybsi.api.observable.enums.ThreatCategory`.
+      Attribute belongs to `File` entity type.
+    """
+    RelatedThreatCategory = "RelatedThreatCategory"
+    """
+      .. versionadded:: 2.9
+
+      The threat category with which the entity has a relationship.
+      Attribute value type is
+      :class:`~cybsi.api.observable.enums.RelatedThreatCategory`.
+      Attribute belongs to  `DomainName`, `IPAddress`, `URL`,
+      `EmailAddress` entity types.
+    """
+    MalwareNames = "MalwareNames"
+    """
+      .. versionadded:: 2.9
+
+      The entity malware name. Attribute value type is :class:`str`.
+      Attribute belongs to `File` entity type.
     """
 
 
@@ -307,3 +318,22 @@ class RegionalInternetRegistry(CybsiAPIEnum):
     ARIN = "ARIN"
     AFRINIC = "AFRINIC"
     LACNIC = "LACNIC"
+
+
+@document_enum
+class ThreatCategory(CybsiAPIEnum):
+    """Threat categories."""
+
+    Clean = "Clean"
+    Riskware = "Riskware"
+    Adware = "Adware"
+    Malware = "Malware"
+
+
+@document_enum
+class RelatedThreatCategory(CybsiAPIEnum):
+    """Related threat categories."""
+
+    Riskware = "Riskware"
+    Adware = "Adware"
+    Malware = "Malware"

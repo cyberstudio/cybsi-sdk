@@ -27,9 +27,9 @@ if __name__ == "__main__":
     ip_address.add_key(EntityKeyTypes.String, "8.8.8.8")
     ip_address_ref = client.observable.entities.register(ip_address)
 
-    # Get IsMalicious attribute value forecast of ip-address entity.
+    # Get IsIoC attribute value forecast of ip-address entity.
     attribute_forecast = client.observable.entities.forecast_attribute_values(
-        ip_address_ref.uuid, AttributeNames.IsMalicious
+        ip_address_ref.uuid, AttributeNames.IsIoC
     )
     print(attribute_forecast)
     # {
