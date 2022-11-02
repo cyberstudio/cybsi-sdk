@@ -287,7 +287,6 @@ class EntityAggregateSections(CybsiAPIEnum):
     AssociatedAttributes = "AssociatedAttributes"
     NaturalAttributes = "NaturalAttributes"
     Threat = "Threat"
-    AVScanStatistics = "AVScanStatistics"
     GeoIP = "GeoIP"
     Labels = "Labels"
 

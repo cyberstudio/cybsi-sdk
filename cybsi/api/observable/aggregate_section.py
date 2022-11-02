@@ -213,15 +213,6 @@ class ThreatSectionData(JsonObjectView):
         return ThreatStatus(self._get("status"))
 
 
-class AVScanStatisticsSectionData(JsonObjectView):
-    """View for AVScanStatistics section data."""
-
-    @property
-    def malware_name(self) -> Optional[str]:
-        """Malware name."""
-        return self._get("malwareName")
-
-
 class GeoIPSectionData(JsonObjectView):
     """View for GeoIP section data."""
 
@@ -259,7 +250,6 @@ class SectionsView:
         ),
         EntityAggregateSections.NaturalAttributes: list_mapper(AttributesSectionData),
         EntityAggregateSections.Threat: ThreatSectionData,
-        EntityAggregateSections.AVScanStatistics: AVScanStatisticsSectionData,
         EntityAggregateSections.GeoIP: GeoIPSectionData,
         EntityAggregateSections.Labels: LabelsSectionData,
     }
@@ -304,17 +294,6 @@ class SectionsView:
                 Section is absent in the :class:`~cybsi.api.observable.SectionsView`.
         """
         return self._sections[EntityAggregateSections.Threat]  # type: ignore
-
-    @property
-    def av_scan_statistics(self) -> SectionView[AVScanStatisticsSectionData]:
-        """AV scanning statistics.
-
-        Raises:
-            :class:`KeyError`:
-                Section is absent in the :class:`~cybsi.api.observable.SectionsView`.
-        """
-        val = self._sections[EntityAggregateSections.AVScanStatistics]
-        return val  # type: ignore
 
     @property
     def geo_ip(self) -> SectionView[GeoIPSectionData]:

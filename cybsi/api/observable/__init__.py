@@ -21,7 +21,6 @@ from .aggregate_section import (
     ValuableFactView,
     AttributeValuableFactView,
     ThreatSectionData,
-    AVScanStatisticsSectionData,
     GeoIPSectionData,
     LabelsSectionData,
     AttributeValueView,
