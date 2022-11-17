@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, cast
 
 from .. import RefView
-from ..artifact import ArtifactTypes
+from ..artifact import ArtifactTypes, ArtifactCommonView
 from ..internal import (
     BaseAPI,
     BaseAsyncAPI,
@@ -261,7 +261,7 @@ class ReportsAPI(BaseAPI):
         return page
 
     def attach_observations(
-        self, report_uuid: uuid.UUID, observation_uuids: List[uuid.UUID]
+        self, report_uuid: uuid.UUID, observation_uuids: Iterable[uuid.UUID]
     ) -> RefView:
         """Attach observations to existing report.
 
@@ -316,6 +316,63 @@ class ReportsAPI(BaseAPI):
         path = f"{_REPORTS_PATH}/{report_uuid}/observations"
         resp = self._connector.do_get(path=path, params=params)
         page = Page(self._connector.do_get, resp, ObservationView)
+        return page
+
+    def attach_artifacts(
+        self, report_uuid: uuid.UUID, artifact_uuids: Iterable[uuid.UUID]
+    ) -> RefView:
+        """Attach artifacts to existing report.
+
+        Note:
+            Calls `POST /enrichment/reports/{report_uuid}/artifacts`.
+        Args:
+            report_uuid: Report UUID.
+            artifact_uuids: Artifact UUIDs.
+        Returns:
+            Reference to the report.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.NotFoundError`: Report not found.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ArtifactNotFound`
+        """
+        form: Dict[str, Any] = {"artifacts": [str(u) for u in artifact_uuids]}
+
+        path = f"{_REPORTS_PATH}/{report_uuid}/artifacts"
+        resp = self._connector.do_post(path=path, json=form)
+        return RefView(resp.json())
+
+    def filter_artifacts(
+        self,
+        report_uuid: uuid.UUID,
+        *,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> Page["ArtifactCommonView"]:
+        """Filter artifacts in the report.
+
+        Note:
+            Calls `GET /enrichment/reports/{report_uuid}/artifacts`.
+        Args:
+            report_uuid: Report UUID.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of report artifacts list and next page cursor.
+                The list of artifacts is ordered as in the report.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Report not found.
+        """
+        params: Dict[str, Any] = {}
+        if cursor is not None:
+            params["cursor"] = str(cursor)
+        if limit is not None:
+            params["limit"] = str(limit)
+
+        path = f"{_REPORTS_PATH}/{report_uuid}/artifacts"
+        resp = self._connector.do_get(path=path, params=params)
+        page = Page(self._connector.do_get, resp, ArtifactCommonView)
         return page
 
 
@@ -549,7 +606,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
         return page
 
     async def attach_observations(
-        self, report_uuid: uuid.UUID, observation_uuids: List[uuid.UUID]
+        self, report_uuid: uuid.UUID, observation_uuids: Iterable[uuid.UUID]
     ) -> RefView:
         """Attach observations to existing report.
 
@@ -604,6 +661,63 @@ class ReportsAsyncAPI(BaseAsyncAPI):
         path = f"{_REPORTS_PATH}/{report_uuid}/observations"
         resp = await self._connector.do_get(path=path, params=params)
         page = AsyncPage(self._connector.do_get, resp, ObservationView)
+        return page
+
+    async def attach_artifacts(
+        self, report_uuid: uuid.UUID, artifact_uuids: Iterable[uuid.UUID]
+    ) -> RefView:
+        """Attach artifacts to existing report.
+
+        Note:
+            Calls `POST /enrichment/reports/{report_uuid}/artifacts`.
+        Args:
+            report_uuid: Report UUID.
+            artifact_uuids: Artifact UUIDs.
+        Returns:
+            Reference to the report.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.NotFoundError`: Report not found.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ArtifactNotFound`
+        """
+        form: Dict[str, Any] = {"artifacts": [str(u) for u in artifact_uuids]}
+
+        path = f"{_REPORTS_PATH}/{report_uuid}/artifacts"
+        resp = await self._connector.do_post(path=path, json=form)
+        return RefView(resp.json())
+
+    async def filter_artifacts(
+        self,
+        report_uuid: uuid.UUID,
+        *,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> AsyncPage["ArtifactCommonView"]:
+        """Filter artifacts in the report.
+
+        Note:
+            Calls `GET /enrichment/reports/{report_uuid}/artifacts`.
+        Args:
+            report_uuid: Report UUID.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page of report artifacts list and next page cursor.
+                The list of artifacts is ordered as in the report.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Report not found.
+        """
+        params: Dict[str, Any] = {}
+        if cursor is not None:
+            params["cursor"] = str(cursor)
+        if limit is not None:
+            params["limit"] = str(limit)
+
+        path = f"{_REPORTS_PATH}/{report_uuid}/artifacts"
+        resp = await self._connector.do_get(path=path, params=params)
+        page = AsyncPage(self._connector.do_get, resp, ArtifactCommonView)
         return page
 
 

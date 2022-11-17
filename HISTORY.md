@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a16(2022-11-16)
+--------------------
+- Add attach and filter report artifacts API
+
 2.9.0a15(2022-11-02)
 --------------------
 - Remove AVScanStatistic section in observable entity api
