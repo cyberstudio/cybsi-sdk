@@ -137,12 +137,6 @@ Network Session
     :members:
     :inherited-members:
 
-Scan Session
-""""""""""""
-.. automodule:: cybsi.api.observation.scan_session
-    :members:
-    :inherited-members:
-
 Threat
 """"""
 .. automodule:: cybsi.api.observation.threat

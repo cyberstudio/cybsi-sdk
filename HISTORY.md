@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a17(2022-11-23)
+--------------------
+- Delete scan session
+
 2.9.0a16(2022-11-16)
 --------------------
 - Add attach and filter report artifacts API

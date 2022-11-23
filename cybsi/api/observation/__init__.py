@@ -24,12 +24,6 @@ from .network_session import (
     NetworkSessionObservationView,
     NetworkSessionObservationContentView,
 )
-from .scan_session import (
-    ScanSessionObservationsAPI,
-    ScanSessionObservationView,
-    ScanSessionObservationContentView,
-    ScanSessionFiltrationMode,
-)
 from .threat import (
     ThreatObservationsAPI,
     ThreatObservationView,

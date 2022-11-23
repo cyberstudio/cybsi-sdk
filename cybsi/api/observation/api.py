@@ -15,7 +15,6 @@ from .dns_lookup import DNSLookupObservationsAPI
 from .enums import ObservationTypes
 from .generic import GenericObservationsAPI, GenericObservationsAsyncAPI
 from .network_session import NetworkSessionObservationsAPI
-from .scan_session import ScanSessionObservationsAPI
 from .threat import ThreatObservationsAPI
 from .view import ObservationHeaderView
 from .whois_lookup import WhoisLookupObservationsAPI
@@ -45,11 +44,6 @@ class ObservationsAPI(BaseAPI):
     def network_sessions(self) -> NetworkSessionObservationsAPI:
         """Get network session observations route."""
         return NetworkSessionObservationsAPI(self._connector)
-
-    @property
-    def scan_sessions(self) -> ScanSessionObservationsAPI:
-        """Get scan session observations route."""
-        return ScanSessionObservationsAPI(self._connector)
 
     @property
     def threats(self) -> ThreatObservationsAPI:

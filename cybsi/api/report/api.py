@@ -21,7 +21,6 @@ from ..observation import (
     ObservationCommonView,
     ObservationHeaderView,
     ObservationTypes,
-    ScanSessionObservationContentView,
     ThreatObservationContentView,
     WhoisLookupObservationContentView,
 )
@@ -962,7 +961,6 @@ class ObservationContentView:
         ObservationTypes.DNSLookup: DNSLookupObservationContentView,
         ObservationTypes.Generic: GenericObservationContentView,
         ObservationTypes.NetworkSession: NetworkSessionObservationContentView,
-        ObservationTypes.ScanSession: ScanSessionObservationContentView,
         ObservationTypes.Threat: ThreatObservationContentView,
         ObservationTypes.WhoisLookup: WhoisLookupObservationContentView,
     }
@@ -1008,20 +1006,6 @@ class ObservationContentView:
         val = cast(
             NetworkSessionObservationContentView,
             self._contents[ObservationTypes.NetworkSession],
-        )
-        return val
-
-    @property
-    def scan_session(self) -> ScanSessionObservationContentView:
-        """Content of scan session observation.
-
-        Raises:
-           :class:`KeyError`:
-               Content is absent in the :class:`ObservationContentView`.
-        """
-        val = cast(
-            ScanSessionObservationContentView,
-            self._contents[ObservationTypes.ScanSession],
         )
         return val
 
