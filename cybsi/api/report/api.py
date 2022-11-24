@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, cast
 
 from .. import RefView
-from ..artifact import ArtifactTypes, ArtifactCommonView
+from ..artifact import ArtifactCommonView, ArtifactTypes
 from ..internal import (
     BaseAPI,
     BaseAsyncAPI,

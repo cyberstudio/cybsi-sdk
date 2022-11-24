@@ -98,18 +98,10 @@ if __name__ == "__main__":
 #             }
 #         ]
 #     },
-#     "attributeValues": [
-#         {
-#             "attribute": "MalwareClasses",
-#             "value": "Trojan"
-#         },
-#         {
-#             "attribute": "MalwareFamilies",
-#             "value": "Aware"
-#         },
-#         {
-#             "attribute": "RelatedMalwareFamilies",
-#             "value": null
-#         }
-#     ]
+#     "malwareClasses": [
+#       "Ransomware",
+#       "Encryptor"
+#     ],
+#    "malwareFamily": "PlugX",
+#    "relatedMalwareFamily": null
 # }

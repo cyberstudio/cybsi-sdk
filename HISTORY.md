@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a18(2022-11-23)
+--------------------
+- PTMS entity view schema update
+
 2.9.0a17(2022-11-23)
 --------------------
 - Delete scan session
