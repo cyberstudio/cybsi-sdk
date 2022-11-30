@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a19(2022-11-30)
+--------------------
+- Extend NodeRoles attribute values
+
 2.9.0a18(2022-11-23)
 --------------------
 - PTMS entity view schema update

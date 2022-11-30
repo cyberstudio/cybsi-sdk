@@ -201,6 +201,11 @@ class NodeRole(CybsiAPIEnum):
     NameServer = "NameServer"  # doc: Name server.
     MailExchanger = "MailExchanger"  # doc: Mail server.
     Phishing = "Phishing"  # doc: Phishing server.
+    DynDNS = "DynDNS"  # doc: Belongs to the DynDNS infrastructure
+    Cloud = "Cloud"  # doc: Belongs to a cloud infrastructure
+    VPN = "VPN"  # doc: VPN server
+    STUN = "STUN"  # doc: STUN server
+    Sinkhole = "Sinkhole"  # doc: Sinkhole nodes
 
 
 @document_enum
