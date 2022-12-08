@@ -65,15 +65,23 @@ class EntityView(AbstractEntityView):
     .. versionadded:: 2.9
     """
 
+    @classmethod
+    def _view_uuid(cls) -> UUID:
+        # The default entity view has no view uuid
+        return None  # type: ignore
+
     @property
     def uuid(self) -> UUID:
         """Entity UUID."""
         return UUID(self._get("uuid"))
 
-    @classmethod
-    def _view_uuid(cls) -> UUID:
-        # The default entity view has no view uuid
-        return None  # type: ignore
+    @property
+    def url(self) -> Optional[str]:
+        """URL of the entity in API.
+        Property is presented if :class:`~cybsi.api.client.Config`
+        embed_object_url is True.
+        """
+        return self._get_optional("url")
 
     @property
     def type(self) -> EntityTypes:
