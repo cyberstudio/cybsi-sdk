@@ -206,6 +206,8 @@ class NodeRole(CybsiAPIEnum):
     VPN = "VPN"  # doc: VPN server
     STUN = "STUN"  # doc: STUN server
     Sinkhole = "Sinkhole"  # doc: Sinkhole nodes
+    PayloadDelivery = "PayloadDelivery"  # doc: Serves malicious payloads
+    ExfiltrationStore = "ExfiltrationStore"  # doc: Used for data exfiltration
 
 
 @document_enum

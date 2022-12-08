@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a21(2022-12-09)
+--------------------
+- Add new NodeRoles attribute values
+
 2.9.0a20(2022-12-08)
 --------------------
 - Add URL to basic entity view
