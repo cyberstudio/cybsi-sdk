@@ -87,8 +87,12 @@ Release History
 - Allow registrate fact value of dictionary item
 - Remove datasource sorting by uuid
 
+2.8.3(2022-12-09)
+-----------------
+- Fix enum fact value serialization
+
 2.8.2(2022-07-11)
---------------------
+-----------------
 - First stable version of SDK
 - Use keyword-only args for public methods
 
