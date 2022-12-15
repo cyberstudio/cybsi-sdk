@@ -3,8 +3,8 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from .. import RefView
-from ..internal import BaseAPI, rfc3339_timestamp
-from ..pagination import Cursor, Page
+from ..internal import BaseAPI, BaseAsyncAPI, rfc3339_timestamp
+from ..pagination import AsyncPage, Cursor, Page
 from .entity import (
     EntityAggregateView,
     EntityAttributeForecastView,
@@ -303,7 +303,7 @@ class EntitiesAPI(BaseAPI):
 
     def add_natural_keys(
         self, entity_uuid: uuid.UUID, keys: Iterable[Tuple[EntityKeyTypes, str]]
-    ):
+    ) -> None:
         """Add entity nalural keys.
 
         Note:
@@ -529,3 +529,362 @@ class EntitiesAPI(BaseAPI):
         params: Dict[str, Any] = {"label": list(labels)}
         path = f"{self._path}/{entity_uuid}/labels"
         self._connector.do_delete(path=path, params=params)
+
+
+class EntitiesAsyncAPI(BaseAsyncAPI):
+    """Asynchronous entities API."""
+
+    _path = "/observable/entities"
+    _path_canonical_key = "/observable/entity-canonical-key"
+
+    async def register(self, entity: EntityForm) -> RefView:
+        """Register an entity.
+
+        Note:
+            Calls `PUT /observable/entities`.
+        Args:
+            entity: Entity registration form.
+        Returns:
+            Reference to a registered entity.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKeySet`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKey`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.KeyConflict`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.BrokenKeySet`
+        Usage:
+            >>> import asyncio
+            >>> from cybsi.api import CybsiAsyncClient
+            >>> from cybsi.api.observable import EntityForm, EntityTypes, EntityKeyTypes
+            >>> async def register_entities():
+            >>>     entities = [
+            >>>         EntityForm(
+            >>>             EntityTypes.File,
+            >>>             [(EntityKeyTypes.MD5, "3c4729715ef0d6bafd3d9c719e152099")]
+            >>>         ),
+            >>>         EntityForm(
+            >>>             EntityTypes.IPAddress,
+            >>>             [(EntityKeyTypes.String, "192.168.0.1")]
+            >>>         ),
+            >>>         EntityForm(
+            >>>             EntityTypes.DomainName,
+            >>>             [(EntityKeyTypes.String, "google.com")]
+            >>>         ),
+            >>>     ]
+            >>>     # concurrently register a batch of entities
+            >>>     async with CybsiAsyncClient as client:
+            >>>         registrations = [
+            >>>             client.observable.entities.register(e) for e in entities
+            >>>         ]
+            >>>         results = await asyncio.gather(*registrations)
+            >>>         uuids = ", ".join(str(u.uuid) for u in results)
+            >>>         print(f"Registered entities: {uuids}")
+            >>> asyncio.run(register_entities())
+        """
+        r = await self._connector.do_put(path=self._path, json=entity.json())
+        return RefView(r.json())
+
+    async def view(
+        self,
+        entity_uuid: uuid.UUID,
+        *,
+        sections: Optional[Iterable[EntityAggregateSections]] = None,
+        forecast_at: Optional[datetime] = None,
+        with_valuable_facts: Optional[bool] = None,
+    ) -> EntityAggregateView:
+        """Get an entity view.
+
+        Note:
+            Calls `GET /observable/entities/{entity_uuid}`.
+        Args:
+            entity_uuid: Entity uuid.
+            sections: Sections to be aggregated.
+            forecast_at: Point of time to aggregate sections at.
+            with_valuable_facts: Include valuable facts in response.
+        Returns:
+            Aggregated view of the entity.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Entity not found.
+        """
+
+        params: Dict[str, Any] = {}
+        if sections is not None:
+            params["section"] = [section.value for section in sections]
+        if forecast_at is not None:
+            params["forecastAt"] = rfc3339_timestamp(forecast_at)
+        if with_valuable_facts is not None:
+            params["valuableFacts"] = with_valuable_facts
+
+        path = f"{self._path}/{entity_uuid}"
+        r = await self._connector.do_get(path=path, params=params)
+        return EntityAggregateView(r.json())
+
+    async def aggregate(
+        self,
+        *,
+        entity_uuids: Optional[Iterable[uuid.UUID]],
+        entity_type: Optional[EntityTypes] = None,
+        key_type: Optional[EntityKeyTypes] = None,
+        key: Optional[str] = None,
+        sections: Optional[Iterable[EntityAggregateSections]] = None,
+        forecast_at: Optional[datetime] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> AsyncPage[EntityAggregateView]:
+        """Get list of aggregated entities.
+
+        Note:
+            Calls `GET /observable/entities`.
+
+            To get entity aggregate, only one of [key, entity_uuids] parameters
+            should be specified else Cybsi API will return error.
+        Args:
+            entity_uuids: Entity uuids.
+                Excludes parameters: `entity_type`, `key_type`, `key`.
+            entity_type: Entity type.
+                Excludes parameter `entity_uuids` and requires parameter `key`.
+                The parameter is not required if the `entity_type` can be
+                uniquely determined by `key_type`.
+            key_type: Entity natural key type.
+                Excludes parameter `entity_uuids` and requires parameter `key`.
+                The parameter is not required if only one `key_type` is used for
+                the specified `entity_type`.
+            key: Entity natural key value. Required if `entity_type` or `key_type`
+                parameter is specified.
+                It is possible to pass a key value in a non-canonical representation.
+            sections: Sections to be aggregated.
+            forecast_at: Point of time to aggregate sections at.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page with aggregated entities views and next page cursor.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityNotFound`
+        """
+
+        params: Dict[str, Any] = {}
+        if entity_uuids is not None:
+            params["uuid"] = [str(u) for u in entity_uuids]
+        if entity_type is not None:
+            params["type"] = entity_type.value
+        if key_type is not None:
+            params["keyType"] = key_type.value
+        if key is not None:
+            params["key"] = key
+        if sections is not None:
+            params["section"] = [section.value for section in sections]
+        if forecast_at is not None:
+            params["forecastAt"] = rfc3339_timestamp(forecast_at)
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = limit
+
+        r = await self._connector.do_get(path=self._path, params=params)
+        page = AsyncPage(self._connector.do_get, r, EntityAggregateView)
+        return page
+
+    async def canonize_key(
+        self, entity_type: EntityTypes, key_type: EntityKeyTypes, value: str
+    ) -> EntityKeyView:
+        """Get a canonized entity key.
+
+        Note:
+            Calls `GET /observable/entity-canonical-key`.
+        Args:
+            entity_type: Entity type.
+            key_type: Key type.
+            value: Key value.
+        Returns:
+            Canonized key view.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKeySet`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKey`
+        """
+        params = {
+            "entityType": entity_type.value,
+            "keyType": key_type.value,
+            "key": value,
+        }
+        r = await self._connector.do_get(path=self._path_canonical_key, params=params)
+        return EntityKeyView(r.json())
+
+    async def add_natural_keys(
+        self, entity_uuid: uuid.UUID, keys: Iterable[Tuple[EntityKeyTypes, str]]
+    ) -> None:
+        """Add entity nalural keys.
+
+        Note:
+            Calls `PUT /observable/entities/{entity_uuid}/keys`.
+        Args:
+            entity_uuid: Entity UUID.
+            keys: Entity natural keys.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKeySet`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidKey`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.KeyConflict`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.BrokenKeySet`
+        """
+        form = [{"type": t.value, "value": v} for t, v in keys]
+        path = f"{self._path}/{entity_uuid}/keys"
+        await self._connector.do_put(path=path, json=form)
+
+    async def forecast_attribute_values(
+        self,
+        entity_uuid: uuid.UUID,
+        attr_name: AttributeNames,
+        forecast_at: Optional[datetime] = None,
+    ) -> EntityAttributeForecastView:
+        """Get a forecast of entity attribute value.
+
+        See Also:
+            See :ref:`attributes`
+            for complete information about available attributes.
+
+        Note:
+            Calls `GET /observable/entities/{entity_uuid}/attributes/{attr_name}`.
+        Args:
+            entity_uuid: Entity UUID.
+            attr_name: Attribute name. Converts to kebab-case on URL-path.
+            forecast_at: Point of time to forecast at.
+                If not specified, forecast is built on current time.
+        Returns:
+            Attribute forecast view.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Query contains logic errors.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Attribute with specified name does not exist (NoSuchAttribute).
+        Note:
+            Semantic error codes specific for this method:
+             * :attr:`~cybsi.api.error.SemanticErrorCodes.WrongEntityAttribute`
+        """
+
+        params: Dict[str, Any] = {}
+        if forecast_at is not None:
+            params["forecastAt"] = rfc3339_timestamp(forecast_at)
+
+        kebab_attr_name = _convert_attribute_name_kebab(attr_name)
+        path = f"{self._path}/{entity_uuid}/attributes/{kebab_attr_name}"
+        r = await self._connector.do_get(path=path, params=params)
+        return EntityAttributeForecastView(r.json(), attr_name)
+
+    async def forecast_links(
+        self,
+        entity_uuid: uuid.UUID,
+        related_entity_types: Optional[Iterable[EntityTypes]] = None,
+        direction: Optional[Iterable[LinkDirection]] = None,
+        kind: Optional[Iterable[RelationshipKinds]] = None,
+        confidence_threshold: Optional[float] = None,
+        forecast_at: Optional[datetime] = None,
+        cursor: Optional[Cursor] = None,
+        limit: Optional[int] = None,
+    ) -> AsyncPage[EntityLinksForecastView]:
+        """Get a list of link forecasts of entity.
+
+        See Also:
+            See :ref:`relationships`
+            for complete information about available relationships.
+
+        Note:
+            Calls `GET /observable/entities/{entity_uuid}/links`.
+        Args:
+            entity_uuid: Entity UUID.
+            related_entity_types: Related entity types.
+            direction: Link direction. Return any if not specified.
+            kind: Kind of relationship. Return any if not specified.
+            confidence_threshold: Discard links with confidence
+                less than threshold. Valid values are in (0, 1].
+            forecast_at: Date of forecast.
+                If not specified, forecast is built on current time.
+            cursor: Page cursor.
+            limit: Page limit.
+        Returns:
+            Page with links forecast view and next page cursor.
+        """
+
+        params: Dict[str, Any] = {}
+        if related_entity_types is not None:
+            params["relatedEntityType"] = [typ.value for typ in related_entity_types]
+        if direction is not None:
+            params["direction"] = [d.value for d in direction]
+        if kind is not None:
+            params["kind"] = [k.value for k in kind]
+        if confidence_threshold is not None:
+            params["confidenceThreshold"] = confidence_threshold
+        if forecast_at is not None:
+            params["forecastAt"] = rfc3339_timestamp(forecast_at)
+        if cursor:
+            params["cursor"] = str(cursor)
+        if limit:
+            params["limit"] = str(limit)
+
+        path = f"{self._path}/{entity_uuid}/links"
+        r = await self._connector.do_get(path=path, params=params)
+        page = AsyncPage(self._connector.do_get, r, EntityLinksForecastView)
+        return page
+
+    async def forecast_links_statistic(
+        self,
+        entity_uuid: uuid.UUID,
+        forecast_at: Optional[datetime] = None,
+    ) -> List[EntityLinkStatisticView]:
+        """Get statictics of forecasted links for entity
+        considering all facts about entity.
+
+        Note:
+            Calls `GET /observable/entities/{entity_uuid}/link-type-statistic`.
+        Args:
+            entity_uuid: Entity UUID.
+            forecast_at: Date of forecast.
+                If not specified, forecast is built on current time.
+        Returns:
+            List of link forecasts. Links are grouped by direction, relation kind,
+             and entity type. Groups are ordered by direction,
+             relation kind, and entity type.
+        """
+
+        params: Dict[str, Any] = {}
+        if forecast_at is not None:
+            params["forecastAt"] = rfc3339_timestamp(forecast_at)
+
+        path = f"{self._path}/{entity_uuid}/link-type-statistic"
+        r = await self._connector.do_get(path=path, params=params)
+        return [EntityLinkStatisticView(v) for v in r.json()]
+
+    async def add_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]) -> None:
+        """Add entity labels.
+
+        Note:
+            Calls `PUT /observable/entities/{entityUUID}/labels`.
+        Args:
+            entity_uuid: Entity UUID.
+            labels: List of labels. Label length must be in range [2, 50].
+                Labels are converted to lowercase before saving.
+        """
+
+        path = f"{self._path}/{entity_uuid}/labels"
+        await self._connector.do_put(path=path, json=list(labels))
+
+    async def delete_labels(
+        self, entity_uuid: uuid.UUID, labels: Iterable[str]
+    ) -> None:
+        """Delete entity labels.
+
+        Note:
+            Calls `DELETE /observable/entities/{entityUUID}/labels`.
+        Args:
+            entity_uuid: Entity UUID.
+            labels: List of labels.
+                Labels are case-insensitive when compared.
+        """
+
+        params: Dict[str, Any] = {"label": list(labels)}
+        path = f"{self._path}/{entity_uuid}/labels"
+        await self._connector.do_delete(path=path, params=params)

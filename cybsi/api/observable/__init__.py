@@ -1,8 +1,8 @@
 """Use this section of API to register entities
 and retrieve aggregates about entities.
 """
-from .api import ObservableAPI
-from .entities_api import EntitiesAPI
+from .api import ObservableAPI, ObservableAsyncAPI
+from .entities_api import EntitiesAPI, EntitiesAsyncAPI
 from .view import AbstractEntityView, EntityViewT, EntityViewsAPI, EntityViewView
 from .entity import (
     EntityForm,

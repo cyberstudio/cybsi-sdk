@@ -1,6 +1,6 @@
-from ..internal import BaseAPI
+from ..internal import BaseAPI, BaseAsyncAPI
 from .annotations import AnnotationsAPI
-from .entities_api import EntitiesAPI
+from .entities_api import EntitiesAPI, EntitiesAsyncAPI
 from .relationships import RelationshipsAPI
 from .view import EntityViewsAPI
 
@@ -27,3 +27,12 @@ class ObservableAPI(BaseAPI):
     def annotations(self) -> AnnotationsAPI:
         """Annotations API."""
         return AnnotationsAPI(self._connector)
+
+
+class ObservableAsyncAPI(BaseAsyncAPI):
+    """Observable async API."""
+
+    @property
+    def entities(self) -> EntitiesAsyncAPI:
+        """Entities API handle."""
+        return EntitiesAsyncAPI(self._connector)

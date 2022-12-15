@@ -15,7 +15,7 @@ from .enrichment import EnrichmentAPI, EnrichmentAsyncAPI
 from .error import CybsiError
 from .internal import HTTPConnector, JsonObjectView
 from .internal.connector import AsyncHTTPConnector
-from .observable import ObservableAPI
+from .observable import ObservableAPI, ObservableAsyncAPI
 from .observation import ObservationsAPI, ObservationsAsyncAPI
 from .replist import ReplistsAPI, ReplistsAsyncAPI
 from .report import ReportsAPI, ReportsAsyncAPI
@@ -263,6 +263,11 @@ class CybsiAsyncClient:
     def replists(self) -> ReplistsAsyncAPI:
         """Replists API handle."""
         return ReplistsAsyncAPI(self._connector)
+
+    @property
+    def observable(self) -> ObservableAsyncAPI:
+        """Observable API handle."""
+        return ObservableAsyncAPI(self._connector)
 
 
 class VersionView(JsonObjectView):

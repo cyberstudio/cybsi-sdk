@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a22(2022-12-15)
+--------------------
+- Add entities async API (cherry-pick from release 2.8.4)
+
 2.9.0a21(2022-12-09)
 --------------------
 - Add new NodeRoles attribute values
