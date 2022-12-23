@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.9.0a24(2023-01-09)
+--------------------
+- Update the underlying HTTP library (httpx)
+- Improve type hints
+
 2.9.0a23(2022-12-26)
 --------------------
 - Extend dictionary item view in attribute values
