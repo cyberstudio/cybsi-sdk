@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 import httpx
 
@@ -55,7 +55,7 @@ class HTTPConnector:
         self._client.close()
 
     def do_get(
-        self, path: str, params: dict = None, stream=False, **kwargs
+        self, path: str, params: Optional[dict] = None, stream=False, **kwargs
     ) -> httpx.Response:
         if params is None:
             params = {}
@@ -63,18 +63,22 @@ class HTTPConnector:
             params["embedObjectURL"] = self._embed_object_url
         return self._do("GET", path, params=params, stream=stream, **kwargs)
 
-    def do_post(self, path: str, json=None, **kwargs) -> httpx.Response:
+    def do_post(self, path: str, json: Any = None, **kwargs) -> httpx.Response:
         return self._do("POST", path, json=json, **kwargs)
 
-    def do_patch(self, path: str, tag: Tag, json=None, **kwargs) -> httpx.Response:
+    def do_patch(
+        self, path: str, tag: Tag, json: Any = None, **kwargs
+    ) -> httpx.Response:
         headers = kwargs.setdefault("headers", {})
         headers[_IF_MATCH_HEADER] = tag
         return self._do("PATCH", path, json=json, **kwargs)
 
-    def do_put(self, path: str, json=None, **kwargs) -> httpx.Response:
+    def do_put(self, path: str, json: Any = None, **kwargs) -> httpx.Response:
         return self._do("PUT", path, json=json, **kwargs)
 
-    def do_delete(self, path: str, params: dict = None, **kwargs) -> httpx.Response:
+    def do_delete(
+        self, path: str, params: Optional[dict] = None, **kwargs
+    ) -> httpx.Response:
         return self._do("DELETE", path, params=params, **kwargs)
 
     def _do(self, method: str, path: str, stream=False, **kwargs):
@@ -99,7 +103,7 @@ class HTTPConnector:
             raise CybsiError("could not send request", exp) from exp
 
         if not resp.is_success:
-            if resp.stream:
+            if resp.stream:  # type: ignore
                 # read stream data to raise the error
                 resp.read()
             _raise_cybsi_error(resp)
@@ -146,7 +150,7 @@ class AsyncHTTPConnector:
         await self._client.aclose()
 
     async def do_get(
-        self, path: str, params: dict = None, stream=False, **kwargs
+        self, path: str, params: Optional[dict] = None, stream=False, **kwargs
     ) -> httpx.Response:
         if params is None:
             params = {}
@@ -158,7 +162,7 @@ class AsyncHTTPConnector:
         return await self._do("POST", path, json=json, **kwargs)
 
     async def do_patch(
-        self, path: str, tag: Tag, json=None, **kwargs
+        self, path: str, tag: Tag, json: Any = None, **kwargs
     ) -> httpx.Response:
         headers = kwargs.setdefault("headers", {})
         headers[_IF_MATCH_HEADER] = tag
@@ -168,7 +172,7 @@ class AsyncHTTPConnector:
         return await self._do("PUT", path, json=json, **kwargs)
 
     async def do_delete(
-        self, path: str, params: dict = None, **kwargs
+        self, path: str, params: Optional[dict] = None, **kwargs
     ) -> httpx.Response:
         return await self._do("DELETE", path, params=params, **kwargs)
 
@@ -194,7 +198,7 @@ class AsyncHTTPConnector:
             raise CybsiError("could not send request", exp) from exp
 
         if not resp.is_success:
-            if resp.stream:
+            if resp.stream:  # type: ignore
                 # read stream data to raise the error
                 await resp.aread()
             _raise_cybsi_error(resp)

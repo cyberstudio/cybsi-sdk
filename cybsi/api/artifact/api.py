@@ -91,7 +91,7 @@ class ArtifactsAPI(BaseAPI):
         self,
         filename: str,
         data: Any,
-        artifact_type: ArtifactTypes = None,
+        artifact_type: Optional[ArtifactTypes] = None,
         share_level: ShareLevels = ShareLevels.White,
     ) -> RefView:
         """Upload an artifact.
@@ -129,8 +129,8 @@ class ArtifactsAPI(BaseAPI):
         self,
         artifact_uuid: uuid.UUID,
         *,
-        archive: ArtifactContentDownloadCompressionTypes = None,
-        archive_password: str = None,
+        archive: Optional[ArtifactContentDownloadCompressionTypes] = None,
+        archive_password: Optional[str] = None,
     ) -> ContextManager["ArtifactContent"]:
         """Get artifact content.
 
@@ -287,7 +287,7 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
         *,
         filename: str,
         data: Any,
-        artifact_type: ArtifactTypes = None,
+        artifact_type: Optional[ArtifactTypes] = None,
         share_level: ShareLevels = ShareLevels.White,
     ) -> RefView:
         """Upload an artifact.
@@ -325,8 +325,8 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
         self,
         *,
         artifact_uuid: uuid.UUID,
-        archive: ArtifactContentDownloadCompressionTypes = None,
-        archive_password: str = None,
+        archive: Optional[ArtifactContentDownloadCompressionTypes] = None,
+        archive_password: Optional[str] = None,
     ) -> AsyncContextManager["ArtifactAsyncContent"]:
         """Get artifact content
 

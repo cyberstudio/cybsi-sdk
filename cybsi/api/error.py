@@ -9,7 +9,7 @@ Each exception type is annotated if it makes sense to retry.
 
 Some exceptions have ``code`` property. It allows to determine the concrete error.
 """
-from typing import Any, Dict, cast
+from typing import Any, Dict, Optional, cast
 
 import httpx
 from enum_tools import document_enum
@@ -30,7 +30,7 @@ class CybsiError(Exception):
 
     """
 
-    def __init__(self, message, ex: Exception = None):
+    def __init__(self, message, ex: Optional[Exception] = None):
         msg = message if ex is None else f"{message}: {ex}"
         super().__init__(msg)
         self._ex = ex
@@ -43,7 +43,11 @@ class APIError(CybsiError):
     """Base exception for HTTP 4xx API responses."""
 
     def __init__(
-        self, status: int, content: JsonObject, header: str = None, suffix: str = None
+        self,
+        status: int,
+        content: JsonObject,
+        header: Optional[str] = None,
+        suffix: Optional[str] = None,
     ) -> None:
         self._status = status
         self._view = _ErrorView(content)

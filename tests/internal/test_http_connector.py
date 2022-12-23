@@ -17,7 +17,7 @@ class HTTPConnectorTest(unittest.TestCase):
         )
 
     @patch.object(httpx.Client, "send")
-    def test_connector_default_headers(self, mock):
+    def test_connector_default_headers(self, mock) -> None:
         mock.return_value.status_code = 200
 
         self.connector.do_get("/test")
@@ -30,7 +30,7 @@ class HTTPConnectorTest(unittest.TestCase):
         )
 
     @patch.object(httpx.Client, "send")
-    def test_connector_do_get(self, mock):
+    def test_connector_do_get(self, mock) -> None:
         status_code = 200
         mock.return_value.status_code = status_code
 
@@ -42,7 +42,7 @@ class HTTPConnectorTest(unittest.TestCase):
         self.assertEqual(f"{self.base_url}/test?p1=v1", req.url)
 
     @patch.object(httpx.Client, "send")
-    def test_connector_do_post(self, mock):
+    def test_connector_do_post(self, mock) -> None:
         status_code = 200
         mock.return_value.status_code = status_code
         body = {"field1": "value1", "field2": "value2"}
@@ -56,7 +56,7 @@ class HTTPConnectorTest(unittest.TestCase):
         self.assertEqual(body, json.loads(req.content))
 
     @patch.object(httpx.Client, "send")
-    def test_connector_do_post_503(self, mock):
+    def test_connector_do_post_503(self, mock) -> None:
         mock.return_value = self._make_response(
             503, b"Server is busy laying on the floor"
         )
@@ -65,12 +65,12 @@ class HTTPConnectorTest(unittest.TestCase):
             self.connector.do_post("/test", json={})
 
     @patch.object(httpx.Client, "send")
-    def test_connector_do_get_404(self, mock):
+    def test_connector_do_get_404(self, mock) -> None:
         mock.return_value = self._make_response(404, b'{"code": "NotFound"}')
 
         with self.assertRaises(NotFoundError):
             self.connector.do_get("/test")
 
     @staticmethod
-    def _make_response(status_code, content):
+    def _make_response(status_code, content) -> httpx.Response:
         return httpx.Response(status_code=status_code, content=content)

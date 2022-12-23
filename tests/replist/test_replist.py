@@ -1,5 +1,5 @@
 import uuid
-from typing import cast
+from typing import Any, List, cast
 from unittest.mock import patch
 
 from cybsi.api.internal.connector import HTTPConnector
@@ -10,7 +10,7 @@ from cybsi.api.observable import (
     EntityView,
     NodeRole,
 )
-from cybsi.api.pagination import Cursor
+from cybsi.api.pagination import Cursor, Page
 from cybsi.api.replist import EntitySetChangeView, EntitySetOperations, ReplistsAPI
 from tests import BaseTest
 
@@ -40,20 +40,21 @@ class ReplistTest(BaseTest):
         self.replists_api = ReplistsAPI(self.connector)
 
     @patch.object(HTTPConnector, "do_get")
-    def test_replist_entities_default_view(self, mock):
+    def test_replist_entities_default_view(self, mock) -> None:
         entities_response = [
             {
                 "type": "IPAddress",
                 "uuid": "8f960b00-220a-4785-b9b9-b993efab9165",
                 "keys": [{"type": "String", "value": "171.25.193.77"}],
             }
-        ]
+        ]  # type: List[Any]
 
         mock.return_value = self._make_response(200, entities_response)
 
         replist_uuid = uuid.uuid4()
         # GIVEN: Replist containing some entities
         # WHEN: Request the entities
+        call_result_page: Page[EntityView]
         call_result_page, cursor = self.replists_api.entities(replist_uuid)
 
         args, _ = mock.call_args
@@ -61,7 +62,7 @@ class ReplistTest(BaseTest):
         assert f"/replists/{replist_uuid}/entities" == args[0]
 
         ent = entities_response[0]
-        parsed = cast(EntityView, call_result_page.data()[0])
+        parsed = call_result_page.data()[0]
 
         # THEN: Entities are properly parsed, types are converted to SDK types
         assert uuid.UUID(ent["uuid"]) == parsed.uuid
@@ -69,7 +70,7 @@ class ReplistTest(BaseTest):
         assert EntityKeyTypes(ent["keys"][0]["type"]) == parsed.keys[0].type
 
     @patch.object(HTTPConnector, "do_get")
-    def test_replist_entities_custom_view(self, mock):
+    def test_replist_entities_custom_view(self, mock) -> None:
         entities_response = [
             {"type": "IPAddress", "value": "171.25.193.77", "nodeRole": "CnC"}
         ]
@@ -97,7 +98,7 @@ class ReplistTest(BaseTest):
         assert NodeRole(ent["nodeRole"]) == parsed.node_role
 
     @patch.object(HTTPConnector, "do_get")
-    def test_replist_changes_custom_view(self, mock):
+    def test_replist_changes_custom_view(self, mock) -> None:
         changes_response = [
             {
                 "operation": "Add",
@@ -107,7 +108,7 @@ class ReplistTest(BaseTest):
                     "nodeRole": "CnC",
                 },
             }
-        ]
+        ]  # type: List[Any]
 
         mock.return_value = self._make_response(200, changes_response)
 
@@ -116,6 +117,7 @@ class ReplistTest(BaseTest):
 
         # GIVEN: Replist containing some changes
         # WHEN: Request the changes, require non-basic view
+        call_result_page: Page[EntitySetChangeView[CustomEntityView]]
         call_result_page = self.replists_api.changes(
             replist_uuid, cursor=cursor, entity_view=CustomEntityView
         )
@@ -126,7 +128,7 @@ class ReplistTest(BaseTest):
 
         change = changes_response[0]
         ent = change["entity"]
-        parsed: EntitySetChangeView[CustomEntityView] = call_result_page.data()[0]
+        parsed = call_result_page.data()[0]
 
         # THEN: Change fields are parsed correctly.
         assert EntitySetOperations(change["operation"]) == parsed.operation

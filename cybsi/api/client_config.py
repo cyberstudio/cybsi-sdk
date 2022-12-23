@@ -26,8 +26,8 @@ class Limits:
     def __init__(
         self,
         *,
-        max_connections: int = None,
-        max_keepalive_connections: int = None,
+        max_connections: Optional[int] = None,
+        max_keepalive_connections: Optional[int] = None,
         keepalive_expiry: Optional[float] = 5.0,
     ):
         self.max_connections = max_connections
