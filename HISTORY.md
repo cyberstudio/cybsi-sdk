@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a23(2022-12-26)
+--------------------
+- Extend dictionary item view in attribute values
+
 2.9.0a22(2022-12-15)
 --------------------
 - Add entities async API (cherry-pick from release 2.8.4)

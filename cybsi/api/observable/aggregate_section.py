@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Any, Callable, Dict, Generic, List, Optional, TypeVar, Union
 
 from .. import RefView
+from ..dictionary import DictionaryItemCommonView
 from ..internal import JsonObject, JsonObjectView, list_mapper, parse_rfc3339_timestamp
 from .enums import (
     AttributeNames,
@@ -21,7 +22,7 @@ T = TypeVar("T")
 """Type of section data. Depends on section name."""
 
 
-AttributeValueView = Union[str, bool, int, uuid.UUID, RefView, Enum]
+AttributeValueView = Union[str, bool, int, uuid.UUID, DictionaryItemCommonView, Enum]
 
 
 def _convert_attribute_value_type(
@@ -35,9 +36,9 @@ def _convert_attribute_value_type(
         AttributeNames.IsTrusted: bool,
         AttributeNames.Size: int,
         AttributeNames.MalwareNames: str,
-        AttributeNames.MalwareClasses: RefView,
-        AttributeNames.MalwareFamilies: RefView,
-        AttributeNames.RelatedMalwareFamilies: RefView,
+        AttributeNames.MalwareClasses: DictionaryItemCommonView,
+        AttributeNames.MalwareFamilies: DictionaryItemCommonView,
+        AttributeNames.RelatedMalwareFamilies: DictionaryItemCommonView,
         AttributeNames.NodeRoles: NodeRole,
         AttributeNames.ThreatCategory: ThreatCategory,
         AttributeNames.RelatedThreatCategory: RelatedThreatCategory,
@@ -113,20 +114,15 @@ class AttributeValuableFactView(ValuableFactView):
     def value(self) -> "AttributeValueView":
         """Facts attribute value. Returned value type depends on attribute.
 
-        Note:
-            Return :class:`~cybsi.api.RefView` type
-            is used to get the value of a dictionary item attribute.
-            You can resolve the ref
-            using :meth:`~cybsi.api.dictionary.DictionariesAPI.view_item`.
         Usage:
             >>> from typing import cast
             >>> from cybsi.api.observable import AttributeValuableFactView
-            >>> from cybsi.api import RefView
+            >>> from cybsi.api.dictionary import DictionaryItemCommonView
             >>>
             >>> view = AttributesSectionData()
             >>> if view.attribute_name == AttributeNames.MalwareFamilies:
             >>>     for v in view.values:
-            >>>         value = cast(RefView, v.value)
+            >>>         value = cast(DictionaryItemCommonView, v.value)
             >>>         print(value)
         """
         return _convert_attribute_value_type(self._attribute_name, self._get("value"))
@@ -143,20 +139,15 @@ class AttributeAggregatedValue(JsonObjectView):
     def value(self) -> "AttributeValueView":
         """Attribute value. Returned value type depends on attribute.
 
-        Note:
-            Return :class:`~cybsi.api.RefView` type
-            is used to get the value of a dictionary item attribute.
-            You can resolve the ref
-            using :meth:`~cybsi.api.dictionary.DictionariesAPI.view_item`.
         Usage:
             >>> from typing import cast
             >>> from cybsi.api.observable import AttributeValuableFactView
-            >>> from cybsi.api import RefView
+            >>> from cybsi.api.dictionary import DictionaryItemCommonView
             >>>
             >>> view = AttributesSectionData()
             >>> if view.attribute_name == AttributeNames.MalwareFamilies:
             >>>     for v in view.values:
-            >>>         value = cast(RefView, v.value)
+            >>>         value = cast(DictionaryItemCommonView, v.value)
             >>>         print(value)
         """
         return _convert_attribute_value_type(self._attribute_name, self._get("value"))

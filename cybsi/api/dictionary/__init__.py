@@ -12,6 +12,6 @@ from .api import (
     DictionaryView,
     DictionaryCommonView,
     DictionaryItemView,
-    DictionaryCommonItemView,
+    DictionaryItemCommonView,
     DictItemAttributeValue,
 )

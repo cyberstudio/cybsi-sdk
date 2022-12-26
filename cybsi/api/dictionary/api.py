@@ -158,7 +158,7 @@ class DictionariesAPI(BaseAPI):
         prefix: Optional[str] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
-    ) -> Page["DictionaryCommonItemView"]:
+    ) -> Page["DictionaryItemCommonView"]:
         """Get a filtered list of dictionary items.
 
         Results are sorted in alphabetical order by dictionary item name.
@@ -200,7 +200,7 @@ class DictionariesAPI(BaseAPI):
 
         path = f"{self._path}/{dictionary_uuid}/items"
         resp = self._connector.do_get(path=path, params=params)
-        page = Page(self._connector.do_get, resp, DictionaryCommonItemView)
+        page = Page(self._connector.do_get, resp, DictionaryItemCommonView)
         return page
 
     def add_item_synonym(
@@ -266,7 +266,7 @@ class DictionaryView(DictionaryCommonView):
         return self._get_optional("description")
 
 
-class DictionaryCommonItemView(RefView):
+class DictionaryItemCommonView(RefView):
     """Dictionary item common view."""
 
     @property
@@ -275,7 +275,7 @@ class DictionaryCommonItemView(RefView):
         return self._get("key")
 
 
-class DictionaryItemView(_TaggedRefView, DictionaryCommonItemView):
+class DictionaryItemView(_TaggedRefView, DictionaryItemCommonView):
     """Dictionary item detailed view."""
 
     @property

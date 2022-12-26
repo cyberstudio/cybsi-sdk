@@ -393,20 +393,15 @@ class AttributeValueFactView(JsonObjectView):
     def value(self) -> AttributeValueView:
         """Value of the attribute.  Return type depends on attribute name and entity type.
 
-        Note:
-            Return :class:`~cybsi.api.RefView` type
-            is used to get the value of a dictionary item attribute.
-            You can resolve the ref using
-            :meth:`~cybsi.api.dictionary.DictionariesAPI.view_item`.
         Usage:
             >>> from typing import cast
             >>> from cybsi.api.observation import GenericObservationContentView
-            >>> from cybsi.api import RefView
+            >>> from cybsi.api.dictionary import DictionaryItemCommonView
             >>>
             >>> view = GenericObservationContentView()
             >>> for v in view.entity_attribute_values:
             >>>     if v.attribute_name == AttributeNames.MalwareFamilies:
-            >>>         value = cast(RefView, v.value)
+            >>>         value = cast(DictionaryItemCommonView, v.value)
             >>>         print(value)
         """
         return _convert_attribute_value_type(self.attribute_name, self._get("value"))
