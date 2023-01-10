@@ -19,6 +19,7 @@ from typing import (
 from .. import RefView
 from ..error import CybsiError
 from ..internal import BaseAPI, BaseAsyncAPI, JsonObjectView, parse_rfc3339_timestamp
+from ..internal.multipart import AsyncStreamWrapper
 from ..observable import EntityView, ShareLevels
 from ..pagination import AsyncPage, Cursor, Page
 from ..view import _TaggedRefView
@@ -93,6 +94,7 @@ class ArtifactsAPI(BaseAPI):
         data: Any,
         artifact_type: Optional[ArtifactTypes] = None,
         share_level: ShareLevels = ShareLevels.White,
+        timeout: int = 300,
     ) -> RefView:
         """Upload an artifact.
 
@@ -103,6 +105,7 @@ class ArtifactsAPI(BaseAPI):
             data: File-like object. If you have bytes, wrap them in BytesIO.
             artifact_type: Artifact type.
             share_level: Artifact share level.
+            timeout: Connection timeout in sec.
         Returns:
             Reference to artifact in API.
         Raises:
@@ -122,7 +125,11 @@ class ArtifactsAPI(BaseAPI):
         form["shareLevel"] = share_level.value.encode()
         form["file"] = (filename, data)
 
-        r = self._connector.do_post(path=_ARTIFACTS_PATH, files=form)
+        r = self._connector.do_post(
+            path=_ARTIFACTS_PATH,
+            files=form,
+            timeout=timeout,
+        )
         return RefView(r.json())
 
     def get_content(
@@ -287,8 +294,10 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
         *,
         filename: str,
         data: Any,
+        data_size: int = 0,
         artifact_type: Optional[ArtifactTypes] = None,
         share_level: ShareLevels = ShareLevels.White,
+        timeout: int = 300,
     ) -> RefView:
         """Upload an artifact.
 
@@ -296,9 +305,13 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
             Calls `POST /enrichment/artifacts`.
         Args:
             filename: Name of the artifact.
-            data: File-like object. If you have bytes, wrap them in BytesIO.
+            data: File-like or async stream object.
+                If you have bytes, wrap them in BytesIO.
+            data_size: Total file size.
+                Required for StreamReader or AsyncIterator data types.
             artifact_type: Artifact type.
             share_level: Artifact share level.
+            timeout: Connection timeout in sec.
         Returns:
             Reference to artifact in API.
         Raises:
@@ -307,18 +320,26 @@ class ArtifactsAsyncAPI(BaseAsyncAPI):
         See Also:
             See :ref:`upload-download-artifact-example`
             for a complete example of this function usage.
-
+            See :ref:`advanced` for asynchronous multipart upload example.
+        Warning:
+            Upload is synchronous if data_size is not provided.
         """
 
         form: Dict[str, Any] = {}
 
         if artifact_type is not None:
             form["type"] = artifact_type.value.encode()
-
         form["shareLevel"] = share_level.value.encode()
-        form["file"] = (filename, data)
+        if data_size > 0:
+            form["file"] = (filename, AsyncStreamWrapper(data, data_size))
+        else:
+            form["file"] = (filename, data)
 
-        r = await self._connector.do_post(path=_ARTIFACTS_PATH, files=form, timeout=300)
+        r = await self._connector.do_post(
+            path=_ARTIFACTS_PATH,
+            files=form,
+            timeout=timeout,
+        )
         return RefView(r.json())
 
     def get_content(

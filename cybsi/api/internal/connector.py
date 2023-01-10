@@ -7,6 +7,7 @@ from cybsi.__version__ import __version__
 from ..api import Tag
 from ..client_config import DEFAULT_LIMITS, DEFAULT_TIMEOUTS, Limits, Timeouts
 from ..error import CybsiError, _raise_cybsi_error
+from .multipart import apply_async_multipart_stream
 
 _BASIC_HEADERS = {
     "Accept": "application/vnd.ptsecurity.app-v2",
@@ -14,6 +15,8 @@ _BASIC_HEADERS = {
 }
 
 _IF_MATCH_HEADER = "If-Match"
+
+apply_async_multipart_stream()
 
 
 class HTTPConnector:

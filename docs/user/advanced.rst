@@ -35,3 +35,13 @@ You can find builtin views in :mod:`~cybsi.utils.views` or use :meth:`~cybsi.api
 In the example below you can see replist entities in PT Multiscanner view:
 
 .. literalinclude:: ../../examples/get_entity_view.py
+
+Asynchronous artifacts uploading
+--------------------------------
+
+You can upload artifacts asynchronously using multipart/form-data streams.
+For usage pass asyncio/aiohttp `StreamReader` or `AsyncIterator` as argument to :meth:`~cybsi.api.artifact.ArtifactsAsyncAPI.upload`.
+
+In the example below you can see local and remote files uploading:
+
+.. literalinclude:: ../../examples/upload_async_multipart_artifact.py

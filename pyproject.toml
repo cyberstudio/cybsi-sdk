@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cybsi-sdk"
-version = "2.9.0a24"
+version = "2.9.0a25"
 description = "Cybsi development kit"
 authors = ["Cybsi developers"]
 license = "MIT"
@@ -15,6 +15,7 @@ enum-tools = "0.9.0.post1"
 typing-extensions = {version = "^4.1.1", markers = "python_version < '3.8'" }
 httpx = "^0.23.1"
 sphinx-jinja2-compat = "0.1.1"
+aiofiles = "22.1.0"
 
 [tool.poetry.dev-dependencies]
 isort = "5.10.1"
@@ -27,6 +28,10 @@ sphinx_toolbox = "2.16.0"
 sphinx-autodoc-typehints = "1.11.1"
 pytest = "^7.1.1"
 tbump = "6.8.0"
+sphinx-jinja2-compat = "0.1.1"
+aiofiles = "22.1.0"
+types-aiofiles = "22.1.0.4"
+aiohttp = "3.8.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -39,7 +44,7 @@ extend_skip = ["__init__.py"]
 [tool.tbump]
 
 [tool.tbump.version]
-current = "2.9.0a24"
+current = "2.9.0a25"
 
 regex = '''
   ^

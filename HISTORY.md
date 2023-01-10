@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0a25(2023-01-10)
+--------------------
+- Asynchronous artifacts uploading (see advanced.rst)
+
 2.9.0a24(2023-01-09)
 --------------------
 - Update the underlying HTTP library (httpx)
