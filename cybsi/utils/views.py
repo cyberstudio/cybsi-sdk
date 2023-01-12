@@ -44,11 +44,11 @@ class PTMSEntityView(AbstractEntityView):
         return BasicEntityView(self._get("entity"))
 
     @property
-    def malware_classes(self) -> List[str]:
+    def malware_classes(self) -> Optional[List[str]]:
         """Malware classes.
         Expected, but not required for File entity type.
         :data:`None` for other entity types."""
-        return self._get("malwareClasses")
+        return self._map_list_optional("malwareClasses", str)
 
     @property
     def malware_family(self) -> Optional[str]:

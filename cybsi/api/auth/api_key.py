@@ -164,6 +164,7 @@ class APIKeysAPI(BaseAPI):
         limit: Optional[int] = None,
     ) -> Page["APIKeyCommonView"]:
         """Get API keys created for user.
+        Keys are ordered by creation timestamp, new first.
 
         Note:
             Calls `GET /users/{user_uuid}/api-keys`.
@@ -393,15 +394,16 @@ class APIKeyCommonView(JsonObjectView):
         return parse_rfc3339_timestamp(self._get("createdAt"))
 
     @property
-    def expires_at(self) -> datetime:
-        """Expiration date.
+    def expires_at(self) -> Optional[datetime]:
+        """Expiration date. :data:`None` if it shouldn't expire.
+
         The API-Key is automatically revoked after the expiration date."""
-        return parse_rfc3339_timestamp(self._get("expiresAt"))
+        return self._map_optional("expiresAt", parse_rfc3339_timestamp)
 
     @property
-    def last_used_at(self) -> datetime:
-        """Last used date."""
-        return parse_rfc3339_timestamp(self._get("lastUsedAt"))
+    def last_used_at(self) -> Optional[datetime]:
+        """Last used date. :data:`None` if it wasn't used yet."""
+        return self._map_optional("lastUsedAt", parse_rfc3339_timestamp)
 
     @property
     def revoked(self) -> bool:

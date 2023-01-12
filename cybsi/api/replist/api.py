@@ -154,6 +154,11 @@ class ReplistsAPI(BaseAPI):
             The cursor can be used to call :meth:`changes`.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
+            :class:`~cybsi.api.error.SemanticError`: Semantic request error.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityViewNotFound`
+
         .. versionchanged:: 2.9
             Add entity view support. See :mod:`~cybsi.utils.views` for details.
         """
@@ -214,6 +219,8 @@ class ReplistsAPI(BaseAPI):
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.CursorOutOfRange`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityViewNotFound`
+
         .. versionchanged:: 2.9
             Add entity view support. See :mod:`~cybsi.utils.views` for details.
         """
@@ -428,9 +435,13 @@ class ReplistView(_TaggedRefView, ReplistCommonView):
     """Reputation list full view."""
 
     @property
-    def updated_at(self) -> datetime:
-        """Replist last updated time."""
-        return parse_rfc3339_timestamp(self._get("createdAt"))
+    def updated_at(self) -> Optional[datetime]:
+        """Replist last updated time.
+
+        :data:`None` if it was never updated.
+
+        """
+        return self._map_optional("createdAt", parse_rfc3339_timestamp)
 
     @property
     def status(self) -> ReplistStatus:

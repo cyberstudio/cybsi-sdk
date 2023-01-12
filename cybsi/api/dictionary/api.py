@@ -260,10 +260,7 @@ class DictionaryCommonView(RefView):
 class DictionaryView(DictionaryCommonView):
     """Dictionary detailed view."""
 
-    @property
-    def description(self) -> Optional[str]:
-        """Dictionary description."""
-        return self._get_optional("description")
+    pass
 
 
 class DictionaryItemCommonView(RefView):

@@ -88,6 +88,7 @@ class ReportsAPI(BaseAPI):
         created_after: Optional[datetime] = None,
         updated_before: Optional[datetime] = None,
         updated_after: Optional[datetime] = None,
+        external_id: Optional[str] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["ReportHeaderView"]:
@@ -117,10 +118,11 @@ class ReportsAPI(BaseAPI):
                 The '_' symbol replaces only one title symbol.
                 To search for '%' and '_' symbols in the usual sense,
                 you need to prepend them with '\'.
-            created_before: Filter report created before the time (inclusive).
-            created_after: Filter report created after the time (inclusive).
-            updated_before: Filter report updated before the time (inclusive).
-            updated_after: Filter report updated after the time (inclusive).
+            created_before: Filter reports created before the timestamp (inclusive).
+            created_after: Filter reports created after the timestamp (inclusive).
+            updated_before: Filter reports updated before the timestamp (inclusive).
+            updated_after: Filter reports updated after the timestamp (inclusive).
+            external_id: Filter reports by their external id. Min length is 1.
             cursor: Page cursor.
             limit: Page limit.
         Returns:
@@ -159,6 +161,8 @@ class ReportsAPI(BaseAPI):
             params["updatedBefore"] = rfc3339_timestamp(updated_before)
         if updated_after is not None:
             params["updatedAfter"] = rfc3339_timestamp(updated_after)
+        if external_id is not None:
+            params["externalID"] = external_id
         if cursor:
             params["cursor"] = str(cursor)
         if limit:
@@ -272,8 +276,10 @@ class ReportsAPI(BaseAPI):
         Returns:
             Reference to the report.
         Raises:
-            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.ForbiddenError`: Operation was forbidden.
+                Most probably because user is not owner of the report.
             :class:`~cybsi.api.error.NotFoundError`: Report not found.
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.ObservationNotFound`
@@ -293,6 +299,7 @@ class ReportsAPI(BaseAPI):
         limit: Optional[int] = None,
     ) -> Page["ObservationView"]:
         """Filter observations in the report.
+        Observations having share level above user's access level are filtered out.
 
         Note:
             Calls `GET /enrichment/reports/{report_uuid}/observations`.
@@ -330,6 +337,8 @@ class ReportsAPI(BaseAPI):
         Returns:
             Reference to the report.
         Raises:
+            :class:`~cybsi.api.error.ForbiddenError`: Operation was forbidden.
+                Most probably because user is not owner of the report.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
             :class:`~cybsi.api.error.NotFoundError`: Report not found.
         Note:
@@ -350,6 +359,7 @@ class ReportsAPI(BaseAPI):
         limit: Optional[int] = None,
     ) -> Page["ArtifactCommonView"]:
         """Filter artifacts in the report.
+        Artifacts having share level above user's access level are filtered out.
 
         Note:
             Calls `GET /enrichment/reports/{report_uuid}/artifacts`.
@@ -433,6 +443,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
         created_after: Optional[datetime] = None,
         updated_before: Optional[datetime] = None,
         updated_after: Optional[datetime] = None,
+        external_id: Optional[str] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> AsyncPage["ReportHeaderView"]:
@@ -462,10 +473,11 @@ class ReportsAsyncAPI(BaseAsyncAPI):
                 The '_' symbol replaces only one title symbol.
                 To search for '%' and '_' symbols in the usual sense,
                 you need to prepend them with '\'.
-            created_before: Filter report created before the time (inclusive).
-            created_after: Filter report created after the time (inclusive).
-            updated_before: Filter report updated before the time (inclusive).
-            updated_after: Filter report updated after the time (inclusive).
+            created_before: Filter reports created before the timestamp (inclusive).
+            created_after: Filter reports created after the timestamp (inclusive).
+            updated_before: Filter reports updated before the timestamp (inclusive).
+            updated_after: Filter reports updated after the timestamp (inclusive).
+            external_id: Filter reports by their external id. Min length is 1.
             cursor: Page cursor.
             limit: Page limit.
         Returns:
@@ -504,6 +516,8 @@ class ReportsAsyncAPI(BaseAsyncAPI):
             params["updatedBefore"] = rfc3339_timestamp(updated_before)
         if updated_after is not None:
             params["updatedAfter"] = rfc3339_timestamp(updated_after)
+        if external_id is not None:
+            params["externalID"] = external_id
         if cursor:
             params["cursor"] = str(cursor)
         if limit:
@@ -638,6 +652,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
         limit: Optional[int] = None,
     ) -> AsyncPage["ObservationView"]:
         """Filter observations in the report.
+        Observations having share level above user's access level are filtered out.
 
         Note:
             Calls `GET /enrichment/reports/{report_uuid}/observations`.
@@ -695,6 +710,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
         limit: Optional[int] = None,
     ) -> AsyncPage["ArtifactCommonView"]:
         """Filter artifacts in the report.
+        Artifacts having share level above user's access level are filtered out.
 
         Note:
             Calls `GET /enrichment/reports/{report_uuid}/artifacts`.

@@ -216,9 +216,18 @@ class CybsiLangErrorView(JsonObjectView):
 
     @property
     def position(self) -> "ErrorPosition":
-        """Position."""
+        """Position of the error start."""
 
         return ErrorPosition(self._get("position"))
+
+    @property
+    def until_position(self) -> "ErrorPosition":
+        """Position of the error end.
+
+        Points to a symbol next to the last symbol of the error.
+        """
+
+        return ErrorPosition(self._get("untilPosition"))
 
 
 class ErrorPosition(JsonObjectView):

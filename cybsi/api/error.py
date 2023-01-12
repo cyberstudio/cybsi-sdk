@@ -207,6 +207,8 @@ class SemanticErrorCodes(CybsiAPIEnum):
     """Enrichment using provided parameters is not possible."""
     EntityNotFound = "EntityNotFound"
     """Entity not found."""
+    EntityViewNotFound = "EntityViewNotFound"
+    """Entity view not found."""
     FileNotFound = "FileNotFound"
     """File entity not found."""
     ImmutableValue = "ImmutableValue"

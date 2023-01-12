@@ -7,12 +7,16 @@ from cybsi.api.enum import CybsiAPIEnum
 class CybsiLangErrorCodes(CybsiAPIEnum):
     """Stored query error code."""
 
+    CommentNotTerminated = "CommentNotTerminated"
+    """Syntax error: comment not terminated"""
+    IdentifierNotTerminated = "IdentifierNotTerminated"
+    """Syntax error: identifier not terminated"""
     InvalidCharacter = "InvalidCharacter"
     """Symbol error: invalid character"""
     InvalidEscapeSequence = "InvalidEscapeSequence"
     """Symbol error: invalid escape sequence"""
-    CommentNotTerminated = "CommentNotTerminated"
-    """Syntax error: comment not terminated"""
+    InvalidIdentifier = "InvalidIdentifier"
+    """Syntax error: invalid identifier"""
     InvalidNumber = "InvalidNumber"
     """Syntax error: invalid number"""
     StringNotTerminated = "StringNotTerminated"

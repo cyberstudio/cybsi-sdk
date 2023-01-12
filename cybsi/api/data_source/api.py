@@ -1,5 +1,5 @@
 import uuid
-from typing import Any, Dict, Iterable, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 from .. import RefView
 from ..api import Nullable, Tag, _unwrap_nullable
@@ -469,6 +469,16 @@ class DataSourceLinksView(JsonObjectView):
     def user(self) -> Optional[RefView]:
         """Reference to user.
 
+        .. deprecated:: 2.8
+
         Use :meth:`~cybsi.api.user.UsersAPI.view` to retrieve user view.
         """
         return self._map_optional("user", RefView)
+
+    @property
+    def users(self) -> Optional[List[RefView]]:
+        """References to users.
+
+        Use :meth:`~cybsi.api.user.UsersAPI.view` to retrieve user view.
+        """
+        return self._map_list_optional("users", RefView)
