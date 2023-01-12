@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.9.0 (2023-01-12)
+------------------
+- Sync SDK with API specification 2.9.0
+
 2.9.0a25(2023-01-10)
 --------------------
 - Asynchronous artifacts uploading (see advanced.rst)
