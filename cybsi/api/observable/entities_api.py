@@ -52,6 +52,9 @@ _attr_value_kebab_converters: Dict[AttributeNames, str] = {
     AttributeNames.RelatedThreatCategory: "related-threat-category",
     AttributeNames.ThreatCategory: "threat-category",
     AttributeNames.MalwareNames: "malware-names",
+    AttributeNames.Campaigns: "campaigns",
+    AttributeNames.ThreatActors: "threat-actors",
+    AttributeNames.AffectedCountries: "affected-countries",
 }
 
 

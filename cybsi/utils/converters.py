@@ -113,6 +113,9 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.RegionalInternetRegistry: _new_enum_value_converter(
         RegionalInternetRegistry, ignore_case=True
     ),
+    AttributeNames.Campaigns: _dict_item_value_converter,
+    AttributeNames.ThreatActors: _dict_item_value_converter,
+    AttributeNames.AffectedCountries: _dict_item_value_converter,
 }
 
 

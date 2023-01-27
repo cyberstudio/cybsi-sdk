@@ -46,6 +46,9 @@ def _convert_attribute_value_type(
         AttributeNames.Class: IdentityClass,
         AttributeNames.ASN: int,
         AttributeNames.Statuses: DictionaryItemCommonView,
+        AttributeNames.Campaigns: DictionaryItemCommonView,
+        AttributeNames.ThreatActors: DictionaryItemCommonView,
+        AttributeNames.AffectedCountries: DictionaryItemCommonView,
     }
 
     return _attribute_value_types[attribute_name](val)

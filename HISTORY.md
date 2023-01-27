@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.10.0a2 (2023-01-27)
+---------------------
+- Add Campaigns, ThreatActors, AffectedCountries attributes
+- Add ASN, Statuses to attribute value convertor func (cherry-pick from release 2.9.1)
+
 2.10.0a1 (2023-01-27)
 ---------------------
 - Add closed dictionary properties

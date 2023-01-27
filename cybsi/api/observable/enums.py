@@ -188,6 +188,36 @@ class AttributeNames(CybsiAPIEnum):
       The entity malware name. Attribute value type is :class:`str`.
       Attribute belongs to `File` entity type.
     """
+    Campaigns = "Campaigns"
+    """
+      .. versionadded:: 2.10
+
+      The entity is used in a malicious campaign.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
+      `URL` entity type.
+    """
+    ThreatActors = "ThreatActors"
+    """
+      .. versionadded:: 2.10
+
+      The entity is used by threat actor.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
+      `URL` entity type.
+    """
+    AffectedCountries = "AffectedCountries"
+    """
+      .. versionadded:: 2.10
+
+      The entity can be used most often in countries.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
+      `URL` entity type.
+    """
 
 
 @document_enum
