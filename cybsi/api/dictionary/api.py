@@ -82,6 +82,8 @@ class DictionariesAPI(BaseAPI):
         """Register item for the dictionary.
 
         .. versionadded:: 2.9
+        .. versionchanged:: 2.10
+            Added semantic error `DictionaryClosed`
         Note:
             Calls `POST /dictionary-items`.
         Args:
@@ -96,6 +98,7 @@ class DictionariesAPI(BaseAPI):
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryClosed`
         """
 
         item._data["dictionaryUUID"] = dictionary_uuid
@@ -129,6 +132,8 @@ class DictionariesAPI(BaseAPI):
         """Edit the dictionary item.
 
         .. versionadded:: 2.9
+        .. versionchanged:: 2.10
+            Added semantic error `DictionaryClosed`
         Note:
             Calls `PATCH /dictionary-items/{item_uuid}`.
         Args:
@@ -143,6 +148,10 @@ class DictionariesAPI(BaseAPI):
             :class:`~cybsi.api.error.NotFoundError`: Dictionary item not found.
             :class:`~cybsi.api.error.ResourceModifiedError`:
                 Dictionary item changed since last request. Update tag and retry.
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryClosed`
         """
         form = {}
         if description is not None:
@@ -209,6 +218,8 @@ class DictionariesAPI(BaseAPI):
         """Add dictionary item to synonym group.
 
         .. versionadded:: 2.9
+        .. versionchanged:: 2.10
+            Added semantic error `DictionaryClosed`
         Note:
             Calls `PUT /dictionary-items/{item_uuid}/synonyms`.
         Args:
@@ -226,6 +237,7 @@ class DictionariesAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.ItemAlreadyInSynonymGroup`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidSynonym`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryClosed`
         """
 
         form = {"synonymUUID": str(synonym_uuid)}
@@ -236,12 +248,18 @@ class DictionariesAPI(BaseAPI):
         """Remove dictionary item from synonym group.
 
         .. versionadded:: 2.9
+        .. versionchanged:: 2.10
+            Added semantic error `DictionaryClosed`
         Note:
             Calls `DELETE /dictionary-items/{item_uuid}/synonyms`.
         Args:
             item_uuid: Dictionary item UUID.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Dictionary item not found.
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryClosed`
         """
 
         path = f"{self._path_dictionary_items}/{item_uuid}/synonyms"
@@ -260,7 +278,10 @@ class DictionaryCommonView(RefView):
 class DictionaryView(DictionaryCommonView):
     """Dictionary detailed view."""
 
-    pass
+    @property
+    def is_closed(self) -> bool:
+        """Closed dictionary flag."""
+        return self._get("isClosed")
 
 
 class DictionaryItemCommonView(RefView):

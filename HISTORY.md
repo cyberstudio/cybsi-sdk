@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.10.0a1 (2023-01-27)
+---------------------
+- Add closed dictionary properties
+
 2.9.0 (2023-01-12)
 ------------------
 - Sync SDK with API specification 2.9.0
