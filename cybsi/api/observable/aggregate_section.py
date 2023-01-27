@@ -44,6 +44,8 @@ def _convert_attribute_value_type(
         AttributeNames.RelatedThreatCategory: RelatedThreatCategory,
         AttributeNames.Sectors: IndustrySector,
         AttributeNames.Class: IdentityClass,
+        AttributeNames.ASN: int,
+        AttributeNames.Statuses: DictionaryItemCommonView,
     }
 
     return _attribute_value_types[attribute_name](val)
