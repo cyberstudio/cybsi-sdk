@@ -105,3 +105,23 @@ if __name__ == "__main__":
 #    "malwareFamily": "PlugX",
 #    "relatedMalwareFamily": null
 # }
+# Cybsi-Cybsi view example:
+# {
+#     "entity": {
+#         "uuid": "31d8248f-a004-455a-95c2-5c96cba7fae6",
+#         "type": "File",
+#         "naturalKeys": [
+#             {
+#                 "type": "SHA1Hash",
+#                 "value": "9ee972c591dc03b24f7bc23c27361dcb719371f2"
+#             }
+#         ]
+#     },
+#     "attributeValues": [
+#         {
+#             "name": "MalwareFamilies",
+#             "value": "PlugX",
+#             "confidence": 1
+#         }
+#     ]
+# }

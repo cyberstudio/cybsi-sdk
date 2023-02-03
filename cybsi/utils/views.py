@@ -1,8 +1,13 @@
 import uuid
-from typing import List, Optional
+from typing import List, Optional, Union, cast
 
 from cybsi.api.internal import JsonObjectView
-from cybsi.api.observable import AbstractEntityView, EntityKeyView, EntityTypes
+from cybsi.api.observable import (
+    AbstractEntityView,
+    AttributeNames,
+    EntityKeyView,
+    EntityTypes,
+)
 
 
 class BasicEntityView(JsonObjectView):
@@ -65,3 +70,58 @@ class PTMSEntityView(AbstractEntityView):
         IPAddress, EmailAddress entity types.
         :data:`None` for other entity types."""
         return self._get_optional("relatedMalwareFamily")
+
+
+class CybsiEntityView(AbstractEntityView):
+    """Entity view tailored for consumption by Cybsi-Cybsi relay.
+
+    .. versionadded:: 2.10
+    """
+
+    @classmethod
+    def _view_uuid(cls) -> uuid.UUID:
+        return uuid.UUID("4bd21f23-e4b9-45ab-bde8-078f7115b0b8")
+
+    @property
+    def entity(self) -> BasicEntityView:
+        """Basic entity view."""
+        return BasicEntityView(self._get("entity"))
+
+    @property
+    def attribute_values(self) -> List["AttributeValuesView"]:
+        """Natural and associated attributes forecast of the entity.
+
+        Natural attributes only from the list:
+            For `File` entity type: `Size`, `Names`, `MalwareNames`.
+        """
+
+        attributes = self._get("attributeValues")
+        return [AttributeValuesView(x) for x in attributes]
+
+
+class AttributeValuesView(JsonObjectView):
+    """Attribute value view."""
+
+    @property
+    def name(self) -> AttributeNames:
+        """Attribute name."""
+
+        return AttributeNames(self._get("name"))
+
+    @property
+    def value(self) -> Union[str, bool, int]:
+        """Forecast attribute value.
+
+        Return type depends on attribute name.
+
+        Use :meth:`~cybsi.utils.converters.convert_attribute_value`
+            to get attribute value form to create a general observation.
+        """
+
+        return self._get("value")
+
+    @property
+    def confidence(self) -> float:
+        """Attribute confidence."""
+
+        return float(cast(float, self._get("confidence")))

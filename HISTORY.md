@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.10.0a3 (2023-02-03)
+---------------------
+- Add cybsi-cybsi entity view
+
 2.10.0a2 (2023-01-27)
 ---------------------
 - Add Campaigns, ThreatActors, AffectedCountries attributes
