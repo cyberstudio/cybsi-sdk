@@ -221,6 +221,26 @@ class AttributeNames(CybsiAPIEnum):
       Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
       `URL` entity type.
     """
+    ExploitedVulnerabilities = "ExploitedVulnerabilities"
+    """
+      .. versionadded:: 2.10
+
+      The entity exploits vulnerabilities.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
+      `URL` entity type.
+    """
+    TargetedSectors = "TargetedSectors"
+    """
+      .. versionadded:: 2.10
+
+      The entity targets sectors of activity.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
+      `URL` entity type.
+    """
 
 
 @document_enum

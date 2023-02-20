@@ -1,6 +1,12 @@
 Release History
 ===============
 
+2.10.0a4 (2023-02-20)
+---------------------
+- Add ExploitedVulnerabilities and TargetedSectors attributes
+- Change Sectors attribute value type from enums to dictionary item
+- Delete targets and exploits relationship kinds
+
 2.10.0a3 (2023-02-03)
 ---------------------
 - Add cybsi-cybsi entity view
