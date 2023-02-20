@@ -54,7 +54,6 @@ from .enums import (
     ThreatCategory,
     RelatedThreatCategory,
     LinkDirection,
-    IndustrySector,
     NodeRole,
     IdentityClass,
 )

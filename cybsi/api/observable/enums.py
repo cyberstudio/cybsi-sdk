@@ -87,8 +87,11 @@ class AttributeNames(CybsiAPIEnum):
     """
     Sectors = "Sectors"
     """
-      Identity industry sector. Attribute value type is enum,
-      see :class:`IndustrySector`.
+      .. versionchanged:: 2.10
+        Change attribute value type from enums to dictionary item.
+
+      Identity industry sector. Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
       Attribute belongs to `Identity` entity type.
     """
     Size = "Size"
@@ -252,43 +255,6 @@ class IdentityClass(CybsiAPIEnum):
     """A formal organization of people, with governance."""
     Class = "Class"
     """A class of entities, such as all hospitals, all Europeans etc."""
-
-
-@document_enum
-class IndustrySector(CybsiAPIEnum):
-    """Industry Sectors."""
-
-    Agriculture = "Agriculture"
-    Aerospace = "Aerospace"
-    Automotive = "Automotive"
-    Communications = "Communications"
-    Construction = "Construction"
-    Defence = "Defence"
-    Education = "Education"
-    Energy = "Energy"
-    Entertainment = "Entertainment"
-    FinancialServices = "FinancialServices"
-    GovernmentNational = "GovernmentNational"
-    GovernmentRegional = "GovernmentRegional"
-    GovernmentLocal = "GovernmentLocal"
-    GovernmentPublicServices = "GovernmentPublicServices"
-    Healthcare = "Healthcare"
-    HospitalityLeisure = "HospitalityLeisure"
-    Infrastructure = "Infrastructure"
-    Insurance = "Insurance"
-    Manufacturing = "Manufacturing"
-    Mining = "Mining"
-    NonProfit = "NonProfit"
-    Pharmaceuticals = "Pharmaceuticals"
-    Retail = "Retail"
-    Technology = "Technology"
-    Telecommunications = "Telecommunications"
-    Transportation = "Transportation"
-    Utilities = "Utilities"
-    HostingProvider = "TelecommunicationsHostingProvider"
-    DomainRegistrar = "TelecommunicationsDomainRegistrar"
-    MobilePhoneOperator = "TelecommunicationsMobilePhoneOperator"
-    FixedLinePhoneOperator = "TelecommunicationsFixedLinePhoneOperator"
 
 
 @document_enum

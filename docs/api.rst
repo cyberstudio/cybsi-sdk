@@ -101,7 +101,7 @@ Observable entities
     :members:
     :imported-members:
     :inherited-members:
-    :exclude-members:  AttributeNames, EntityKeyTypes, EntityTypes, RelationshipKinds, ShareLevels, EntityAggregateSections, ThreatStatus, LinkDirection, IndustrySector, NodeRole,IdentityClass,
+    :exclude-members:  AttributeNames, EntityKeyTypes, EntityTypes, RelationshipKinds, ShareLevels, EntityAggregateSections, ThreatStatus, LinkDirection, NodeRole,IdentityClass,
 
 .. automodule:: cybsi.api.observable.enums
     :members:
