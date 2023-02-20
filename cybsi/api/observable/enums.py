@@ -310,8 +310,6 @@ class RelationshipKinds(CybsiAPIEnum):
     Supports = "Supports"
     ResolvesTo = "ResolvesTo"
     VariantOf = "VariantOf"  # doc: Deprecated.
-    Targets = "Targets"
-    Exploits = "Exploits"
     Hosts = "Hosts"
     Serves = "Serves"
     Locates = "Locates"

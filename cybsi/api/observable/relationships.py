@@ -30,8 +30,6 @@ _rel_kind_kebab_converters: Dict[RelationshipKinds, str] = {
     RelationshipKinds.Supports: "supports",
     RelationshipKinds.ResolvesTo: "resolves-to",
     RelationshipKinds.VariantOf: "variant-of",
-    RelationshipKinds.Targets: "targets",
-    RelationshipKinds.Exploits: "exploits",
     RelationshipKinds.Hosts: "hosts",
     RelationshipKinds.Serves: "serves",
     RelationshipKinds.Locates: "locates",
@@ -77,7 +75,7 @@ class RelationshipsAPI(BaseAPI):
             >>> forecasts = client.observable.relationships.forecast(
             >>>     source_entity_uuid = UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
             >>>     target_entity_uuid = UUID("3a53cc35-f632-434c-bd4b-1ed8c014003a"),
-            >>>     RelationshipKinds.ResolvesTo,
+            >>>     kind = RelationshipKinds.ResolvesTo,
             >>> )
             >>> # Do something with the forecast
             >>> print(forecasts)
