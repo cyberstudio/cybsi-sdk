@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.10.0a5 (2023-03-13)
+---------------------
+- Add passwords field in analyzer task parameters
+
 2.10.0a4 (2023-02-20)
 ---------------------
 - Add ExploitedVulnerabilities and TargetedSectors attributes

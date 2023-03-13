@@ -5,7 +5,7 @@ It also allows registering enrichment task to start enrichment forcibly.
 """
 import datetime
 import uuid
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Dict, Iterable, List, Optional, Union, cast
 
 from .. import RefView
 from ..artifact import ArtifactTypes
@@ -206,17 +206,22 @@ class ArtifactAnalysisParamsForm(JsonObjectForm):
     Args:
         artifact_uuid: Artifact identifier.
         image_id: Analyzer-specific sandbox identifier (not all data sources).
+        passwords: Password list for unpacking artifact and/or
+            its attachments (not all data sources).
     """
 
     def __init__(
         self,
         artifact_uuid: uuid.UUID,
         image_id: Optional[str] = None,
+        passwords: Optional[Iterable[str]] = None,
     ):
         super().__init__()
         self._data["artifact"] = {"uuid": str(artifact_uuid)}
         if image_id is not None:
             self._data["imageID"] = image_id
+        if passwords is not None:
+            self._data["passwords"] = list(passwords)
 
 
 class ArchiveUnpackParamsForm(JsonObjectForm):
@@ -338,6 +343,11 @@ class ArtifactAnalysisParamsView(JsonObjectView):
     def image_id(self) -> Optional[str]:
         """Analyzer-specific image id."""
         return self._get_optional("imageID")
+
+    @property
+    def passwords(self) -> Optional[List[str]]:
+        """Password list for unpacking an artifact and/or its attachments."""
+        return self._get_optional("passwords")
 
 
 class ArchiveUnpackParamsView(JsonObjectView):
