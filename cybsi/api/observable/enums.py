@@ -261,6 +261,8 @@ class NodeRole(CybsiAPIEnum):
     Sinkhole = "Sinkhole"  # doc: Sinkhole nodes
     PayloadDelivery = "PayloadDelivery"  # doc: Serves malicious payloads
     ExfiltrationStore = "ExfiltrationStore"  # doc: Used for data exfiltration
+    CDN = "CDN"  # doc: Belongs to a CDN infrastructure
+    BitTorrentTracker = "BitTorrentTracker"  # doc: BitTorrent tracker
 
 
 @document_enum

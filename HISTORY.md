@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.10.0a6 (2023-03-29)
+---------------------
+- Add new NodeRoles attribute values
+
 2.10.0a5 (2023-03-13)
 ---------------------
 - Add passwords field in analyzer task parameters
