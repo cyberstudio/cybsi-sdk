@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.10.0a7 (2023-04-07)
+---------------------
+- Add multi-value attributes support to Cybsi entity view
+
 2.10.0a6 (2023-03-29)
 ---------------------
 - Add new NodeRoles attribute values

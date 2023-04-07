@@ -109,16 +109,23 @@ class AttributeValuesView(JsonObjectView):
         return AttributeNames(self._get("name"))
 
     @property
-    def value(self) -> Union[str, bool, int]:
+    def value(self) -> Union[str, bool, int, List[int], List[str]]:
         """Forecast attribute value.
 
         Return type depends on attribute name.
+        Method returns list of forecasted values for multi-value attributes.
 
         Use :meth:`~cybsi.utils.converters.convert_attribute_value`
             to get attribute value form to create a general observation.
         """
 
         return self._get("value")
+
+    def multivalue(self) -> bool:
+        """Method returns true if attribute view is multi-value.
+        Use this method before :meth:`value` to check if value type is list.
+        """
+        return isinstance(self.value, List)
 
     @property
     def confidence(self) -> float:
