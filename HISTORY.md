@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.10.0a8 (2023-05-04)
+---------------------
+- Add license API
+
 2.10.0a7 (2023-04-07)
 ---------------------
 - Add multi-value attributes support to Cybsi entity view
