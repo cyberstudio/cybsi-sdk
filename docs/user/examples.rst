@@ -63,21 +63,6 @@ In the example below we registering our own data source type CIRCL and data sour
 
 .. literalinclude:: ../../examples/register_data_sources.py
 
-API-Key
--------
-
-.. _generate-user-api-key:
-
-Generate user API-Key
-~~~~~~~~~~~~~~~~~~~~~
-Cybsi API authentication occurs through API-Key.
-The client receives a Bearer Token using the api-key and then authenticates in the Cybsi API using this token.
-
-In the example below we create new user and generate his API-Key.
-
-.. literalinclude:: ../../examples/generate_user_api_key.py
-
-
 .. _pagination-example:
 
 Pagination

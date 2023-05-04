@@ -19,4 +19,7 @@ def rfc3339_timestamp(dt: datetime.datetime) -> str:
 
 
 def parse_rfc3339_timestamp(ts: str) -> datetime.datetime:
-    return datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%fZ")
+    if ts.find(".") != -1:
+        return datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%fZ")
+    else:
+        return datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%SZ")

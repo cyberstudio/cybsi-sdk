@@ -15,6 +15,7 @@ from .enrichment import EnrichmentAPI, EnrichmentAsyncAPI
 from .error import CybsiError
 from .internal import HTTPConnector, JsonObjectView
 from .internal.connector import AsyncHTTPConnector
+from .license import LicensesAPI
 from .observable import ObservableAPI, ObservableAsyncAPI
 from .observation import ObservationsAPI, ObservationsAsyncAPI
 from .replist import ReplistsAPI, ReplistsAsyncAPI
@@ -175,6 +176,11 @@ class CybsiClient:
     def dictionaries(self) -> DictionariesAPI:
         """Dictionaries API handle."""
         return DictionariesAPI(self._connector)
+
+    @property
+    def licenses(self) -> LicensesAPI:
+        """Licenses API handle."""
+        return LicensesAPI(self._connector)
 
     def version(self) -> "VersionView":
         """Get API and server version information.

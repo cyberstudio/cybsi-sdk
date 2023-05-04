@@ -233,6 +233,13 @@ Dictionaries
     :imported-members:
     :inherited-members:
 
+Licenses
+~~~~~~~~
+.. automodule:: cybsi.api.license
+    :members:
+    :imported-members:
+    :inherited-members:
+
 Common views and data types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: cybsi.api.Null
