@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.10.0a9 (2023-05-12)
+---------------------
+- Fix cybsi-cybsi entity view attribute values
+
 2.10.0a8 (2023-05-04)
 ---------------------
 - Add license API

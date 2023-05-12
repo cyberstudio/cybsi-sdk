@@ -120,8 +120,12 @@ if __name__ == "__main__":
 #     "attributeValues": [
 #         {
 #             "name": "MalwareFamilies",
-#             "value": "PlugX",
-#             "confidence": 1
+#             "values": [
+#               {
+#                   "value": "PlugX",
+#                   "confidence": 1
+#               }
+#             ]
 #         }
 #     ]
 # }
