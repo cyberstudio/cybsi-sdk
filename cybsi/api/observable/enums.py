@@ -57,6 +57,15 @@ class AttributeNames(CybsiAPIEnum):
         see :class:`IdentityClass`.
         Attribute belongs to `Identity` entity type.
     """
+    Country = "Country"
+    """
+       .. versionadded:: 2.11
+
+       A country where IP address was allocated.
+       Attribute value type is
+       :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+       Attribute belongs to `IPAddress` entity type.
+    """
     DisplayNames = "DisplayNames"
     """
        Email address display names. Attribute value type is :class:`str`.

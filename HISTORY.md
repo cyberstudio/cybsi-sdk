@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.11.0a1 (2023-06-05)
+---------------------
+- Add new Country attribute
+
 2.10.0 (2023-06-05)
 ---------------------
 - Fix urllib library

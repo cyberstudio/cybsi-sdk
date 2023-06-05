@@ -117,6 +117,7 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.AffectedCountries: _dict_item_value_converter,
     AttributeNames.ExploitedVulnerabilities: _dict_item_value_converter,
     AttributeNames.TargetedSectors: _dict_item_value_converter,
+    AttributeNames.Country: _dict_item_value_converter,
 }
 
 

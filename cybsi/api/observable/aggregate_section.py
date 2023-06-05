@@ -50,6 +50,7 @@ def _convert_attribute_value_type(
         AttributeNames.AffectedCountries: DictionaryItemCommonView,
         AttributeNames.ExploitedVulnerabilities: DictionaryItemCommonView,
         AttributeNames.TargetedSectors: DictionaryItemCommonView,
+        AttributeNames.Country: DictionaryItemCommonView,
     }
 
     return _attribute_value_types[attribute_name](val)
