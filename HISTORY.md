@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.10.0 (2023-06-05)
+---------------------
+- Fix urllib library
+
 2.10.0a9 (2023-05-12)
 ---------------------
 - Fix cybsi-cybsi entity view attribute values
