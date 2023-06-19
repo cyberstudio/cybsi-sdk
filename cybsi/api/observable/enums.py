@@ -57,11 +57,11 @@ class AttributeNames(CybsiAPIEnum):
         see :class:`IdentityClass`.
         Attribute belongs to `Identity` entity type.
     """
-    Country = "Country"
+    RegistrationCountry = "RegistrationCountry"
     """
        .. versionadded:: 2.11
 
-       A country where IP address was allocated.
+       Registration country.
        Attribute value type is
        :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
        Attribute belongs to `IPAddress` entity type.

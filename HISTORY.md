@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.11.0a3 (2023-06-19)
+---------------------
+- Rename Country attribute to RegistrationCountry
+
 2.11.0a2 (2023-06-19)
 ---------------------
 - Increase client default timeout
