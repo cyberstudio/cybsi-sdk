@@ -33,7 +33,7 @@ class Config:
         auth: Optional callable :class:`CybsiClient` can use to authenticate requests.
             In most cases it's enough to pass `api_key` instead of this.
         ssl_verify: Enable SSL certificate verification.
-        timeouts: Timeout configuration. Default configuration is 5 sec
+        timeouts: Timeout configuration. Default configuration is 60 sec
             on all operations.
         limits:  Configuration for limits to various client behaviors.
             Default configuration is max_connections=100, max_keepalive_connections=20.

@@ -126,5 +126,5 @@ class Timeouts:
         )
 
 
-DEFAULT_TIMEOUTS = Timeouts(default=5.0)
+DEFAULT_TIMEOUTS = Timeouts(default=60.0)
 DEFAULT_LIMITS = Limits(max_connections=100, max_keepalive_connections=20)

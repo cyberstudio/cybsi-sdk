@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.11.0a2 (2023-06-19)
+---------------------
+- Increase client default timeout
+
 2.11.0a1 (2023-06-05)
 ---------------------
 - Add new Country attribute
