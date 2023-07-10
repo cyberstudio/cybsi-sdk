@@ -165,7 +165,8 @@ class EntitiesAPI(BaseAPI):
     def aggregate(
         self,
         *,
-        entity_uuids: Optional[Iterable[uuid.UUID]],
+        entity_uuids: Optional[Iterable[uuid.UUID]] = None,
+        dict_item_uuid: Optional[uuid.UUID] = None,
         entity_type: Optional[EntityTypes] = None,
         key_type: Optional[EntityKeyTypes] = None,
         key: Optional[str] = None,
@@ -180,6 +181,9 @@ class EntitiesAPI(BaseAPI):
             Added new parameters: `ent_type`, `key_type`, `key`.
             Parameter `entity_uuids` changed to Optional.
 
+        .. versionchanged:: 2.11
+            Added new parameter `dict_item_uuid`.
+
         Note:
             Calls `GET /observable/entities`.
 
@@ -187,15 +191,17 @@ class EntitiesAPI(BaseAPI):
             should be specified else Cybsi API will return error.
         Args:
             entity_uuids: Entity uuids.
-                Excludes parameters: `entity_type`, `key_type`, `key`.
+                Excludes parameters: `dict_item_uuid`, `entity_type`, `key_type`, `key`.
+            dict_item_uuid: Dictionary item which is attributed to the entity.
+                Excludes parameters: `entity_uuids`, `entity_type`, `key_type`, `key`.
             entity_type: Entity type.
-                Excludes parameter `entity_uuids` and requires parameter `key`.
-                The parameter is not required if the `entity_type` can be
-                uniquely determined by `key_type`.
+                Excludes parameter `entity_uuids`, `dict_item_uuid` and
+                requires parameter `key`. The parameter is not required if
+                the `entity_type` can be uniquely determined by `key_type`.
             key_type: Entity natural key type.
-                Excludes parameter `entity_uuids` and requires parameter `key`.
-                The parameter is not required if only one `key_type` is used for
-                the specified `entity_type`.
+                Excludes parameter `entity_uuids`, `dict_item_uuid` and
+                requires parameter `key`. The parameter is not required if
+                only one `key_type` is used for the specified `entity_type`.
             key: Entity natural key value. Required if `entity_type` or `key_type`
                 parameter is specified.
                 It is possible to pass a key value in a non-canonical representation.
@@ -208,6 +214,7 @@ class EntitiesAPI(BaseAPI):
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
         Usage:
             >>> from uuid import UUID
             >>> from cybsi.api import CybsiClient
@@ -249,6 +256,8 @@ class EntitiesAPI(BaseAPI):
         params: Dict[str, Any] = {}
         if entity_uuids is not None:
             params["uuid"] = [str(u) for u in entity_uuids]
+        if dict_item_uuid is not None:
+            params["dictItemUUID"] = str(dict_item_uuid)
         if entity_type is not None:
             params["type"] = entity_type.value
         if key_type is not None:
@@ -630,7 +639,8 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
     async def aggregate(
         self,
         *,
-        entity_uuids: Optional[Iterable[uuid.UUID]],
+        entity_uuids: Optional[Iterable[uuid.UUID]] = None,
+        dict_item_uuid: Optional[uuid.UUID] = None,
         entity_type: Optional[EntityTypes] = None,
         key_type: Optional[EntityKeyTypes] = None,
         key: Optional[str] = None,
@@ -641,6 +651,9 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
     ) -> AsyncPage[EntityAggregateView]:
         """Get list of aggregated entities.
 
+        .. versionchanged:: 2.11
+            Added new parameter `dict_item_uuid`.
+
         Note:
             Calls `GET /observable/entities`.
 
@@ -648,15 +661,17 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
             should be specified else Cybsi API will return error.
         Args:
             entity_uuids: Entity uuids.
-                Excludes parameters: `entity_type`, `key_type`, `key`.
+                Excludes parameters: `dict_item_uuid`, `entity_type`, `key_type`, `key`.
+            dict_item_uuid: Dictionary item which is attributed to the entity.
+                Excludes parameters: `entity_uuids`, `entity_type`, `key_type`, `key`.
             entity_type: Entity type.
-                Excludes parameter `entity_uuids` and requires parameter `key`.
-                The parameter is not required if the `entity_type` can be
-                uniquely determined by `key_type`.
+                Excludes parameter `entity_uuids`, `dict_item_uuid` and
+                requires parameter `key`. The parameter is not required if
+                the `entity_type` can be uniquely determined by `key_type`.
             key_type: Entity natural key type.
-                Excludes parameter `entity_uuids` and requires parameter `key`.
-                The parameter is not required if only one `key_type` is used for
-                the specified `entity_type`.
+                Excludes parameter `entity_uuids`, `dict_item_uuid` and
+                requires parameter `key`. The parameter is not required if
+                only one `key_type` is used for the specified `entity_type`.
             key: Entity natural key value. Required if `entity_type` or `key_type`
                 parameter is specified.
                 It is possible to pass a key value in a non-canonical representation.
@@ -669,11 +684,14 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
         """
 
         params: Dict[str, Any] = {}
         if entity_uuids is not None:
             params["uuid"] = [str(u) for u in entity_uuids]
+        if dict_item_uuid is not None:
+            params["dictItemUUID"] = str(dict_item_uuid)
         if entity_type is not None:
             params["type"] = entity_type.value
         if key_type is not None:

@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.11.0a4 (2023-07-10)
+---------------------
+- Add dictItemUUID parameter to entity aggregation method
+
 2.11.0a3 (2023-06-19)
 ---------------------
 - Rename Country attribute to RegistrationCountry
