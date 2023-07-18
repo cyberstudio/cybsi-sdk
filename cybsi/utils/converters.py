@@ -11,6 +11,7 @@ from cybsi.api.observable.enums import (
     EntityKeyTypes,
     IdentityClass,
     NodeRole,
+    PotentialDamage,
     RegionalInternetRegistry,
     RelatedThreatCategory,
     ThreatCategory,
@@ -118,6 +119,9 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.ExploitedVulnerabilities: _dict_item_value_converter,
     AttributeNames.TargetedSectors: _dict_item_value_converter,
     AttributeNames.RegistrationCountry: _dict_item_value_converter,
+    AttributeNames.PotentialDamage: _new_enum_value_converter(
+        PotentialDamage, ignore_case=True
+    ),
 }
 
 

@@ -250,6 +250,14 @@ class AttributeNames(CybsiAPIEnum):
       Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
       `URL` entity type.
     """
+    PotentialDamage = "PotentialDamage"
+    """
+      .. versionadded:: 2.11
+
+      The amount of potential damage from the entity.
+      Attribute value type is  :class:`~cybsi.api.observable.enums.PotentialDamage`.
+      Attribute belongs to `File`, `DomainName`, `IPAddress`, `URL` entity type.
+    """
 
 
 @document_enum
@@ -368,3 +376,12 @@ class RelatedThreatCategory(CybsiAPIEnum):
     Riskware = "Riskware"
     Adware = "Adware"
     Malware = "Malware"
+
+
+@document_enum
+class PotentialDamage(CybsiAPIEnum):
+    """Potential damage."""
+
+    Low = "Low"
+    Medium = "Medium"
+    High = "High"

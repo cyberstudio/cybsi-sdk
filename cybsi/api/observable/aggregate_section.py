@@ -11,6 +11,7 @@ from .enums import (
     EntityAggregateSections,
     IdentityClass,
     NodeRole,
+    PotentialDamage,
     RelatedThreatCategory,
     ShareLevels,
     ThreatCategory,
@@ -51,6 +52,7 @@ def _convert_attribute_value_type(
         AttributeNames.ExploitedVulnerabilities: DictionaryItemCommonView,
         AttributeNames.TargetedSectors: DictionaryItemCommonView,
         AttributeNames.RegistrationCountry: DictionaryItemCommonView,
+        AttributeNames.PotentialDamage: PotentialDamage,
     }
 
     return _attribute_value_types[attribute_name](val)

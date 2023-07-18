@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.11.0a5 (2023-07-18)
+---------------------
+- Add new PotentialDamage attribute
+
 2.11.0a4 (2023-07-10)
 ---------------------
 - Add dictItemUUID parameter to entity aggregation method
