@@ -101,7 +101,7 @@ class DictionariesAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryClosed`
         """
 
-        item._data["dictionaryUUID"] = dictionary_uuid
+        item._data["dictionaryUUID"] = str(dictionary_uuid)
         r = self._connector.do_post(path=self._path_dictionary_items, json=item.json())
         return RefView(r.json())
 
@@ -263,6 +263,50 @@ class DictionariesAPI(BaseAPI):
         """
 
         path = f"{self._path_dictionary_items}/{item_uuid}/synonyms"
+        self._connector.do_delete(path=path)
+
+    def add_related_item(
+        self, *, item_uuid: uuid.UUID, related_uuid: uuid.UUID
+    ) -> None:
+        """Add related item for dictionary item.
+
+        .. versionadded:: 2.11
+
+        Note:
+            Calls `PUT /dictionary-items/{item_uuid}/related-items`.
+        Args:
+            item_uuid: Dictionary item UUID.
+            related_uuid: Related dictionary item UUID.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Dictionary item not found.
+            :class:`~cybsi.api.error.SemanticError`: Request contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidDictionary`
+        """
+
+        form = {"relatedItemUUID": str(related_uuid)}
+        path = f"{self._path_dictionary_items}/{item_uuid}/related-items"
+        self._connector.do_put(path=path, json=form)
+
+    def remove_related_item(
+        self, *, item_uuid: uuid.UUID, related_uuid: uuid.UUID
+    ) -> None:
+        """Remove related item for dictionary item.
+
+        .. versionadded:: 2.11
+
+        Note:
+            Calls `DELETE /dictionary-items/{item_uuid}/related-items/{related_uuid}`.
+        Args:
+            item_uuid: Dictionary item UUID.
+            related_uuid: Related dictionary item UUID.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Dictionary item not found.
+        """
+
+        path = f"{self._path_dictionary_items}/{item_uuid}/related-items/{related_uuid}"
         self._connector.do_delete(path=path)
 
 
