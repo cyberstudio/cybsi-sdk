@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.11.0a6 (2023-07-26)
+---------------------
+- Add related dictionary items api
+- Fix register dictionary item
+
 2.11.0a5 (2023-07-18)
 ---------------------
 - Add new PotentialDamage attribute
