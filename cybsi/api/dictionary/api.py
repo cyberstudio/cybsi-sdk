@@ -76,18 +76,17 @@ class DictionariesAPI(BaseAPI):
         page = Page(self._connector.do_get, resp, DictionaryCommonView)
         return page
 
-    def register_item(
-        self, *, dictionary_uuid: uuid.UUID, item: "DictionaryItemForm"
-    ) -> RefView:
+    def register_item(self, item: "DictionaryItemForm") -> RefView:
         """Register item for the dictionary.
 
         .. versionadded:: 2.9
         .. versionchanged:: 2.10
             Added semantic error `DictionaryClosed`
+        .. versionchanged:: 2.11
+            Move `dictionary_uuid` parameter into `DictionaryItemForm`
         Note:
             Calls `POST /dictionary-items`.
         Args:
-            dictionary_uuid: Dictionary UUID.
             item: Filled dictionary item form.
         Returns:
             Reference to a newly added dictionary item.
@@ -101,7 +100,6 @@ class DictionariesAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryClosed`
         """
 
-        item._data["dictionaryUUID"] = str(dictionary_uuid)
         r = self._connector.do_post(path=self._path_dictionary_items, json=item.json())
         return RefView(r.json())
 
@@ -360,14 +358,16 @@ class DictionaryItemForm(JsonObjectForm):
     """Dictionary item form. Use to add dictionary item.
 
     Args:
+        dictionary_uuid: Dictionary identifier.
         key: Dictionary item key. The key should consist of characters
             according to the pattern `[a-zA-Z0-9_ -]` and
             have length in the range `[1;30]`.
             User-specified key case is preserved.
     """
 
-    def __init__(self, *, key: str):
+    def __init__(self, *, dictionary_uuid: uuid.UUID, key: str):
         super().__init__()
+        self._data["dictionaryUUID"] = str(dictionary_uuid)
         self._data["key"] = key
 
 
