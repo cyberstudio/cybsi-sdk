@@ -178,6 +178,10 @@ class GenericObservationForm(JsonObjectForm):
     ) -> "GenericObservationForm":
         """Add attribute value fact to the observation.
 
+        See Also:
+            See :ref:`attributes`
+            for complete information about available attributes.
+
         Args:
             entity: Filled form of entity or passed uuid of entity.
                 Entity with passed UUID must be registered in system.
@@ -213,6 +217,10 @@ class GenericObservationForm(JsonObjectForm):
         confidence: Optional[float] = None,
     ) -> "GenericObservationForm":
         """Add entity relationship to observation.
+
+        See Also:
+            See :ref:`relationships`
+            for complete information about available relationships.
 
         Args:
             source: Filled form of source entity in the relationship or

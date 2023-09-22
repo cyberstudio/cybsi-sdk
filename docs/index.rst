@@ -16,7 +16,7 @@ background information about Cybsi, then focuses on step-by-step
 instructions for getting the most out of Cybsi SDK.
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    user/install
    user/quickstart
@@ -35,6 +35,7 @@ this part of the documentation is for you.
    :maxdepth: 2
 
    api
+   user/data_model
 
 
 The Community Guide

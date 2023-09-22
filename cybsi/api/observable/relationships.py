@@ -53,6 +53,10 @@ class RelationshipsAPI(BaseAPI):
     ) -> "RelationshipsForecastView":
         """Get forecast of relationship between two entities.
 
+        See Also:
+           See :ref:`relationships`
+           for complete information about available relationships.
+
         Note:
             Calls `GET /observable/relationships/{sourceEntityUUID}/{relationKind}/{targetEntityUUID}`. # noqa: E501
         Args:

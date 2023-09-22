@@ -41,7 +41,12 @@ class EntityKeyTypes(Enum):
 
 @document_enum
 class AttributeNames(Enum):
-    """Entity attribute names."""
+    """Entity attribute names.
+
+    See Also:
+        See :ref:`attributes`
+        for complete information about available attributes.
+    """
 
     Class = "Class"  # doc: Identity class.
     DisplayNames = "DisplayNames"  # doc: Email address display names.
@@ -60,7 +65,12 @@ class AttributeNames(Enum):
 
 @document_enum
 class RelationshipKinds(Enum):
-    """Kind of a relationship between entities."""
+    """Kind of a relationship between entities.
+
+    See Also:
+        See :ref:`relationships`
+        for complete information about available relationships.
+    """
 
     Has = "Has"
     Contains = "Contains"

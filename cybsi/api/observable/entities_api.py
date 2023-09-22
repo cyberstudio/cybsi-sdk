@@ -292,6 +292,10 @@ class EntitiesAPI(BaseAPI):
     ) -> EntityAttributeForecastView:
         """Get a forecast of entity attribute value.
 
+        See Also:
+            See :ref:`attributes`
+            for complete information about available attributes.
+
         Note:
             Calls `GET /observable/entities/{entity_uuid}/attributes/{attr_name}`.
         Args:
@@ -343,6 +347,10 @@ class EntitiesAPI(BaseAPI):
         limit: Optional[int] = None,
     ) -> Page[EntityLinksForecastView]:
         """Get a list of link forecasts of entity.
+
+        See Also:
+            See :ref:`relationships`
+            for complete information about available relationships.
 
         Note:
             Calls `GET /observable/entities/{entity_uuid}/links`.
