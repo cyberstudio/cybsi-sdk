@@ -42,15 +42,11 @@ The Community Guide
 This part of the documentation details the Cybsi ecosystem.
 
 .. toctree::
-   :maxdepth: 2
-
-   community/faq
-   community/release-process
-
-.. toctree::
    :maxdepth: 1
 
    community/updates
+   community/release-process
+   community/faq
 
 
 The Contributor Guide

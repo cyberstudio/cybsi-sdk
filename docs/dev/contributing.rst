@@ -9,34 +9,38 @@ Thank you very much!
 Code Contributions
 ------------------
 
-Code Review
-~~~~~~~~~~~
+Contributions will not be merged until they've been reviewed.
 
-Contributions will not be merged until they've been code reviewed.
-
-Code Style
-~~~~~~~~~~
+Please follow `PEP-20 <https://www.python.org/dev/peps/pep-0020/>`_ if you're in doubt.
 
 Formatting is performed using ``make lint``. There are no compromises.
 
 Documentation Contributions
 ---------------------------
 
-Documentation improvements are always welcome! The documentation files live in
-the ``docs/`` directory of the codebase. They're written in
+The documentation files live in the ``docs/`` directory. Docs are written in
 `reStructuredText`_, and use `Sphinx`_ to generate the full suite of
 documentation.
-
-When contributing documentation, please do your best to follow the style of the
-documentation files. This means a soft-limit of 79 characters wide in your text
-files and a semi-formal, yet friendly and approachable, prose style.
-
-When presenting Python code, use single-quoted strings (``'hello'`` instead of
-``"hello"``).
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 .. _Sphinx: http://sphinx-doc.org/index.html
 
+Releases
+--------
+Releases are performed manually.
+
+To perform a release:
+
+#. Update version in ``pyproject.toml``
+#. Update version in ``__version__.py``
+#. Update ``HISTORY.md``
+#. Ensure everything builds nicely (``make lint test build-docs``)
+
+And then run the following commands:
+
+.. code-block:: bash
+  $ poetry config (TODO repo name)
+  $ poetry publish --build
 
 .. _bug-reports:
 

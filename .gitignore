@@ -4,3 +4,5 @@ __pycache__/
 venv
 .venv
 docs/_build/
+_build/
+dist/

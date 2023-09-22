@@ -1,6 +1,0 @@
-black==21.10b0
-enum-tools==0.6.5
-flake8==3.9.2
-mypy==0.910
-requests==2.26
-types-requests==2.25.9
