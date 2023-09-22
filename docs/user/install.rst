@@ -13,7 +13,16 @@ To install it from registry, simply run the following command in your terminal o
 
   $ pip3 install cybsi-sdk
 
-You can also get a specific version by running a command like ``pip3 install cybsi-sdk==0.0.14``.
+You can also get a specific version by running a command like ``pip3 install cybsi-sdk==2.8.0``.
+
+If you use Poetry to manage your dependencies, add the following sections to your `pyproject.toml` file:
+
+.. code-block:: toml
+
+    ....
+    [tool.poetry.dependencies]
+    cybsi-sdk = "2.8.0" # See last version of Cybsi SDK
+    ...
 
 Source code
 -----------
