@@ -1,4 +1,4 @@
-Cybsi python SDK documentation
+Cybsi SDK documentation
 ------------------------------
 
 The following packages need to be installed for successful [PDF builds](https://www.sphinx-doc.org/en/master/usage/builders/index.html#sphinx.builders.latex.LaTeXBuilder):

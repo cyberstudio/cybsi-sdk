@@ -4,7 +4,7 @@ from typing import Optional, TypeVar, Union, cast
 class Tag:
     """Identifier of a specific version of a resource.
 
-    Prevents mid-air-collisions. Required for edit() functions on Cybsi API resources.
+    Prevents mid-air-collisions. Required for edit() functions on Threat Analyzer API resources.
     """
 
     pass

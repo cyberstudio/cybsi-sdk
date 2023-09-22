@@ -15,7 +15,7 @@ External databases are useful for entity enrichment. An example of external data
 
 In the example below we pass IP received from enrichment task to
 an imaginary system. The system can magically tell if IP is IoC or not.
-We form an observation from results and register the observation in Cybsi API.
+We form an observation from results and register the observation in Threat Analyzer API.
 
 The example can be used as a general boilerplate for connectors to external databases.
 
@@ -29,7 +29,7 @@ Analyzers perform artifact analysis. Typical analyzers are network traffic analy
 
 In the example below we pass artifact and its content (i.e. bytes)
 to an imaginary third-party analyzer. The analyzer can magically tell if file associated with our artifact is malicious or not.
-We form a report from results and register the report in Cybsi API.
+We form a report from results and register the report in Threat Analyzer API.
 
 The example can be used as a general boilerplate for connectors to analyzers.
 
@@ -43,7 +43,7 @@ Artifacts
 
 Upload and download an artifact
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Artifacts are regular files with additional attributes. An artifact can be analyzed or unpacked by Cybsi.
+Artifacts are regular files with additional attributes. An artifact can be analyzed or unpacked by Threat Analyzer.
 An artifact can be sent for analysis to analyzer (for example, sandbox).
 
 The example shows how to upload and download artifacts.

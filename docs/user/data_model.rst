@@ -1,7 +1,7 @@
 .. _data_model:
 
-Cybsi data model
-================
+Threat Analyzer data model
+==========================
 
 .. _attributes:
 

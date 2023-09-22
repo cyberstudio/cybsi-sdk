@@ -3,7 +3,7 @@
 Contributor's Guide
 ===================
 
-If you're reading this, you're probably interested in contributing to Cybsi.
+If you're reading this, you're probably interested in contributing to Threat Analyzer.
 Thank you very much!
 
 Code Contributions
@@ -56,7 +56,6 @@ To do that, run this once:
 .. code-block:: bash
 
   $ poetry config (TODO repo name)
-  $ poetry publish --build
 
 And then use the following commands:
 
@@ -72,4 +71,4 @@ And then use the following commands:
 Bug Reports & Feature Requests
 ------------------------------
 
-Please send them to Cybsi developers over email.
+Please send them to Threat Analyzer developers over email.
