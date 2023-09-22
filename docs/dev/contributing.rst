@@ -25,6 +25,16 @@ documentation.
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 .. _Sphinx: http://sphinx-doc.org/index.html
 
+Developer Environment Setup
+---------------------------
+We use ``poetry`` for project builds. Install it via pip (``pip3 install poetry==1.1.12``), and then run the following command:
+
+.. code-block:: bash
+
+  $ poetry install
+
+This will create a virtualenv with all dependencies installed.
+
 Releases
 --------
 Releases are performed manually.

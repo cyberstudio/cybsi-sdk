@@ -1,9 +1,17 @@
 Release History
 ===============
 
+
+0.0.16 (2021-12-27)
+-------------------
+- Add entity/attribute/relationship forecast API
+- Add all routes for Observations API
+- Add report filtering API
+- Use poetry for project building and publishing
+
 0.0.15 (2021-12-22)
 -------------------
-- Extend ReportForm constructor paramters
+- Extend ReportForm constructor parameters
 - Add entity relationships to generic observations form
 - Add Data source API
 - Add functions to edit data sources, replists, search queries, analyzers, external databases
