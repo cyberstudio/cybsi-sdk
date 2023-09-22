@@ -23,13 +23,6 @@ extensions = [
     "sphinxjp.themes.basicstrap",
 ]
 
-# A list of regular expressions that match anchors Sphinx should skip
-# when checking the validity of anchors in links.
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-linkcheck_anchors_ignore
-linkcheck_anchors_ignore = [
-    "/artifacts/browse/tree/General/cybsi-pypi"  # anchor of link to pt artifactory
-]
-
 templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
@@ -44,7 +37,7 @@ copyright = u"PT"
 author = u"Cybsi Devs"
 version = cybsi.__version__
 release = cybsi.__version__
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
