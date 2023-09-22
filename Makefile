@@ -1,4 +1,5 @@
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+DOCS_DIR := ${ROOT_DIR}/docs
 DOCKER_FLAGS ?= --rm=true
 DOCKER_BUILD_FLAGS ?= --force-rm=true --pull --rm=true
 DOCKER_IMAGE := cybsi/cybsi-sdk
@@ -14,8 +15,8 @@ lint:
 test:
 	poetry run python3 -m unittest discover tests/ -v
 
-include docs/Makefile
-build-docs: html
+build-docs:
+	make -C ${DOCS_DIR} linkcheck html
 
 .PHONY: image-build
 image-build:

@@ -13,8 +13,6 @@ To install it from registry, simply run the following command in your terminal o
 
   $ pip3 install cybsi-sdk
 
-``pip3`` will ask you for credentials.
-
 You can also get a specific version by running a command like ``pip3 install cybsi-sdk==0.0.14``.
 
 Source code

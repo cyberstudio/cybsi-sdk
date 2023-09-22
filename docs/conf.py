@@ -23,6 +23,13 @@ extensions = [
     "sphinxjp.themes.basicstrap"
 ]
 
+# A list of regular expressions that match anchors Sphinx should skip
+# when checking the validity of anchors in links.
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-linkcheck_anchors_ignore
+linkcheck_anchors_ignore = [
+    "/artifacts/browse/tree/General/cybsi-pypi"  # anchor of link to pt artifactory
+]
+
 templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
@@ -111,6 +118,11 @@ latex_documents = [
     (master_doc, "cybsi.tex", u"Cybsi SDK Documentation",
      author, "manual")
 ]
+
+# LaTeX document customization
+latex_elements = {
+    'fontenc': '\\usepackage[X2,T1]{fontenc}'
+}
 
 # -- Options for manual page output ---------------------------------------
 
