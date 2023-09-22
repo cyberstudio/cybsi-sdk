@@ -6,6 +6,8 @@ DOCKER_NOROOT := -u $$(id -u):$$(id -g)
 lint:
 	flake8 --exclude=.venv --exclude=venv
 
+test:
+	python3 -m unittest discover tests/ -v
 
 docker-build:
 	docker build --pull --rm --tag "$(DOCKER_IMAGE):$(DOCKER_TAG)" .
@@ -13,6 +15,10 @@ docker-build:
 docker-lint:
 	docker run $(DOCKER_FLAGS) "$(DOCKER_IMAGE):$(DOCKER_TAG)" \
 	make lint
+
+docker-test:
+	docker run $(DOCKER_FLAGS) "$(DOCKER_IMAGE):$(DOCKER_TAG)" \
+	make test
 
 docker-clean:
 	docker rmi -f "$$(docker images -q $(DOCKER_IMAGE):$(DOCKER_TAG))"

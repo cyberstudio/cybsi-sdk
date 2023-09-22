@@ -1,0 +1,6 @@
+__version__ = '0.0.1'
+__title__ = 'cybsi-sdk'
+__description__ = 'Cybsi development kit'
+__license__ = 'Apache License 2.0'
+__author__ = 'SDK developers'
+__author_email__ = ''
