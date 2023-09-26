@@ -1,6 +1,13 @@
 Release History
 ===============
 
+2.11.0a8 (2023-09-26)
+---------------------
+
+- Boost API client authentication
+- Add license Apache License 2.0
+- Fix documentation
+
 2.11.0a7 (2023-07-31)
 ---------------------
 - Refactor register dictionary item
