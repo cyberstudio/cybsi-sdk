@@ -1,9 +1,12 @@
 Release History
 ===============
 
+2.11.0a9 (2023-09-27)
+---------------------
+- Add async page chaining helper
+
 2.11.0a8 (2023-09-26)
 ---------------------
-
 - Boost API client authentication
 - Add license Apache License 2.0
 - Fix documentation
