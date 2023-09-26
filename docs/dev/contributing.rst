@@ -71,4 +71,4 @@ And then use the following commands:
 Bug Reports & Feature Requests
 ------------------------------
 
-Please send them to Threat Analyzer developers over email.
+Please create a github issue.

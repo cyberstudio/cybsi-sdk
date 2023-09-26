@@ -33,8 +33,8 @@ master_doc = "index"
 
 # General information about the project.
 project = u"Cybsi SDK"
-copyright = u"PT"
-author = u"Cybsi Devs"
+copyright = u"Cybsi SDK developers"
+author = u"Cybsi SDK developers"
 version = cybsi.__version__
 release = cybsi.__version__
 language = "en"
