@@ -102,6 +102,10 @@ class HTTPConnector:
             resp = self._client.send(request=req, stream=stream)
         except CybsiError:
             raise
+        except httpx.TimeoutException as exp:
+            # Handle httpx.TimeoutException separately
+            # because it doesn't have an exception message.
+            raise CybsiError("request timeout", exp) from exp
         except Exception as exp:
             raise CybsiError("could not send request", exp) from exp
 
@@ -197,6 +201,10 @@ class AsyncHTTPConnector:
             resp = await self._client.send(request=req, stream=stream)
         except CybsiError:
             raise
+        except httpx.TimeoutException as exp:
+            # Handle httpx.TimeoutException separately
+            # because it doesn't have an exception message.
+            raise CybsiError("request timeout", exp) from exp
         except Exception as exp:
             raise CybsiError("could not send request", exp) from exp
 
