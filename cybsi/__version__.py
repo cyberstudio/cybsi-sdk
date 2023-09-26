@@ -1,6 +1,6 @@
 __version__ = "2.11.0a7"
 __title__ = "cybsi-python-sdk"
-__description__ = "Cybsi development kit"
+__description__ = "Cybersecurity threat intelligence development kit"
 __license__ = "Apache License 2.0"
-__author__ = "SDK Developers"
+__author__ = "Cybsi SDK Developers"
 __author_email__ = ""
