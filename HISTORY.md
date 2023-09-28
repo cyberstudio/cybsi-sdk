@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.11.0a10 (2023-09-28)
+----------------------
+- Fix license in pyproject.toml
+
 2.11.0a9 (2023-09-27)
 ---------------------
 - Add async page chaining helper
