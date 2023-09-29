@@ -4,6 +4,7 @@ version = "2.11.0a10"
 description = "Cybsi development kit"
 authors = ["Cybsi SDK developers"]
 license = "Apache License 2.0"
+readme = "README.md"
 packages = [
     { include = "cybsi" },
 ]
