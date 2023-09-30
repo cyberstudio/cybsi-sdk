@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.11.0 (2023-09-30)
+-------------------
+- Update docs
+
 2.11.0a10 (2023-09-28)
 ----------------------
 - Fix license in pyproject.toml

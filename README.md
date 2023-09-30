@@ -1,10 +1,12 @@
 Cybsi SDK
 ---------
 
-Это Python-библиотека для продукта Threat Analyzer. Позволяет настраивать продукт, расширять возможности продукта пользовательскими источниками данных, а также выгружать и загружать данные через HTTP REST API Threat Analyzer. 
+Библиотека для взаимодействия с API Threat Analyzer. Позволяет:
+* Настраивать продукт
+* Расширять возможности продукта пользовательскими источниками данных
+* Выгружать и загружать Threat Intelligence в различных форматах
 
-Библиотека поддерживает Python 3.7+ и имеет как синхронный, так и асинхронный интерфейс.
+Библиотека имеет как синхронный, так и асинхронный интерфейс.
 
-[Последняя версия документации](https://cybsi-sdk.readthedocs.io).
-
-[Руководство по настройке окружения разработчика и выпуску релизов](https://cybsi-sdk.readthedocs.io/en/latest/dev/contributing.html).
+[![Supported Versions](https://img.shields.io/pypi/pyversions/cybsi-sdk.svg)](https://pypi.org/project/cybsi-sdk/)
+[![Documentation Status](https://readthedocs.org/projects/cybsi-sdk/badge/?version=latest)](https://cybsi-sdk.readthedocs.io/en/latest/?badge=latest)

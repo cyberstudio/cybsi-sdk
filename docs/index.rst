@@ -6,8 +6,19 @@ Cybsi SDK: **Cyb**\ er\ **s**\ecurity Threat **I**\ntelligence development kit
 Release v\ |version|. (:ref:`Installation <install>`)
 
 **Cybsi SDK** is a Python library for communication with Threat Analyzer over HTTP REST API.
-It supports Python 3.7+, and has both synchronous and asynchronous interface.
+It has both synchronous and asynchronous interface.
 
+.. image:: https://img.shields.io/pypi/l/cybsi-sdk.svg
+    :target: https://pypi.org/project/cybsi-sdk/
+    :alt: License Badge
+
+.. image:: https://img.shields.io/pypi/wheel/cybsi-sdk.svg
+    :target: https://pypi.org/project/cybsi-sdk/
+    :alt: Wheel Support Badge
+
+.. image:: https://img.shields.io/pypi/pyversions/cybsi-sdk.svg
+    :target: https://pypi.org/project/cybsi-sdk/
+    :alt: Python Version Support Badge
 
 The User Guide
 --------------
