@@ -20,7 +20,6 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "enum_tools.autoenum",
-    "sphinxjp.themes.basicstrap",
 ]
 
 templates_path = ["_templates"]
@@ -71,9 +70,13 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = 'basicstrap'
+# Docs of sphinx_book_theme https://pydata-sphinx-theme.readthedocs.io/en/latest/user_guide/install.html
+html_theme = 'sphinx_book_theme'
 html_theme_options = {
-    'sidebar_span': 1,
+    "repository_url": "https://github.com/cyberstudio/cybsi-sdk",
+    "use_repository_button": True,
+    "use_issues_button": True,
+    'secondary_sidebar_items': [],
 }
 html_static_path = ["_static"]
 
