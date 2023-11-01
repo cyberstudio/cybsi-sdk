@@ -122,6 +122,7 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.PotentialDamage: _new_enum_value_converter(
         PotentialDamage, ignore_case=True
     ),
+    AttributeNames.Platforms: _dict_item_value_converter,
 }
 
 

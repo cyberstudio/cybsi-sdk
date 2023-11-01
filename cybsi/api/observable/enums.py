@@ -258,6 +258,15 @@ class AttributeNames(CybsiAPIEnum):
       Attribute value type is  :class:`~cybsi.api.observable.enums.PotentialDamage`.
       Attribute belongs to `File`, `DomainName`, `IPAddress`, `URL` entity type.
     """
+    Platforms = "Platforms"
+    """
+      .. versionadded:: 2.12
+
+      The file operates on platforms.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `File` entity type.
+    """
 
 
 @document_enum

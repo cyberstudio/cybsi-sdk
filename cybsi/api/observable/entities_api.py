@@ -59,6 +59,7 @@ _attr_value_kebab_converters: Dict[AttributeNames, str] = {
     AttributeNames.TargetedSectors: "targeted-sectors",
     AttributeNames.RegistrationCountry: "registration-country",
     AttributeNames.PotentialDamage: "potential-damage",
+    AttributeNames.Platforms: "platforms",
 }
 
 
