@@ -1,4 +1,4 @@
-FROM python:3.7.12-slim-buster
+FROM python:3.11.6-slim-bookworm
 
 ARG PIP_INDEX_URL
 
