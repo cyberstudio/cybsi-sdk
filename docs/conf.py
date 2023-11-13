@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 # Cybsi SDK documentation build configuration file.
 
-import sys
 import os
+import sys
 
 # Insert Cybsi SDK' path into the system.
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath("_themes"))
 
 import cybsi  # noqa: E402
-
 
 # -- General configuration ------------------------------------------------
 extensions = [
@@ -70,12 +69,9 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-# Docs of sphinx_book_theme https://pydata-sphinx-theme.readthedocs.io/en/latest/user_guide/install.html
-html_theme = 'sphinx_book_theme'
+# Docs of pydata_sphinx_theme https://pydata-sphinx-theme.readthedocs.io/en/latest/user_guide/install.html
+html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
-    "repository_url": "https://github.com/cyberstudio/cybsi-sdk",
-    "use_repository_button": True,
-    "use_issues_button": True,
     'secondary_sidebar_items': [],
 }
 html_static_path = ["_static"]
@@ -136,7 +132,6 @@ man_pages = [
 
 # -- Options controlling document structure --------------------------------
 autodoc_member_order = 'bysource'
-
 
 # -- Options for type hints in developer documentation ---------------------
 intersphinx_mapping = {

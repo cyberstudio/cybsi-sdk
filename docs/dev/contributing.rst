@@ -18,12 +18,32 @@ Formatting is performed using ``make lint``. There are no compromises.
 Documentation Contributions
 ---------------------------
 
+We publish documentation to ReadTheDocs. ReadTheDocs builds docs using python3.11 (so are we).
+
 The documentation files live in the ``docs/`` directory. Docs are written in
 `reStructuredText`_, and use `Sphinx`_ to generate the full suite of
 documentation.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 .. _Sphinx: http://sphinx-doc.org/index.html
+
+Documentation tools update
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To update documentation tools do:
+
+#. install docs dependencies ``make docs-tools``;
+#. update dependencies at ``docs/requirements.in``;
+#. use ``make update-docs-dependencies`` to update dependencies.
+
+``make update-docs-dependencies`` packs packages ``docs/requirements.in`` with its transitive
+dependencies to ``docs/requirements.txt``.
+``docs/requirements.txt`` contains complete list of packages with specific versions used
+to reproduce same documentation build environment.
+
+See `ReadTheDocs: Reproducible Builds`_ for details.
+
+.. _`ReadTheDocs: Reproducible Builds`: https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
 
 Developer Environment Setup
 ---------------------------
