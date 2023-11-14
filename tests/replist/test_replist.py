@@ -41,13 +41,13 @@ class ReplistTest(BaseTest):
 
     @patch.object(HTTPConnector, "do_get")
     def test_replist_entities_default_view(self, mock) -> None:
-        entities_response = [
+        entities_response: List[Any] = [
             {
                 "type": "IPAddress",
                 "uuid": "8f960b00-220a-4785-b9b9-b993efab9165",
                 "keys": [{"type": "String", "value": "171.25.193.77"}],
             }
-        ]  # type: List[Any]
+        ]
 
         mock.return_value = self._make_response(200, entities_response)
 
@@ -99,7 +99,7 @@ class ReplistTest(BaseTest):
 
     @patch.object(HTTPConnector, "do_get")
     def test_replist_changes_custom_view(self, mock) -> None:
-        changes_response = [
+        changes_response: List[Any] = [
             {
                 "operation": "Add",
                 "entity": {
@@ -108,7 +108,7 @@ class ReplistTest(BaseTest):
                     "nodeRole": "CnC",
                 },
             }
-        ]  # type: List[Any]
+        ]
 
         mock.return_value = self._make_response(200, changes_response)
 

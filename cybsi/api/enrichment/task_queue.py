@@ -345,7 +345,6 @@ class FailedTaskForm(JsonObjectForm):
         error_code: "EnrichmentErrorCodes",
         message: str,
     ) -> None:
-
         super().__init__()
         self._data["uuid"] = str(task_uuid)
         self._data["error"] = {
