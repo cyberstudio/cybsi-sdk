@@ -391,7 +391,8 @@ class AttributeValueFactView(JsonObjectView):
 
     @property
     def value(self) -> AttributeValueView:
-        """Value of the attribute.  Return type depends on attribute name and entity type.
+        """Value of the attribute.
+        Return type depends on attribute name and entity type.
 
         Usage:
             >>> from typing import cast

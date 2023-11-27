@@ -21,7 +21,6 @@ from .enums import (
 T = TypeVar("T")
 """Type of section data. Depends on section name."""
 
-
 AttributeValueView = Union[str, bool, int, uuid.UUID, DictionaryItemCommonView, Enum]
 
 
@@ -256,7 +255,7 @@ class SectionsView:
     }
 
     def __init__(self, data: List[JsonObject]):
-        self._sections = {}  # type: Dict[EntityAggregateSections,Any]
+        self._sections: Dict[EntityAggregateSections, Any] = {}
         for section in data:
             section_name = EntityAggregateSections(section["name"])
             view: Any = SectionView(

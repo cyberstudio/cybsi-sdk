@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.12.0a3 (2023-11-14)
+---------------------
+- Update dependencies
+
 2.12.0a2 (2023-11-10)
 ---------------------
 - Drop python 3.7 support
