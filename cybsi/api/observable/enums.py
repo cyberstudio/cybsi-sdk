@@ -309,6 +309,11 @@ class NodeRole(CybsiAPIEnum):
     ExfiltrationStore = "ExfiltrationStore"  # doc: Used for data exfiltration
     CDN = "CDN"  # doc: Belongs to a CDN infrastructure
     BitTorrentTracker = "BitTorrentTracker"  # doc: BitTorrent tracker
+    PublicDNS = "PublicDNS"  # doc: Public DNS
+    FreeEmail = "FreeEmail"  # doc: Free email servers
+    Cryptomining = "Cryptomining"  # doc: Mining pools
+    CrlOcsp = "CrlOcsp"  # doc: OCSP servers
+    Parking = "Parking"  # doc: Unregistered domains parking
 
 
 @document_enum

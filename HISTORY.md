@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.12.0a5 (2023-12-04)
+---------------------
+- Extend node roles enum
+
 2.12.0a4 (2023-12-04)
 ---------------------
 - Add new Tactics and Techniques attributes
