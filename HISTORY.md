@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.12.0a4 (2023-12-04)
+---------------------
+- Add new Tactics and Techniques attributes
+
 2.12.0a3 (2023-11-14)
 ---------------------
 - Update dependencies

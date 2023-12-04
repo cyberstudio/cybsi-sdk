@@ -123,6 +123,8 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
         PotentialDamage, ignore_case=True
     ),
     AttributeNames.Platforms: _dict_item_value_converter,
+    AttributeNames.Tactics: _dict_item_value_converter,
+    AttributeNames.Techniques: _dict_item_value_converter,
 }
 
 
