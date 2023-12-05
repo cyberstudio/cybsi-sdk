@@ -53,6 +53,8 @@ def _convert_attribute_value_type(
         AttributeNames.RegistrationCountry: DictionaryItemCommonView,
         AttributeNames.PotentialDamage: PotentialDamage,
         AttributeNames.Platforms: DictionaryItemCommonView,
+        AttributeNames.Tactics: DictionaryItemCommonView,
+        AttributeNames.Techniques: DictionaryItemCommonView,
     }
 
     return _attribute_value_types[attribute_name](val)

@@ -267,6 +267,26 @@ class AttributeNames(CybsiAPIEnum):
       :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
       Attribute belongs to `File` entity type.
     """
+    Tactics = "Tactics"
+    """
+      .. versionadded:: 2.12
+
+      The entity uses tactics.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
+      `URL` entity type.
+    """
+    Techniques = "Techniques"
+    """
+      .. versionadded:: 2.12
+
+      The entity uses techniques.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
+      `URL` entity type.
+    """
 
 
 @document_enum
