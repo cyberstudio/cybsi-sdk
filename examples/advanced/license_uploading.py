@@ -10,12 +10,11 @@ def main():
 
     auth = APIKeyAuth(api_url=api_url, api_key=api_key)
     config = Config(api_url, auth, ssl_verify=False)
-    client = CybsiClient(config)
 
     # license.zip is zip archive with nested `license-access-token.key`
-    f = open("license.zip", "rb")
-    client.licenses.upload(f)
-    client.close()
+    with CybsiClient(config) as client:
+        f = open("license.zip", "rb")
+        client.licenses.upload(f)
 
 
 if __name__ == "__main__":

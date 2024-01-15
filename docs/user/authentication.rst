@@ -13,17 +13,4 @@ The client receives a Bearer Token using the api-key and then authenticates in t
 
 In the example below we create new user and generate his API-Key.
 
-.. literalinclude:: ../../examples/generate_user_api_key.py
-
-
-Licenses
---------
-
-License - the right to use the software. Such a right is granted by concluding the appropriate License Agreement,
-which regulates the scope of rights and restrictions regarding such use.
-For the correct installation of the Threat Analyzer obtained under the relevant License Agreement,
-the user receives a license key on paper and/or an electronic key.
-
-The example shows how to upload license.
-
-.. literalinclude:: ../../examples/upload_license.py
+.. literalinclude:: ../../examples/authentication/user_api_key_generation.py

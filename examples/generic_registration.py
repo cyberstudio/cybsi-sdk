@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
+import asyncio
 from datetime import datetime, timezone
 from os import environ
 
-from cybsi.api import APIKeyAuth, Config, CybsiClient
+from cybsi.api import APIKeyAuth, Config, CybsiAsyncClient
 from cybsi.api.dictionary import DictItemAttributeValue
 from cybsi.api.observable import (
     AttributeNames,
     EntityForm,
     EntityKeyTypes,
     EntityTypes,
-    RelatedThreatCategory,
     RelationshipKinds,
     ShareLevels,
 )
 from cybsi.api.observation import GenericObservationForm
 
 
-def create_generic_observation():
+def create_generic_observation(domain, ip):
     domain = EntityForm(
         EntityTypes.DomainName,
-        [(EntityKeyTypes.String, "test.com1")],
+        [(EntityKeyTypes.String, domain)],
     )
     ip_address = EntityForm(
         EntityTypes.IPAddress,
-        [(EntityKeyTypes.String, "8.8.8.1")],
+        [(EntityKeyTypes.String, ip)],
     )
 
     observation = (
@@ -34,12 +34,6 @@ def create_generic_observation():
             entity=domain,
             attribute_name=AttributeNames.IsIoC,
             value=True,
-            confidence=0.9,
-        )
-        .add_attribute_fact(
-            entity=domain,
-            attribute_name=AttributeNames.RelatedThreatCategory,
-            value=RelatedThreatCategory.Malware,
             confidence=0.9,
         )
         .add_attribute_fact(
@@ -58,14 +52,35 @@ def create_generic_observation():
     return observation
 
 
-if __name__ == "__main__":
+async def main():
     api_key = environ["CYBSI_API_KEY"]
     api_url = environ["CYBSI_API_URL"]
 
     auth = APIKeyAuth(api_url=api_url, api_key=api_key)
     config = Config(api_url, auth, ssl_verify=False)
 
-    with CybsiClient(config) as client:
-        generic_observation = create_generic_observation()
-        ref = client.observations.generics.register(generic_observation)
-        view = client.observations.generics.view(ref.uuid)
+    domain_ip_pairs = [
+        ("aa.com", "7.7.7.7"),
+        ("bb.com", "8.8.8.8"),
+        ("cc.com", "9.9.9.9"),
+    ]
+    generics = [
+        create_generic_observation(domain, ip) for domain, ip in domain_ip_pairs
+    ]
+
+    # There is also a sync generic registration. Use CybsiClient class:
+    #     with CybsiClient(config) as client:
+    #         generic_observation = create_generic_observation()
+    #         ref = client.observations.generics.register(generic_observation)
+
+    async with CybsiAsyncClient(config) as client:
+        registrations = [client.observations.generics.register(g) for g in generics]
+
+        results = await asyncio.gather(*registrations)
+        uuids = ", ".join(str(u.uuid) for u in results)
+
+        print(f"Registered observations: {uuids}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

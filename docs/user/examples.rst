@@ -3,39 +3,6 @@
 Examples
 ========
 
-Enrichment
-----------
-
-.. _implement-custom-external-db-example:
-
-Implement an external database
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-External databases are useful for entity enrichment. An example of external database is global DNS system.
-
-In the example below we pass IP received from enrichment task to
-an imaginary system. The system can magically tell if IP is IoC or not.
-We form an observation from results and register the observation in Threat Analyzer API.
-
-The example can be used as a general boilerplate for connectors to external databases.
-
-.. literalinclude:: ../../examples/external_db_lookup_enricher.py
-
-.. _implement-custom-analyzer-example:
-
-Implement an analyzer
-~~~~~~~~~~~~~~~~~~~~~
-Analyzers perform artifact analysis. Typical analyzers are network traffic analyzers and sandboxes.
-
-In the example below we pass artifact and its content (i.e. bytes)
-to an imaginary third-party analyzer. The analyzer can magically tell if file associated with our artifact is malicious or not.
-We form a report from results and register the report in Threat Analyzer API.
-
-The example can be used as a general boilerplate for connectors to analyzers.
-
-.. literalinclude:: ../../examples/artifact_analysis_enricher.py
-
-
 Artifacts
 ---------
 
@@ -48,7 +15,9 @@ An artifact can be sent for analysis to analyzer (for example, sandbox).
 
 The example shows how to upload and download artifacts.
 
-.. literalinclude:: ../../examples/upload_download_artifact.py
+Also see :ref:`upload-asynchronous-artifacts-example`.
+
+.. literalinclude:: ../../examples/artifact_uploading_downloading.py
 
 Data sources
 ------------
@@ -61,7 +30,7 @@ Data source describes software or identity who makes observation, describes obje
 
 In the example below we registering our own data source type CIRCL and data source MISP.
 
-.. literalinclude:: ../../examples/register_data_sources.py
+.. literalinclude:: ../../examples/data_sources_registration.py
 
 .. _pagination-example:
 
@@ -82,3 +51,17 @@ The **second** way is elements traversing. This approach allows you to iterate t
 collections without working with pages. To work with collections as with iterator use `chain_pages`.
 
 .. literalinclude:: ../../examples/pagination_chained.py
+
+.. _get-replist-changes-example:
+
+Reputation list changes
+-----------------------
+Reputation list is a list of observed entities, united by some characteristic
+through a stored query, for example: malicious entities, indicator hosts, etc.
+Reputation list is dynamic and can change with the appearance of each new fact in the system.
+
+In the example below we get a reputation list changes by specified cursor.
+
+Also see :ref:`register-reputation-list`.
+
+.. literalinclude:: ../../examples/replist_changes_getting.py
