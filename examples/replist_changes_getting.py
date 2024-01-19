@@ -6,7 +6,7 @@ from typing import cast
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
 from cybsi.api.observable import EntityView
-from cybsi.api.pagination import Cursor, Page, chain_pages
+from cybsi.api.pagination import Cursor, Page
 from cybsi.api.replist import EntitySetChangeView
 
 if __name__ == "__main__":
@@ -34,11 +34,15 @@ if __name__ == "__main__":
             changes_page = client.replists.changes(
                 replist_uuid, cursor=cursor_for_changes
             )
-            for item in chain_pages(changes_page):
-                # Do something with reputation list changes
-                #
+            while changes_page:
+                # Page is iterable
+                for item in changes_page:
+                    # Do something with reputation list changes
+                    pass
+                # Do something with a page
                 if changes_page.cursor is not None:
                     cursor_for_changes = cast(Cursor, changes_page.cursor)
+                changes_page = changes_page.next_page()  # type: ignore
 
             # Changes are over, wait and request again with last cursor
             time.sleep(wait_on_empty_changes_sec)
