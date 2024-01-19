@@ -16,11 +16,11 @@ if __name__ == "__main__":
     ds_type_uuid = None
     ds_uuid = None
     try:  # store datasource_type
-        circl_type = DataSourceTypeForm(
+        datasource_type_form = DataSourceTypeForm(
             short_name="CIRCL",
             long_name="Computer Incident Response Center Luxembourg",
         )
-        ds_type_ref = client.data_source_types.register(circl_type)
+        ds_type_ref = client.data_source_types.register(datasource_type_form)
         ds_type_uuid = ds_type_ref.uuid
         datasource_form = DataSourceForm(
             type_uuid=ds_type_uuid,

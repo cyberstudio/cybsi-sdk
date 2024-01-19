@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
+import uuid
 from os import environ
 
 from cybsi.api import APIKeyAuth, Config, CybsiClient
-from cybsi.api.observable import (
-    AttributeNames,
-    EntityForm,
-    EntityKeyTypes,
-    EntityTypes,
-    RelationshipKinds,
-)
+from cybsi.api.observable import AttributeNames, RelationshipKinds
 
-# Run register_generic.py before script to initialize entity relationships.
 if __name__ == "__main__":
     api_key = environ["CYBSI_API_KEY"]
     api_url = environ["CYBSI_API_URL"]
@@ -19,17 +13,14 @@ if __name__ == "__main__":
     config = Config(api_url, auth, ssl_verify=False)
     client = CybsiClient(config)
 
-    domain = EntityForm(EntityTypes.DomainName)
-    domain.add_key(EntityKeyTypes.String, "test.com")
-    domain_ref = client.observable.entities.register(domain)
-
-    ip_address = EntityForm(EntityTypes.IPAddress)
-    ip_address.add_key(EntityKeyTypes.String, "8.8.8.8")
-    ip_address_ref = client.observable.entities.register(ip_address)
+    # There are IP-Address and DomainName entity with IoC attribute and relationship
+    # See generic_registration.py script for example.
+    domain_uuid = uuid.uuid4()
+    ip_address_uuid = uuid.uuid4()
 
     # Get IsIoC attribute value forecast of ip-address entity.
     attribute_forecast = client.observable.entities.forecast_attribute_values(
-        ip_address_ref.uuid, AttributeNames.IsIoC
+        ip_address_uuid, AttributeNames.IsIoC
     )
     print(attribute_forecast)
     # {
@@ -56,7 +47,7 @@ if __name__ == "__main__":
     # }
 
     # Get link forecasts list of ip-address entity.
-    link_forecast = client.observable.entities.forecast_links(ip_address_ref.uuid)
+    link_forecast = client.observable.entities.forecast_links(ip_address_uuid)
     print(link_forecast.data()[0])
     # {
     #   "link": {
@@ -79,8 +70,8 @@ if __name__ == "__main__":
 
     # Get forecast of relationship (domain name entity resolves ip-address entity).
     relationship_forecast = client.observable.relationships.forecast(
-        source_entity_uuid=domain_ref.uuid,
-        target_entity_uuid=ip_address_ref.uuid,
+        source_entity_uuid=domain_uuid,
+        target_entity_uuid=ip_address_uuid,
         kind=RelationshipKinds.ResolvesTo,
     )
     print(relationship_forecast)
@@ -114,7 +105,7 @@ if __name__ == "__main__":
     #   "valuableFacts": null
     # }
 
-    print(client.observable.entities.forecast_links_statistic(domain_ref.uuid)[0])
+    print(client.observable.entities.forecast_links_statistic(domain_uuid)[0])
     # {
     #     "linkType": {
     #         "url": "http://.../observable/entities/66fd82a1-c35c-424e-986c-133054bd7797/links?kind=ResolvesTo&relatedEntityType=IPAddress&direction=Forward", # noqa: E501

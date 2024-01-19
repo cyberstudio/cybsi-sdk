@@ -3,7 +3,6 @@ In essence, it's a container of arbitrary facts Cybsi domain model supports.
 
 See Also:
     See :ref:`register-generic-observation-example`
-    and :ref:`register-generic-observation-async-example`
     for a complete examples of generic observation API usage.
 """
 import uuid
