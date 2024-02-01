@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.12.0a6 (2024-02-02)
+---------------------
+- Mention changes in 2.11.1
+
 2.12.0a5 (2023-12-04)
 ---------------------
 - Extend node roles enum
@@ -20,6 +24,10 @@ Release History
 2.12.0a1 (2023-10-31)
 ---------------------
 - Add Platforms attribute
+
+2.11.1 (2024-02-02)
+-------------------
+- Export PotentialDamage and RIR attributes
 
 2.11.0 (2023-09-30)
 -------------------

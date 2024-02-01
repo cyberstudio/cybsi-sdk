@@ -56,4 +56,6 @@ from .enums import (
     LinkDirection,
     NodeRole,
     IdentityClass,
+    PotentialDamage,
+    RegionalInternetRegistry,
 )
