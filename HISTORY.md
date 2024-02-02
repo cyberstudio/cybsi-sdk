@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.11.1 (2024-02-02)
+-------------------
+- Export PotentialDamage and RIR attributes
+
 2.11.0 (2023-09-30)
 -------------------
 - Update docs
