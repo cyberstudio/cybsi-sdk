@@ -1,4 +1,4 @@
-__version__ = "2.11.0"
+__version__ = "2.11.1"
 __title__ = "cybsi-python-sdk"
 __description__ = "Cybersecurity threat intelligence development kit"
 __license__ = "Apache License 2.0"
