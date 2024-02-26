@@ -119,6 +119,11 @@ class ResourceName(CybsiAPIEnum):
     """Sample contents. Permission can be only with reading action."""
     DataSources = "DataSources"
     """Data sources."""
+    Dictionaries = "Dictionaries"
+    """
+        .. versionadded:: 2.11.2
+        Dictionaries
+    """
     EnrichmentConfig = "EnrichmentConfig"
     """Enrichment configs."""
     EnrichmentTasks = "EnrichmentTasks"
@@ -152,8 +157,4 @@ class ResourceName(CybsiAPIEnum):
     """Reputation list contents. Permission can be only with reading action."""
     StoredQuery = "StoredQuery"
     """Stored queries."""
-    Dictionaries = "Dictionaries"
-    """
-        .. versionadded:: 2.11.2
-        Dictionaries
-    """
+
