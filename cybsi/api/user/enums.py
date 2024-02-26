@@ -92,11 +92,13 @@ class RoleName(CybsiAPIEnum):
     """
     DictionaryReader = "DictionaryReader"
     """
+        .. versionadded:: 2.11.2
         DictionaryReader's role permissions:
         [Dictionaries:r]
     """
     DictionaryRegistrant = "DictionaryRegistrant"
     """
+        .. versionadded:: 2.11.2
         DictionaryRegistrant's role permissions:
         [Dictionaries:w]
     """
@@ -150,3 +152,8 @@ class ResourceName(CybsiAPIEnum):
     """Reputation list contents. Permission can be only with reading action."""
     StoredQuery = "StoredQuery"
     """Stored queries."""
+    Dictionaries = "Dictionaries"
+    """
+        .. versionadded:: 2.11.2
+        Dictionaries
+    """
