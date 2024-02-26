@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.11.2 (26.02.2024)
+-------------------
+- Add Dictionaries to ResourceNames
+- Add DictionaryReader and DictionaryRegistrant roles.
+
 2.11.1 (2024-02-02)
 -------------------
 - Export PotentialDamage and RIR attributes
