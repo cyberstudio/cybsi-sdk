@@ -93,12 +93,14 @@ class RoleName(CybsiAPIEnum):
     DictionaryReader = "DictionaryReader"
     """
         .. versionadded:: 2.11.2
+        
         DictionaryReader's role permissions:
         [Dictionaries:r]
     """
     DictionaryRegistrant = "DictionaryRegistrant"
     """
         .. versionadded:: 2.11.2
+        
         DictionaryRegistrant's role permissions:
         [Dictionaries:w]
     """
@@ -122,6 +124,7 @@ class ResourceName(CybsiAPIEnum):
     Dictionaries = "Dictionaries"
     """
         .. versionadded:: 2.11.2
+        
         Dictionaries
     """
     EnrichmentConfig = "EnrichmentConfig"
