@@ -150,5 +150,3 @@ class ResourceName(CybsiAPIEnum):
     """Reputation list contents. Permission can be only with reading action."""
     StoredQuery = "StoredQuery"
     """Stored queries."""
-    Dictionaries = "Dictionaries"
-    """Dictionaries"""
