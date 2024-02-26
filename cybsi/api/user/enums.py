@@ -90,7 +90,16 @@ class RoleName(CybsiAPIEnum):
         UserAdministrator's role permissions:
         [APIKeys:rw, Users:rw]
     """
-
+    DictionaryReader = "DictionaryReader"
+    """
+       DictionaryReader's role permissions:
+       [Dictionaries:r] 
+    """
+    DictionaryRegistrant = "DictionaryRegistrant"
+    """
+           DictionaryRegistrant's role permissions:
+           [Dictionaries:w] 
+    """
 
 @document_enum
 class ResourceName(CybsiAPIEnum):
@@ -140,3 +149,5 @@ class ResourceName(CybsiAPIEnum):
     """Reputation list contents. Permission can be only with reading action."""
     StoredQuery = "StoredQuery"
     """Stored queries."""
+    Dictionaries = "Dictionaries"
+    """Dictionaries"""
