@@ -5,6 +5,8 @@ Release History
 -------------------
 - Add Dictionaries to ResourceNames
 - Add DictionaryReader and DictionaryRegistrant roles.
+- Remove privileges Feeds, FeedsData and SearchFilters from roles FeedAdministrator и FeedDataReader
+- Remove privilege SearchFilters from role Searcher
 
 2.11.1 (2024-02-02)
 -------------------
