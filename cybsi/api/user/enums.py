@@ -25,15 +25,15 @@ class RoleName(CybsiAPIEnum):
     FeedAdministrator = "FeedAdministrator"
     """
         FeedAdministrator's role permissions:
-        [DataSources:r, Feeds:rw, FeedsData:r, Observable:r,
-        ReputationLists:rw, ReputationListsContent:r, Search:r,
-        SearchFilters:rw, StoredQuery:rw, Users:r]
+        [DataSources:r, Observable:r, ReputationLists:rw,
+        ReputationListsContent:r, Search:r, StoredQuery:rw,
+        Users:r]
     """
     FeedDataReader = "FeedDataReader"
     """
         FeedDataReader's role permissions:
-        [DataSources:r, Feeds:r, FeedsData:r, ReputationLists:r,
-        ReputationListsContent:r, SearchFilters:r, StoredQuery:r, Users:r]
+        [DataSources:r, ReputationLists:r, ReputationListsContent:r,
+        StoredQuery:r, Users:r]
     """
     EnrichmentRunner = "EnrichmentRunner"
     """
@@ -83,12 +83,26 @@ class RoleName(CybsiAPIEnum):
     Searcher = "Searcher"
     """
         Searcher's role permissions:
-        [DataSources:r, Observable:r, Search:r, SearchFilters:rw]
+        [DataSources:r, Observable:r, Search:r]
     """
     UserAdministrator = "UserAdministrator"
     """
         UserAdministrator's role permissions:
         [APIKeys:rw, Users:rw]
+    """
+    DictionaryReader = "DictionaryReader"
+    """
+        .. versionadded:: 2.11.2
+
+        DictionaryReader's role permissions:
+        [Dictionaries:r]
+    """
+    DictionaryRegistrant = "DictionaryRegistrant"
+    """
+        .. versionadded:: 2.11.2
+
+        DictionaryRegistrant's role permissions:
+        [Dictionaries:w]
     """
 
 
@@ -107,6 +121,12 @@ class ResourceName(CybsiAPIEnum):
     """Sample contents. Permission can be only with reading action."""
     DataSources = "DataSources"
     """Data sources."""
+    Dictionaries = "Dictionaries"
+    """
+        .. versionadded:: 2.11.2
+
+        Dictionaries
+    """
     EnrichmentConfig = "EnrichmentConfig"
     """Enrichment configs."""
     EnrichmentTasks = "EnrichmentTasks"
