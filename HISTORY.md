@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.12.0a7 (2024-02-29)
+---------------------
+- Mention changes in 2.11.2
+
 2.12.0a6 (2024-02-02)
 ---------------------
 - Mention changes in 2.11.1
@@ -24,6 +28,13 @@ Release History
 2.12.0a1 (2023-10-31)
 ---------------------
 - Add Platforms attribute
+
+2.11.2 (26.02.2024)
+-------------------
+- Add Dictionaries to ResourceNames
+- Add DictionaryReader and DictionaryRegistrant roles.
+- Remove privileges Feeds, FeedsData and SearchFilters from roles FeedAdministrator и FeedDataReader
+- Remove privilege SearchFilters from role Searcher
 
 2.11.1 (2024-02-02)
 -------------------
