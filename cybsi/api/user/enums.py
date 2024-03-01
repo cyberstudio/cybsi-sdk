@@ -12,83 +12,61 @@ class RoleName(CybsiAPIEnum):
     See :class:`ResourceName`.
     """
 
-    Administrator = "Administrator"
+    SystemAdministrator = "SystemAdministrator"
     """
-        Administrator's role permissions:
-        [DataSources:rw,EnrichmentConfig:r,Users:r]
+        .. versionadded:: 2.12
+
+        System administrator's role permissions:
+        [DataSources:r,Users:rw,APIKeys:rw,License:w]
     """
-    ConfigReader = "ConfigReader"
+    DataEngineer = "DataEngineer"
     """
-        ConfigReader's role permissions:
-        [DataSources:r, EnrichmentConfig:r]
+        .. versionadded:: 2.12
+
+        Data engineer's role permissions:
+        [StoredQuery:rw,Observable:r,EntityView:r,Artifacts:r,
+        ArtifactsContent:r,ReputationLists:rw,ReputationListsContent:r,
+        EnrichmentConfig:rw,DataSources:rw,Users:rw,APIKeys:rw,
+        Dictionaries:rw]
     """
-    FeedAdministrator = "FeedAdministrator"
+    SOCAnalyst = "SOCAnalyst"
     """
-        FeedAdministrator's role permissions:
-        [DataSources:r, Feeds:rw, FeedsData:r, Observable:r,
-        ReputationLists:rw, ReputationListsContent:r, Search:r,
-        SearchFilters:rw, StoredQuery:rw, Users:r]
+        .. versionadded:: 2.12
+
+        SOC analyst's role permissions:
+        [StoredQuery:rw,Observable:rw,EntityView:r,Artifacts:rw,
+        ArtifactsContent:r,Reports:rw,Observations:rw,RawReports:r
+        EnrichmentTasks:rw,ReputationLists:rw,ReputationListsContent:r,
+        EnrichmentConfig:r,DataSources:r,Users:r,Dictionaries:rw]
     """
-    FeedDataReader = "FeedDataReader"
+    CTIAnalyst = "CTIAnalyst"
     """
-        FeedDataReader's role permissions:
-        [DataSources:r, Feeds:r, FeedsData:r, ReputationLists:r,
-        ReputationListsContent:r, SearchFilters:r, StoredQuery:r, Users:r]
+        .. versionadded:: 2.12
+
+        CTI analyst's role permissions:
+        [StoredQuery:r,Observable:rw,EntityView:r,Artifacts:rw,
+        ArtifactsContent:r,Reports:rw,Observations:rw,RawReports:r
+        EnrichmentTasks:rw,ReputationLists:r,ReputationListsContent:r,
+        EnrichmentConfig:r,DataSources:r,Users:r,Dictionaries:rw]
     """
-    EnrichmentRunner = "EnrichmentRunner"
+    CyberSecuritySpecialist = "CyberSecuritySpecialist"
     """
-        EnrichmentRunner's role permissions:
-        [DataSources:r, EnrichmentTasks:rw]
+        .. versionadded:: 2.12
+
+        Cyber security specialist's role permissions:
+        [StoredQuery:r,Observable:r,EntityView:r,Artifacts:r,
+        Reports:r,Observations:r,RawReports:r,EnrichmentTasks:rw,
+        ReputationLists:r,ReputationListsContent:r,
+        EnrichmentConfig:r,DataSources:r,Users:r,Dictionaries:rw]
     """
-    EnrichmentTaskReader = "EnrichmentTaskReader"
+    Guest = "Guest"
     """
-        EnrichmentTaskReader's role permissions:
-        [DataSources:r, EnrichmentTasks:r]
-    """
-    ReportRegistrant = "ReportRegistrant"
-    """
-        ReportRegistrant's role permissions:
-        [Observations:w, Reports:w]
-    """
-    ReportReader = "ReportReader"
-    """
-        ReportReader's role permissions:
-        [DataSources:r, Observations:r, RawReports:r, Reports:r]
-    """
-    EntityRegistrant = "EntityRegistrant"
-    """
-        EntityRegistrant's role permissions:
-        [Observable:w]
-    """
-    EntityReader = "EntityReader"
-    """
-        EntityReader's role permissions:
-        [DataSources:r, Observable:r]
-    """
-    ArtifactReader = "ArtifactReader"
-    """
-        ArtifactReader's role permissions:
-        [Artifacts:r, DataSources:r]
-    """
-    ArtifactRegistrant = "ArtifactRegistrant"
-    """
-        ArtifactRegistrant's role permissions:
-        [Artifacts:w]
-    """
-    ArtifactContentReader = "ArtifactContentReader"
-    """
-        ArtifactContentReader's role permissions:
-        [Artifacts:r, ArtifactsContent:r]
-    """
-    Searcher = "Searcher"
-    """
-        Searcher's role permissions:
-        [DataSources:r, Observable:r, Search:r, SearchFilters:rw]
-    """
-    UserAdministrator = "UserAdministrator"
-    """
-        UserAdministrator's role permissions:
-        [APIKeys:rw, Users:rw]
+        .. versionadded:: 2.12
+
+        Guest's role permissions:
+        [Observable:r,Artifacts:r,Reports:r,Observations:r,
+        RawReports:r,EnrichmentTasks:r,EnrichmentConfig:r,
+        DataSources:r,Dictionaries:r]
     """
 
 
@@ -107,14 +85,16 @@ class ResourceName(CybsiAPIEnum):
     """Sample contents. Permission can be only with reading action."""
     DataSources = "DataSources"
     """Data sources."""
+    Dictionaries = "Dictionaries"
+    """
+        .. versionadded:: 2.11.2
+
+        Dictionaries
+    """
     EnrichmentConfig = "EnrichmentConfig"
     """Enrichment configs."""
     EnrichmentTasks = "EnrichmentTasks"
     """Enrichment tasks."""
-    Feeds = "Feeds"
-    """Feeds."""
-    FeedsData = "FeedsData"
-    """Feed contents. Permission can be only with reading action."""
     Observable = "Observable"
     """Observable entities."""
     Observations = "Observations"
@@ -128,8 +108,6 @@ class ResourceName(CybsiAPIEnum):
     """Reports."""
     Search = "Search"
     """Search. Permission can be only with reading action."""
-    SearchFilters = "SearchFilters"
-    """Search filters."""
     Users = "Users"
     """Users."""
     APIKeys = "APIKeys"
@@ -140,3 +118,9 @@ class ResourceName(CybsiAPIEnum):
     """Reputation list contents. Permission can be only with reading action."""
     StoredQuery = "StoredQuery"
     """Stored queries."""
+    License = "License"
+    """
+        .. versionadded:: 2.12
+
+        Licenses.
+    """
