@@ -309,7 +309,7 @@ class UserForm(JsonObjectForm):
         >>> userForm = UserForm(
         >>>     login="user_test",
         >>>     access_level=ShareLevels.Green,
-        >>>     roles=[RoleName.EntityReader],
+        >>>     roles=[RoleName.SystemAdministrator],
         >>>     password="string",
         >>>     full_name="Test Tester",
         >>>     email="test@pt.com",
