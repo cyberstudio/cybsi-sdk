@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.12.1 (2024-04-26)
+-------------------
+- Fix api key generation
+
 2.12.0 (2024-03-14)
 -------------------
 - Change user roles
