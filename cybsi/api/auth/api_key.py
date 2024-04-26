@@ -333,13 +333,14 @@ class APIKeyForm(JsonObjectForm):
 
     def __init__(
         self,
-        expires_at: datetime,
+        expires_at: Optional[datetime],
         *,
         description: Optional[str] = None,
         permissions: Iterable[Tuple[ResourceName, ActionSet]] = [],
     ):
         super().__init__()
-        self._data["expiresAt"] = rfc3339_timestamp(expires_at)
+        if expires_at:
+            self._data["expiresAt"] = rfc3339_timestamp(expires_at)
         if description is not None:
             self._data["description"] = description
         if permissions:
