@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.12.2 (2024-05-03)
+-------------------
+- Fix stored query filter
+
 2.12.1 (2024-04-26)
 -------------------
 - Fix api key generation

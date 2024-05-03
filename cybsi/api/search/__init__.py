@@ -10,6 +10,7 @@ from .stored_queries import (
     StoredQueryForm,
     StoredQueryValidationView,
     StoredQueryView,
+    StoredQueryFilterView,
     CybsiLangErrorView,
     ErrorPosition,
 )
