@@ -110,7 +110,7 @@ class StoredQueriesAPI(BaseAPI):
         user_uuid: Optional[uuid.UUID] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
-    ) -> Page["StoredQueryView"]:
+    ) -> Page["StoredQueryFilterView"]:
         """Get page of filtered stored queries list.
 
         Note:
@@ -138,7 +138,7 @@ class StoredQueriesAPI(BaseAPI):
             params["limit"] = str(limit)
 
         resp = self._connector.do_get(self._path, params=params)
-        page = Page(self._connector.do_get, resp, StoredQueryView)
+        page = Page(self._connector.do_get, resp, StoredQueryFilterView)
         return page
 
 
@@ -264,9 +264,9 @@ class StoredQueryCommonView(RefView):
         return self._get("name")
 
 
-class StoredQueryView(_TaggedRefView, StoredQueryCommonView):
-    """View of a stored query,
-    as retrieved by :meth:`StoredQueriesAPI.view`."""
+class StoredQueryFilterView(StoredQueryCommonView):
+    """Filter view of a stored query,
+    as retrieved by :meth:`StoredQueriesAPI.filter`."""
 
     @property
     def text(self) -> str:
@@ -279,3 +279,8 @@ class StoredQueryView(_TaggedRefView, StoredQueryCommonView):
         """User, author of the query."""
 
         return RefView(self._get("author"))
+
+
+class StoredQueryView(_TaggedRefView, StoredQueryFilterView):
+    """View of a stored query,
+    as retrieved by :meth:`StoredQueriesAPI.view`."""
