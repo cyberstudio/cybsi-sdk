@@ -360,8 +360,9 @@ class DictionaryItemForm(JsonObjectForm):
     Args:
         dictionary_uuid: Dictionary identifier.
         key: Dictionary item key. The key should consist of characters
-            according to the pattern `[a-zA-Z0-9_ -]` and
-            have length in the range `[1;30]`.
+            according to the pattern `[a-zA-Z0-9_ :.@-]` and
+            have length in the range `[1;50]`.
+            First and last char of key can't be space-symbol
             User-specified key case is preserved.
     """
 
@@ -377,8 +378,9 @@ class DictItemAttributeValue(JsonObjectForm):
 
     Args:
        key: Dictionary item key. The key should consist of characters
-            according to the pattern `[a-zA-Z0-9_ -]` and
-            have length in the range `[1;30]`.
+            according to the pattern `[a-zA-Z0-9_ :.@-]` and
+            have length in the range `[1;50]`.
+            First and last char of key can't be space-symbol
             User-specified key case is preserved.
     """
 

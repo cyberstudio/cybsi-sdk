@@ -275,6 +275,19 @@ class CybsiAsyncClient:
         """Observable API handle."""
         return ObservableAsyncAPI(self._connector)
 
+    async def version(self) -> "VersionView":
+        """Get API and server version information.
+
+        Note:
+            Calls `GET /version`.
+        Returns:
+            Version view.
+        """
+
+        path = "/version"
+        resp = await self._connector.do_get(path)
+        return VersionView(resp.json())
+
 
 class VersionView(JsonObjectView):
     """Version view."""

@@ -1,6 +1,12 @@
 Release History
 ===============
 
+2.12.2 (2024-05-02)
+-------------------
+- Add .version() method to CybsiAsyncClient
+- Docfix of DictionaryItemForm and DictItemAttributeValue
+- Fix stored query filter
+
 2.12.1 (2024-04-26)
 -------------------
 - Fix api key generation
