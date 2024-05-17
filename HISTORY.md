@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.12.3 (2024-05-17)
+-------------------
+- Fix auth flow (infinitive timeout bug)
+
 2.12.2 (2024-05-02)
 -------------------
 - Add .version() method to CybsiAsyncClient

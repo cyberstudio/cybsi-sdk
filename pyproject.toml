@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cybsi-sdk"
-version = "2.12.2"
+version = "2.12.3"
 description = "Cybsi development kit"
 authors = ["Cybsi SDK developers"]
 license = "Apache License 2.0"
@@ -42,7 +42,7 @@ extend_skip = ["__init__.py"]
 [tool.tbump]
 
 [tool.tbump.version]
-current = "2.12.2"
+current = "2.12.3"
 
 regex = '''
   ^
