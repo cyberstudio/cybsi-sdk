@@ -104,7 +104,7 @@ class APIKeyAuth(httpx.Auth):
             url=token_url,
             params={"apiKey": self._api_key},
             headers=headers,
-            extensions=req.extensions
+            extensions=req.extensions,
         )
 
     def _update_token(
