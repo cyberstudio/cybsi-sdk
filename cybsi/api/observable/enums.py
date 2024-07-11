@@ -314,6 +314,7 @@ class NodeRole(CybsiAPIEnum):
     Cryptomining = "Cryptomining"  # doc: Mining pools
     CrlOcsp = "CrlOcsp"  # doc: OCSP servers
     Parking = "Parking"  # doc: Unregistered domains parking
+    Service = "Service"  # doc: Belongs to web service (forums, file hosting, etc)
 
 
 @document_enum

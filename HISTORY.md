@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.13.0a1 (2024-07-10)
+---------------------
+- Extend node roles enum
+
 2.12.3 (2024-05-17)
 -------------------
 - Fix auth flow (infinitive timeout bug)
