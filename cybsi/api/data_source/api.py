@@ -130,11 +130,14 @@ class DataSourcesAPI(BaseAPI):
             Added new parameters: `query`, `type_uuids`, `order_by`.
             Added semantic error `DataSourceNotFound`
 
+        .. versionchanged:: 2.13
+            Increased maxumum length of `query` parameter.
+
         Note:
             Calls `GET /data-sources`.
         Args:
             query: Filter of data sources by specified substring (case-insensitive).
-                Substring length must be in range [1, 50].
+                Substring length must be in range [1, 250].
                 Filtering is performed by specified substring in data source names or
                 its type names.
             type_uuids: List of data source type UUIDs.
@@ -308,11 +311,14 @@ class DataSourcesAsyncAPI(BaseAsyncAPI):
     ) -> AsyncPage["DataSourceCommonView"]:
         """Get a filtered list of data sources.
 
+        .. versionchanged:: 2.13
+            Increased maxumum length of `query` parameter.
+
         Note:
             Calls `GET /data-sources`.
         Args:
             query: Filter of data sources by specified substring (case-insensitive).
-                Substring length must be in range [1, 50].
+                Substring length must be in range [1, 250].
                 Filtering is performed by specified substring in data source names or
                 its type names.
             type_uuids: List of data source type UUIDs.
