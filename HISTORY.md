@@ -6,6 +6,12 @@ Release History
 - Add search entities api
 - Increase maximum length of `query` parameter for datasource filter method.
 - Add `suggest` parameter to entities aggregate method.
+- Add possible errors to stored queries register method
+- Add possible errors to stored queries edit method
+- Add stored queries filtration method parameters
+- Add stored query delete method
+- Add `is_replist_compatible` property to `StoredQueryFilterView`
+- Add `Search` to `QueryCompatibility` enum
 
 2.13.0a1 (2024-07-10)
 ---------------------

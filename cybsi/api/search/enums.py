@@ -8,3 +8,4 @@ class QueryCompatibility(CybsiAPIEnum):
     """Stored query compatibility."""
 
     Replist = "Replist"  # doc: Replists.
+    Search = "Search"  # doc: Search.

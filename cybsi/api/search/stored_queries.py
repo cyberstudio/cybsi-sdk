@@ -27,6 +27,8 @@ class StoredQueriesAPI(BaseAPI):
         Returns:
             Reference to a registered stored query.
         Raises:
+            :class:`~cybsi.api.error.ConflictError`:
+                Stored query with such name already exists.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
         Note:
             Semantic error codes specific for this method:
@@ -89,12 +91,15 @@ class StoredQueriesAPI(BaseAPI):
             :class:`~cybsi.api.error.InvalidRequestError`:
                 Provided arguments have invalid values.
             :class:`~cybsi.api.error.NotFoundError`: Stored query not found.
+            :class:`~cybsi.api.error.ConflictError`:
+                Stored query with such name already exists.
             :class:`~cybsi.api.error.ResourceModifiedError`:
                 Stored query changed since last request. Update tag and retry.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidQueryText`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidStoredQuery`
         """
         form: Dict[str, Any] = {}
         if name is not None:
@@ -104,10 +109,35 @@ class StoredQueriesAPI(BaseAPI):
         path = f"{self._path}/{query_uuid}"
         self._connector.do_patch(path=path, tag=tag, json=form)
 
+    def delete(
+        self,
+        query_uuid: uuid.UUID,
+    ) -> None:
+        """Delete stored query.
+
+        .. versionadded:: 2.13
+
+        Note:
+            Calls `DELETE /search/stored-queries/{query_uuid}`.
+        Args:
+            query_uuid: Stored query uuid.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Stored query not found.
+            :class:`~cybsi.api.error.SemanticError`: Request contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.StoredQueryIsLocked`
+        """
+
+        path = f"{self._path}/{query_uuid}"
+        self._connector.do_delete(path=path)
+
     def filter(
         self,
         *,
         user_uuid: Optional[uuid.UUID] = None,
+        query_name: Optional[str] = None,
+        is_replist_compatible: Optional[bool] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["StoredQueryFilterView"]:
@@ -118,6 +148,9 @@ class StoredQueriesAPI(BaseAPI):
         Args:
             user_uuid: User's identifier.
                 Filter stored queries by author's id.
+            query_name: Filter stored queries by specified substring (case-insensitive).
+                Substring length must be in range [1, 250].
+            is_replist_compatible: Filter stored queries by replist compatibility flag.
             cursor: Page cursor.
             limit: Page limit.
         Returns:
@@ -132,6 +165,10 @@ class StoredQueriesAPI(BaseAPI):
 
         if user_uuid is not None:
             params["userUUID"] = str(user_uuid)
+        if query_name is not None:
+            params["queryName"] = query_name
+        if is_replist_compatible is not None:
+            params["isReplistCompatible"] = is_replist_compatible
         if cursor:
             params["cursor"] = str(cursor)
         if limit:
@@ -279,6 +316,12 @@ class StoredQueryFilterView(StoredQueryCommonView):
         """User, author of the query."""
 
         return RefView(self._get("author"))
+
+    @property
+    def is_replist_compatible(self) -> bool:
+        """Replist compatibility flag."""
+
+        return self._get("isReplistCompatible")
 
 
 class StoredQueryView(_TaggedRefView, StoredQueryFilterView):
