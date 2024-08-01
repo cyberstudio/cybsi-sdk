@@ -15,6 +15,9 @@ Release History
 - Add replist registration method errors
 - Add replist edit method errors
 - Add replist filter method parameter and errors
+- Remove parameter `imageID` from `ArtifactAnalysisParamsForm`
+- Deprecate `ArtifactAnalysisParamsView.image_id`
+- Add enrichment task filter method parameters and errors
 
 2.13.0a1 (2024-07-10)
 ---------------------
