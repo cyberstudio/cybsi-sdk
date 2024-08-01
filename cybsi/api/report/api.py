@@ -2,7 +2,8 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, cast
 
-from .. import RefView
+from .. import Nullable, RefView
+from ..api import _map_nullable
 from ..artifact import ArtifactCommonView, ArtifactTypes
 from ..internal import (
     BaseAPI,
@@ -745,7 +746,9 @@ class ReportForm(JsonObjectForm):
         description: Report description.
         external_id: ID of the report in external system. Must be unique for datasource.
         created_at: Time of report creation.
+            created_at must be not later than published_at.
         published_at: Time of report publication.
+            published_at must be not earlier than created_at.
         external_refs: List of external references associated with report.
         labels: List of report labels.
         data_source: UUID of report's associated datasource.
@@ -761,8 +764,8 @@ class ReportForm(JsonObjectForm):
         title: Optional[str] = None,
         description: Optional[str] = None,
         external_id: Optional[str] = None,
-        created_at: Optional[datetime] = None,
-        published_at: Optional[datetime] = None,
+        created_at: Nullable[datetime] = None,
+        published_at: Nullable[datetime] = None,
         external_refs: Optional[Iterable[str]] = None,
         labels: Optional[Iterable[str]] = None,
         data_source: Optional[uuid.UUID] = None,
@@ -779,9 +782,9 @@ class ReportForm(JsonObjectForm):
         if external_id is not None:
             self._data["externalID"] = external_id
         if created_at is not None:
-            self._data["createdAt"] = rfc3339_timestamp(created_at)
+            self._data["createdAt"] = _map_nullable(created_at, rfc3339_timestamp)
         if published_at is not None:
-            self._data["publishedAt"] = rfc3339_timestamp(published_at)
+            self._data["publishedAt"] = _map_nullable(published_at, rfc3339_timestamp)
         if external_refs is not None:
             self._data["externalRefs"] = list(external_refs)
         if labels is not None:

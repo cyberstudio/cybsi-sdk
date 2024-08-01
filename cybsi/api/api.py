@@ -1,4 +1,4 @@
-from typing import Optional, TypeVar, Union, cast
+from typing import Callable, Optional, TypeVar, Union, cast
 
 
 class Tag:
@@ -47,3 +47,20 @@ which are be passed as explicit ``null`` to API.
 # SDK internal function. Placed here for locality with Nullable.
 def _unwrap_nullable(value: Nullable[T]) -> Optional[T]:
     return None if value is Null else cast(T, value)
+
+
+R = TypeVar("R")
+"""Non-null type."""
+
+
+# SDK internal function. Placed here for locality with Nullable.
+def _map_nullable(value: Nullable[T], mapper: Callable[[T], R]) -> Optional[R]:
+    """Maps value using mapper.
+
+    Special cases:
+        `None` mapped to `None`
+        `Null` mapped to `None`
+    """
+    if value is None or value is Null:
+        return None
+    return mapper(cast(T, value))

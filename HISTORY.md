@@ -18,6 +18,8 @@ Release History
 - Remove parameter `imageID` from `ArtifactAnalysisParamsForm`
 - Deprecate `ArtifactAnalysisParamsView.image_id`
 - Add enrichment task filter method parameters and errors
+- Add observation get header view method
+- Fix `ReportForm` `created_at` and `published_at` parameters type
 
 2.13.0a1 (2024-07-10)
 ---------------------
