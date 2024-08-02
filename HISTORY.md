@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.13.0 (2024-08-01)
+-------------------
+- Add search entities api
+
 2.13.0a1 (2024-07-10)
 ---------------------
 - Extend node roles enum
