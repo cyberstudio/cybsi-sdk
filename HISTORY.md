@@ -4,6 +4,8 @@ Release History
 2.13.0 (2024-08-01)
 -------------------
 - Add search entities api
+- Increase maximum length of `query` parameter for datasource filter method.
+- Add `suggest` parameter to entities aggregate method.
 
 2.13.0a1 (2024-07-10)
 ---------------------

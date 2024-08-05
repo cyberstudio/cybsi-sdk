@@ -174,6 +174,7 @@ class EntitiesAPI(BaseAPI):
         entity_type: Optional[EntityTypes] = None,
         key_type: Optional[EntityKeyTypes] = None,
         key: Optional[str] = None,
+        suggest: Optional[str] = None,
         sections: Optional[Iterable[EntityAggregateSections]] = None,
         forecast_at: Optional[datetime] = None,
         cursor: Optional[Cursor] = None,
@@ -188,6 +189,9 @@ class EntitiesAPI(BaseAPI):
         .. versionchanged:: 2.11
             Added new parameter `dict_item_uuid`.
 
+        .. versionchanged:: 2.13
+            Added new parameter `suggest`.
+
         Note:
             Calls `GET /observable/entities`.
 
@@ -195,20 +199,26 @@ class EntitiesAPI(BaseAPI):
             should be specified else Cybsi API will return error.
         Args:
             entity_uuids: Entity uuids.
-                Excludes parameters: `dict_item_uuid`, `entity_type`, `key_type`, `key`.
+                Excludes parameters: `dict_item_uuid`, `entity_type`, `key_type`, `key`,
+                `suggest`.
             dict_item_uuid: Dictionary item which is attributed to the entity.
-                Excludes parameters: `entity_uuids`, `entity_type`, `key_type`, `key`.
+                Excludes parameters: `entity_uuids`, `entity_type`, `key_type`, `key`,
+                `suggest`.
             entity_type: Entity type.
                 Excludes parameter `entity_uuids`, `dict_item_uuid` and
                 requires parameter `key`. The parameter is not required if
                 the `entity_type` can be uniquely determined by `key_type`.
             key_type: Entity natural key type.
-                Excludes parameter `entity_uuids`, `dict_item_uuid` and
+                Excludes parameter `entity_uuids`, `dict_item_uuid`, `suggest` and
                 requires parameter `key`. The parameter is not required if
                 only one `key_type` is used for the specified `entity_type`.
-            key: Entity natural key value. Required if `entity_type` or `key_type`
-                parameter is specified.
+            key: Entity natural key value. Excludes parameter `suggest` and required
+                if `entity_type` or `key_type` parameter is specified.
                 It is possible to pass a key value in a non-canonical representation.
+            suggest: Case-insensitive prefix of natural key or value of
+                `identity.Names` attribute. Excludes parameter `key` and can be used
+                with `entity_type` parameter.
+                `suggest` length must greater than or equals to 2.
             sections: Sections to be aggregated.
             forecast_at: Point of time to aggregate sections at.
             cursor: Page cursor.
@@ -268,6 +278,8 @@ class EntitiesAPI(BaseAPI):
             params["keyType"] = key_type.value
         if key is not None:
             params["key"] = key
+        if suggest is not None:
+            params["suggest"] = suggest
         if sections is not None:
             params["section"] = [section.value for section in sections]
         if forecast_at is not None:
@@ -648,6 +660,7 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
         entity_type: Optional[EntityTypes] = None,
         key_type: Optional[EntityKeyTypes] = None,
         key: Optional[str] = None,
+        suggest: Optional[str] = None,
         sections: Optional[Iterable[EntityAggregateSections]] = None,
         forecast_at: Optional[datetime] = None,
         cursor: Optional[Cursor] = None,
@@ -658,6 +671,9 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
         .. versionchanged:: 2.11
             Added new parameter `dict_item_uuid`.
 
+        .. versionchanged:: 2.13
+            Added new parameter `suggest`.
+
         Note:
             Calls `GET /observable/entities`.
 
@@ -665,20 +681,26 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
             should be specified else Cybsi API will return error.
         Args:
             entity_uuids: Entity uuids.
-                Excludes parameters: `dict_item_uuid`, `entity_type`, `key_type`, `key`.
+                Excludes parameters: `dict_item_uuid`, `entity_type`, `key_type`, `key`,
+                `suggest`.
             dict_item_uuid: Dictionary item which is attributed to the entity.
-                Excludes parameters: `entity_uuids`, `entity_type`, `key_type`, `key`.
+                Excludes parameters: `entity_uuids`, `entity_type`, `key_type`, `key`,
+                `suggest`.
             entity_type: Entity type.
                 Excludes parameter `entity_uuids`, `dict_item_uuid` and
                 requires parameter `key`. The parameter is not required if
                 the `entity_type` can be uniquely determined by `key_type`.
             key_type: Entity natural key type.
-                Excludes parameter `entity_uuids`, `dict_item_uuid` and
+                Excludes parameter `entity_uuids`, `dict_item_uuid`, `suggest` and
                 requires parameter `key`. The parameter is not required if
                 only one `key_type` is used for the specified `entity_type`.
-            key: Entity natural key value. Required if `entity_type` or `key_type`
-                parameter is specified.
+            key: Entity natural key value. Excludes parameter `suggest` and required
+                if `entity_type` or `key_type` parameter is specified.
                 It is possible to pass a key value in a non-canonical representation.
+            suggest: Case-insensitive prefix of natural key or value of
+                `identity.Names` attribute. Excludes parameter `key` and can be used
+                with `entity_type` parameter.
+                `suggest` length must greater than or equals to 2.
             sections: Sections to be aggregated.
             forecast_at: Point of time to aggregate sections at.
             cursor: Page cursor.
@@ -702,6 +724,8 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
             params["keyType"] = key_type.value
         if key is not None:
             params["key"] = key
+        if suggest is not None:
+            params["suggest"] = suggest
         if sections is not None:
             params["section"] = [section.value for section in sections]
         if forecast_at is not None:
