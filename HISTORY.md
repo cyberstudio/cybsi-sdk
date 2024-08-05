@@ -12,6 +12,9 @@ Release History
 - Add stored query delete method
 - Add `is_replist_compatible` property to `StoredQueryFilterView`
 - Add `Search` to `QueryCompatibility` enum
+- Add replist registration method errors
+- Add replist edit method errors
+- Add replist filter method parameter and errors
 
 2.13.0a1 (2024-07-10)
 ---------------------

@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Generic, List, Optional, Tuple, Type, cast
+from typing import Generic, Iterable, List, Optional, Tuple, Type, cast
 
 from .. import RefView
 from ..api import Tag
@@ -38,11 +38,14 @@ class ReplistsAPI(BaseAPI):
         Returns:
             Reference to the registered replist.
         Raises:
+            :class:`~cybsi.api.error.ConflictError`:
+                Replist with same identifying data already exists.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.StoredQueryNotFound`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidStoredQuery`
         """
         resp = self._connector.do_post(path=_REPLIST_BASE_PATH, json=replist.json())
         return RefView(resp.json())
@@ -84,6 +87,8 @@ class ReplistsAPI(BaseAPI):
             is_enabled: Replist status toggle.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Replist not found.
+            :class:`~cybsi.api.error.ConflictError`:
+                Replist with same identifying data already exists.
             :class:`~cybsi.api.error.ResourceModifiedError`:
                 Replist changed since last request. Update tag and retry.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
@@ -91,6 +96,7 @@ class ReplistsAPI(BaseAPI):
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.StoredQueryNotFound`
               * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidShareLevel`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.InvalidStoredQuery`
         """
         form = {}
         if query_uuid is not None:
@@ -105,6 +111,7 @@ class ReplistsAPI(BaseAPI):
     def filter(
         self,
         *,
+        query_uuids: Optional[Iterable[uuid.UUID]] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["ReplistCommonView"]:
@@ -113,15 +120,24 @@ class ReplistsAPI(BaseAPI):
         Note:
             Calls `GET /replists`
         Args:
+            query_uuids: Stored query identifier.
+                Filter replists by specified stored query UUIDs.
             cursor: Page cursor.
             limit: Page limit.
         Return:
             Page with entities and cursor allowing to get next batch of changes.
+        Raises:
+            :class:`~cybsi.api.error.SemanticError`: Request contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.StoredQueryNotFound`
         """
-        params = {}
-        if cursor:
+        params: dict = {}
+        if query_uuids is not None:
+            params["queryUUID"] = [str(u) for u in query_uuids]
+        if cursor is not None:
             params["cursor"] = str(cursor)
-        if limit:
+        if limit is not None:
             params["limit"] = str(limit)
 
         resp = self._connector.do_get(path=_REPLIST_BASE_PATH, params=params)
