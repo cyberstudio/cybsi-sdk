@@ -21,6 +21,7 @@ from .observation import ObservationsAPI, ObservationsAsyncAPI
 from .replist import ReplistsAPI, ReplistsAsyncAPI
 from .report import ReportsAPI, ReportsAsyncAPI
 from .search import SearchAPI
+from .search.api import SearchAsyncAPI
 from .user import UsersAPI
 
 
@@ -274,6 +275,11 @@ class CybsiAsyncClient:
     def observable(self) -> ObservableAsyncAPI:
         """Observable API handle."""
         return ObservableAsyncAPI(self._connector)
+
+    @property
+    def search(self) -> SearchAsyncAPI:
+        """Search API handle."""
+        return SearchAsyncAPI(self._connector)
 
     async def version(self) -> "VersionView":
         """Get API and server version information.

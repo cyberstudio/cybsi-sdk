@@ -65,3 +65,12 @@ In the example below we get a reputation list changes by specified cursor.
 Also see :ref:`register-reputation-list`.
 
 .. literalinclude:: ../../examples/replist_changes_getting.py
+
+Search entities
+---------------
+It is possible to search observed entities united by some characteristic
+through a CybsiLang query.
+
+In the example below we get a list of indicators.
+
+.. literalinclude:: ../../examples/search_entities.py
