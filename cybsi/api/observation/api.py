@@ -3,6 +3,7 @@ observation of types known to Cybsi.
 
 Each type of observation is handled by their own subsection of API.
 """
+import uuid
 from datetime import datetime
 from typing import Any, Dict, Iterable, Optional
 from uuid import UUID
@@ -136,6 +137,22 @@ class ObservationsAPI(BaseAPI):
         resp = self._connector.do_get(path=_PATH, params=params)
         page = Page(self._connector.do_get, resp, ObservationHeaderView)
         return page
+
+    def view(self, observation_uuid: uuid.UUID) -> "ObservationHeaderView":
+        """Get observation header.
+
+        Note:
+            Calls `GET /enrichment/observations/{observation_uuid}`.
+        Args:
+            observation_uuid: Observation uuid.
+        Returns:
+            Header of the observation.
+        Raises:
+            :class:`~cybsi.api.error.NotFoundError`: Observation not found.
+        """
+        path = f"{_PATH}/{observation_uuid}"
+        r = self._connector.do_get(path)
+        return ObservationHeaderView(r.json())
 
 
 class ObservationsAsyncAPI(BaseAsyncAPI):
