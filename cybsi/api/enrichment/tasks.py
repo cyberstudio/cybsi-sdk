@@ -78,6 +78,8 @@ class TasksAPI(BaseAPI):
         *,
         artifact_uuid: Optional[uuid.UUID] = None,
         entity_uuid: Optional[uuid.UUID] = None,
+        data_sources: Optional[Iterable[uuid.UUID]] = None,
+        statuses: Optional[Iterable[EnrichmentTaskStatuses]] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["TaskView"]:
@@ -92,6 +94,8 @@ class TasksAPI(BaseAPI):
             limit: Page limit.
             artifact_uuid: Artifact identifier.
             entity_uuid: Entity identifier.
+            data_sources: Datasource list.
+            statuses: List of task statuses.
         Returns:
             Page with enrichment tasks and
             cursor allowing to get next batch of enrichment tasks.
@@ -99,6 +103,12 @@ class TasksAPI(BaseAPI):
             :class:`~cybsi.api.error.InvalidRequestError`:
                 Artifact uuid and entity uuid parameters are missing.
                 At least one of these parameters must be specified.
+            :class:`~cybsi.api.error.SemanticError`: Request contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ArtifactNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
         """
         params: Dict[str, Any] = {}
         if cursor:
@@ -109,6 +119,10 @@ class TasksAPI(BaseAPI):
             params["artifactUUID"] = str(artifact_uuid)
         if entity_uuid:
             params["entityUUID"] = str(entity_uuid)
+        if data_sources is not None:
+            params["dataSource"] = [str(ds) for ds in data_sources]
+        if statuses is not None:
+            params["status"] = [s.value for s in statuses]
 
         resp = self._connector.do_get(_PATH, params=params)
         page = Page(self._connector.do_get, resp, TaskView)
@@ -163,6 +177,8 @@ class TasksAsyncAPI(BaseAsyncAPI):
         *,
         artifact_uuid: Optional[uuid.UUID] = None,
         entity_uuid: Optional[uuid.UUID] = None,
+        data_sources: Optional[Iterable[uuid.UUID]] = None,
+        statuses: Optional[Iterable[EnrichmentTaskStatuses]] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> AsyncPage["TaskView"]:
@@ -177,6 +193,8 @@ class TasksAsyncAPI(BaseAsyncAPI):
             limit: Page limit.
             artifact_uuid: Artifact identifier.
             entity_uuid: Entity identifier.
+            data_sources: Datasource list.
+            statuses: List of task statuses.
         Returns:
             Page with enrichment tasks and
             cursor allowing to get next batch of enrichment tasks.
@@ -184,6 +202,12 @@ class TasksAsyncAPI(BaseAsyncAPI):
             :class:`~cybsi.api.error.InvalidRequestError`:
                 Artifact uuid and entity uuid parameters are missing.
                 At least one of these parameters must be specified.
+            :class:`~cybsi.api.error.SemanticError`: Request contains logic errors.
+        Note:
+            Semantic error codes specific for this method:
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.EntityNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.ArtifactNotFound`
+              * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
         """
         params: Dict[str, Any] = {}
         if cursor:
@@ -194,6 +218,10 @@ class TasksAsyncAPI(BaseAsyncAPI):
             params["artifactUUID"] = str(artifact_uuid)
         if entity_uuid:
             params["entityUUID"] = str(entity_uuid)
+        if data_sources is not None:
+            params["dataSource"] = [str(ds) for ds in data_sources]
+        if statuses is not None:
+            params["status"] = [s.value for s in statuses]
 
         resp = await self._connector.do_get(_PATH, params=params)
         page = AsyncPage(self._connector.do_get, resp, TaskView)
@@ -205,7 +233,6 @@ class ArtifactAnalysisParamsForm(JsonObjectForm):
 
     Args:
         artifact_uuid: Artifact identifier.
-        image_id: Analyzer-specific sandbox identifier (not all data sources).
         passwords: Password list for unpacking artifact and/or
             its attachments (not all data sources).
     """
@@ -213,13 +240,10 @@ class ArtifactAnalysisParamsForm(JsonObjectForm):
     def __init__(
         self,
         artifact_uuid: uuid.UUID,
-        image_id: Optional[str] = None,
         passwords: Optional[Iterable[str]] = None,
     ):
         super().__init__()
         self._data["artifact"] = {"uuid": str(artifact_uuid)}
-        if image_id is not None:
-            self._data["imageID"] = image_id
         if passwords is not None:
             self._data["passwords"] = list(passwords)
 
@@ -314,7 +338,6 @@ WhoisLookupParamsForm = ExternalDBLookupParamsForm
         IPAddress, DomainName entity types.
 """
 
-
 EnrichmentTaskParamsForm = Union[
     ArchiveUnpackParamsForm,
     ArtifactAnalysisParamsForm,
@@ -341,7 +364,10 @@ class ArtifactAnalysisParamsView(JsonObjectView):
 
     @property
     def image_id(self) -> Optional[str]:
-        """Analyzer-specific image id."""
+        """Analyzer-specific image id.
+
+        .. deprecated:: 2.13 Always empty. Will be removed in future releases.
+        """
         return self._get_optional("imageID")
 
     @property

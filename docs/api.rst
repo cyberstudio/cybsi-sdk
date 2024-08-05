@@ -277,7 +277,10 @@ Entity views
 API Changes
 -----------
 
-Breaking API changes are documented here. There's no such changes yet.
+Breaking API changes are documented here.
+
+Version 2.13
+- Removed `image_id` from :class:`cybsi.api.enrichment.tasks.ArtifactAnalysisParamsForm`
 
 Licensing
 ---------
