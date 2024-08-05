@@ -129,6 +129,7 @@ class ConflictError(APIError):
     DuplicateDataSourceType = "DuplicateDataSourceType"
     DuplicateKey = "DuplicateKey"
     DuplicateLogin = "DuplicateLogin"
+    StoredQueryConflict = "StoredQueryConflict"
 
     def __init__(self, content: JsonObject) -> None:
         super().__init__(409, content, header="resource already exists")
@@ -305,6 +306,10 @@ class SemanticErrorCodes(CybsiAPIEnum):
     """User not found."""
     WrongEntityAttribute = "WrongEntityAttribute"
     """The attribute is not registered for provided entity."""
+    InvalidStoredQuery = "InvalidStoredQuery"
+    """Query is not compatible with replist."""
+    StoredQueryIsLocked = "StoredQueryIsLocked"
+    """Stored query is in use. Probably used in replist."""
 
 
 class _ErrorView(dict):
