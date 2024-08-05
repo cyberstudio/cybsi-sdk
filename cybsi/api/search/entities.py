@@ -38,7 +38,7 @@ class SearchEntitiesAPI(BaseAPI):
         """
         form: JsonObject = {"queryText": query_text}
         if share_level is not None:
-            form["shareLevel"] = share_level.value.encode()
+            form["shareLevel"] = share_level.value
         resp = self._connector.do_post(self._path, json=form)
         return cast(Cursor, resp.headers[X_CURSOR_HEADER])
 
@@ -104,7 +104,7 @@ class SearchEntitiesAsyncAPI(BaseAsyncAPI):
         """
         form: JsonObject = {"queryText": query_text}
         if share_level is not None:
-            form["shareLevel"] = share_level.value.encode()
+            form["shareLevel"] = share_level.value
         resp = await self._connector.do_post(self._path, json=form)
         return cast(Cursor, resp.headers[X_CURSOR_HEADER])
 
