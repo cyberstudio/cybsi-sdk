@@ -125,6 +125,7 @@ _attr_value_converters: Dict[AttributeNames, Callable[[str], Any]] = {
     AttributeNames.Platforms: _dict_item_value_converter,
     AttributeNames.Tactics: _dict_item_value_converter,
     AttributeNames.Techniques: _dict_item_value_converter,
+    AttributeNames.Labels: _dict_item_value_converter,
 }
 
 

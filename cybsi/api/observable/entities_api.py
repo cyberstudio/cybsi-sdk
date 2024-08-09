@@ -62,6 +62,7 @@ _attr_value_kebab_converters: Dict[AttributeNames, str] = {
     AttributeNames.Platforms: "platforms",
     AttributeNames.Tactics: "tactics",
     AttributeNames.Techniques: "techniques",
+    AttributeNames.Labels: "labels",
 }
 
 
