@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.14.0a1 (2024-08-09)
+---------------------
+- Add Labels attribute
+
 2.13.0 (2024-08-01)
 -------------------
 - Add search entities api

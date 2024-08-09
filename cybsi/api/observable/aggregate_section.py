@@ -55,6 +55,7 @@ def _convert_attribute_value_type(
         AttributeNames.Platforms: DictionaryItemCommonView,
         AttributeNames.Tactics: DictionaryItemCommonView,
         AttributeNames.Techniques: DictionaryItemCommonView,
+        AttributeNames.Labels: DictionaryItemCommonView,
     }
 
     return _attribute_value_types[attribute_name](val)
