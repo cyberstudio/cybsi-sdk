@@ -287,6 +287,16 @@ class AttributeNames(CybsiAPIEnum):
       Attribute belongs to `File`, `DomainName`, `IPAddress`, `EmailAddress`,
       `URL` entity type.
     """
+    Labels = "Labels"
+    """
+      .. versionadded:: 2.14
+
+      Labels are assigned to entities.
+      Attribute value type is
+      :class:`~cybsi.api.dictionary.api.DictItemAttributeValue`.
+      Attribute belongs to `DomainName`, `URL`, `IPAddress`, `File`, `Identity`,
+      `PhoneNumber`, `EmailAddress` entity type.
+    """
 
 
 @document_enum
