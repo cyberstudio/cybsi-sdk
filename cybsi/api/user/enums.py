@@ -32,41 +32,49 @@ class RoleName(CybsiAPIEnum):
     SOCAnalyst = "SOCAnalyst"
     """
         .. versionadded:: 2.12
+        .. versionchanged:: 2.14
+            Removed `RawReports:r` privilege
 
         SOC analyst's role permissions:
         [StoredQuery:rw,Observable:rw,EntityView:r,Artifacts:rw,
-        ArtifactsContent:r,Reports:rw,Observations:rw,RawReports:r
-        EnrichmentTasks:rw,ReputationLists:rw,ReputationListsContent:r,
-        EnrichmentConfig:r,DataSources:r,Users:r,Dictionaries:rw]
+        ArtifactsContent:r,Reports:rw,Observations:rw,EnrichmentTasks:rw,
+        ReputationLists:rw,ReputationListsContent:r,EnrichmentConfig:r,
+        DataSources:r,Users:r,Dictionaries:rw]
     """
     CTIAnalyst = "CTIAnalyst"
     """
         .. versionadded:: 2.12
+        .. versionchanged:: 2.14
+            Removed `RawReports:r` privilege
 
         CTI analyst's role permissions:
         [StoredQuery:r,Observable:rw,EntityView:r,Artifacts:rw,
-        ArtifactsContent:r,Reports:rw,Observations:rw,RawReports:r
-        EnrichmentTasks:rw,ReputationLists:r,ReputationListsContent:r,
-        EnrichmentConfig:r,DataSources:r,Users:r,Dictionaries:rw]
+        ArtifactsContent:r,Reports:rw,Observations:rw,EnrichmentTasks:rw,
+        ReputationLists:r,ReputationListsContent:r,EnrichmentConfig:r,
+        DataSources:r,Users:r,Dictionaries:rw]
     """
     CyberSecuritySpecialist = "CyberSecuritySpecialist"
     """
         .. versionadded:: 2.12
+        .. versionchanged:: 2.14
+            Removed `RawReports:r` privilege
 
         Cyber security specialist's role permissions:
         [StoredQuery:r,Observable:r,EntityView:r,Artifacts:r,
-        Reports:r,Observations:r,RawReports:r,EnrichmentTasks:rw,
+        Reports:r,Observations:r,EnrichmentTasks:rw,
         ReputationLists:r,ReputationListsContent:r,
         EnrichmentConfig:r,DataSources:r,Users:r,Dictionaries:rw]
     """
     Guest = "Guest"
     """
         .. versionadded:: 2.12
+        .. versionchanged:: 2.14
+            Removed `RawReports:r` privilege
 
         Guest's role permissions:
         [Observable:r,Artifacts:r,Reports:r,Observations:r,
-        RawReports:r,EnrichmentTasks:r,EnrichmentConfig:r,
-        DataSources:r,Dictionaries:r]
+        EnrichmentTasks:r,EnrichmentConfig:r,DataSources:r,
+        Dictionaries:r]
     """
 
 
@@ -76,7 +84,7 @@ class ResourceName(CybsiAPIEnum):
 
     Permission can be with read/write action for almost all resources.
     Exclusion resources:
-    ArtifactsContent, RawReports, Search, ReputationListsContent.
+    ArtifactsContent, Search, ReputationListsContent.
     """
 
     Artifacts = "Artifacts"
@@ -99,11 +107,6 @@ class ResourceName(CybsiAPIEnum):
     """Observable entities."""
     Observations = "Observations"
     """Observations."""
-    RawReports = "RawReports"
-    """
-    Initial data of reports and observations.
-    Permission can be only with reading action.
-    """
     Reports = "Reports"
     """Reports."""
     Search = "Search"
