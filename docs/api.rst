@@ -240,6 +240,13 @@ Licenses
     :imported-members:
     :inherited-members:
 
+AccessLogs
+~~~~~~~~~~
+.. automodule:: cybsi.api.ual
+    :members:
+    :imported-members:
+    :inherited-members:
+
 Common views and data types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: cybsi.api.Null
