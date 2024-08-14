@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.14.0a3 (2024-08-13)
+---------------------
+- Add user access logs API
+- Add `Log` to `ResourceNames`
+
 2.14.0a2 (2024-08-12)
 ---------------------
 - Remove RawReports resource and privileges

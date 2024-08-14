@@ -22,6 +22,7 @@ from .replist import ReplistsAPI, ReplistsAsyncAPI
 from .report import ReportsAPI, ReportsAsyncAPI
 from .search import SearchAPI
 from .search.api import SearchAsyncAPI
+from .ual import AccessLogsAPI
 from .user import UsersAPI
 
 
@@ -182,6 +183,11 @@ class CybsiClient:
     def licenses(self) -> LicensesAPI:
         """Licenses API handle."""
         return LicensesAPI(self._connector)
+
+    @property
+    def access_logs(self) -> AccessLogsAPI:
+        """User access log API handle."""
+        return AccessLogsAPI(self._connector)
 
     def version(self) -> "VersionView":
         """Get API and server version information.

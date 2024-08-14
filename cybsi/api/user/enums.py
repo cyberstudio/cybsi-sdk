@@ -15,9 +15,11 @@ class RoleName(CybsiAPIEnum):
     SystemAdministrator = "SystemAdministrator"
     """
         .. versionadded:: 2.12
+        .. versionchanged:: 2.14
+            Add new privilege 'Log:r'.
 
         System administrator's role permissions:
-        [DataSources:r,Users:rw,APIKeys:rw,License:w]
+        [DataSources:r,Users:rw,APIKeys:rw,License:w,Log:r]
     """
     DataEngineer = "DataEngineer"
     """
@@ -84,7 +86,7 @@ class ResourceName(CybsiAPIEnum):
 
     Permission can be with read/write action for almost all resources.
     Exclusion resources:
-    ArtifactsContent, Search, ReputationListsContent.
+    ArtifactsContent, Search, ReputationListsContent, Log.
     """
 
     Artifacts = "Artifacts"
@@ -126,4 +128,10 @@ class ResourceName(CybsiAPIEnum):
         .. versionadded:: 2.12
 
         Licenses.
+    """
+    Log = "Log"
+    """
+        .. versionadded:: 2.14
+
+        User access log.
     """
