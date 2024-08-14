@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.14.0a2 (2024-08-12)
+---------------------
+- Remove RawReports resource and privileges
+
 2.14.0a1 (2024-08-09)
 ---------------------
 - Add Labels attribute

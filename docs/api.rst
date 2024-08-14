@@ -282,6 +282,9 @@ Breaking API changes are documented here.
 Version 2.13
 - Removed `image_id` from :class:`cybsi.api.enrichment.tasks.ArtifactAnalysisParamsForm`
 
+Version 2.14
+- Removed `RawReports` resource from :class:`cybsi.api.user.enums.ResourceName` and `RawReports:r` privilege from :class:`cybsi.api.user.enums.RoleName`
+
 Licensing
 ---------
 
