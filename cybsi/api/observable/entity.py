@@ -1,7 +1,13 @@
+from datetime import datetime
 from typing import Iterable, List, Optional, Tuple
 from uuid import UUID
 
-from ..internal import JsonObject, JsonObjectForm, JsonObjectView
+from ..internal import (
+    JsonObject,
+    JsonObjectForm,
+    JsonObjectView,
+    parse_rfc3339_timestamp,
+)
 from .aggregate_section import (
     AttributeValuableFactView,
     AttributeValueView,
@@ -101,6 +107,16 @@ class EntityAggregateView(EntityView):
     def sections(self) -> SectionsView:
         """Entity aggregated sections."""
         return SectionsView(self._get("sections"))
+
+    @property
+    def first_seen(self) -> datetime:
+        """Date and time when entity was first mentioned in the observations"""
+        return parse_rfc3339_timestamp(self._get("firstSeen"))
+
+    @property
+    def last_seen(self) -> datetime:
+        """Date and time when entity was last mentioned in the observations"""
+        return parse_rfc3339_timestamp(self._get("lastSeen"))
 
 
 class EntityAttributeForecastView(JsonObjectView):

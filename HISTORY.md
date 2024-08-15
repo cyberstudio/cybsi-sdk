@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.14.0a4 (2024-08-15)
+---------------------
+- Add firstSeen and lastSeen to entity aggregate
+
 2.14.0a3 (2024-08-13)
 ---------------------
 - Add user access logs API
