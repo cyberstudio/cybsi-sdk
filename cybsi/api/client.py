@@ -11,7 +11,7 @@ from .data_source import (
     DataSourceTypesAsyncAPI,
 )
 from .dictionary import DictionariesAPI
-from .dictionary.api import DictionariesAsyncApi, DictionariesAsyncAPI
+from .dictionary.api import DictionariesAsyncAPI
 from .enrichment import EnrichmentAPI, EnrichmentAsyncAPI
 from .error import CybsiError
 from .internal import HTTPConnector, JsonObjectView
