@@ -1,5 +1,8 @@
 Release History
 ===============
+2.13.1 (2024-08-21)
+-------------------
+- Add .dictionaries property to CybsiAsyncClient
 
 2.13.0 (2024-08-01)
 -------------------

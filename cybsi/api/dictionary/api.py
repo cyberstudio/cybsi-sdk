@@ -486,7 +486,9 @@ class DictionariesAsyncAPI(BaseAsyncAPI):
             >>>     client: CybsiAsyncClient
             >>>
             >>>     started_page = await client.dictionaries.filter_items(
-            >>>         dictionary_uuid=uuid.UUID("89200bef-2f50-4d4f-8b38-843d5ab9dfa9"),
+            >>>         dictionary_uuid=uuid.UUID(
+            >>>             "89200bef-2f50-4d4f-8b38-843d5ab9dfa9"
+            >>>         ),
             >>>     )
             >>>     async for item in chain_pages_async(started_page):
             >>>         # do something with dictionary items
