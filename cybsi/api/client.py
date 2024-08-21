@@ -10,8 +10,7 @@ from .data_source import (
     DataSourceTypesAPI,
     DataSourceTypesAsyncAPI,
 )
-from .dictionary import DictionariesAPI
-from .dictionary.api import DictionariesAsyncAPI
+from .dictionary import DictionariesAPI, DictionariesAsyncAPI
 from .enrichment import EnrichmentAPI, EnrichmentAsyncAPI
 from .error import CybsiError
 from .internal import HTTPConnector, JsonObjectView

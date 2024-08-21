@@ -8,6 +8,7 @@
 
 from .api import (
     DictionariesAPI,
+    DictionariesAsyncAPI,
     DictionaryItemForm,
     DictionaryView,
     DictionaryCommonView,
