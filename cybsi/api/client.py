@@ -10,7 +10,7 @@ from .data_source import (
     DataSourceTypesAPI,
     DataSourceTypesAsyncAPI,
 )
-from .dictionary import DictionariesAPI
+from .dictionary import DictionariesAPI, DictionariesAsyncAPI
 from .enrichment import EnrichmentAPI, EnrichmentAsyncAPI
 from .error import CybsiError
 from .internal import HTTPConnector, JsonObjectView
@@ -280,6 +280,11 @@ class CybsiAsyncClient:
     def search(self) -> SearchAsyncAPI:
         """Search API handle."""
         return SearchAsyncAPI(self._connector)
+
+    @property
+    def dictionaries(self) -> DictionariesAsyncAPI:
+        """Dictionaries API handle."""
+        return DictionariesAsyncAPI(self._connector)
 
     async def version(self) -> "VersionView":
         """Get API and server version information.
