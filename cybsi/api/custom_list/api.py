@@ -1,15 +1,15 @@
 import uuid
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from cybsi.api import RefView, Tag
-from cybsi.api.internal import BaseAPI, JsonObjectForm, BaseAsyncAPI
-from cybsi.api.pagination import Cursor, Page, AsyncPage
+from cybsi.api.internal import BaseAPI, BaseAsyncAPI, JsonObjectForm
+from cybsi.api.pagination import AsyncPage, Cursor, Page
 from cybsi.api.view import _TaggedRefView
 
 _PATH = "/custom-lists"
 
 
-class CustomListsAPI(BaseAPI):
+class CustomListAPI(BaseAPI):
     """
     API to operate custom lists.
 
@@ -35,7 +35,8 @@ class CustomListsAPI(BaseAPI):
         Return:
             Page with custom lists and next page cursor.
         Raises:
-            :class:`~cybsi.api.error.SemanticError`: Request contains logic errors.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         """
         params: Dict[str, Any] = {}
         if prefix is not None:
@@ -61,7 +62,9 @@ class CustomListsAPI(BaseAPI):
             Reference to the registered custom list.
         Raises:
             :class:`~cybsi.api.error.ConflictError`:
-                Replist with same identifying data already exists.
+                Custom list with the same string ID already exists.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
         Note:
             Semantic error codes specific for this method:
@@ -71,13 +74,29 @@ class CustomListsAPI(BaseAPI):
         return RefView(resp.json())
 
     def view(self, custom_list_uuid: uuid.UUID) -> "CustomListView":
+        """
+        Get view of a custom list.
+
+        .. versionadded:: 2.14.0
+        Note:
+            Calls `GET /custom-lists/{custom_list_uuid}`
+        Args:
+            custom_list_uuid: Custom list UUID
+        Returns:
+            Custom list view
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
+            :class:`~cybsi.api.error.NotFoundError`:
+                Custom list does not exist.
+        """
         path = f"{_PATH}/{custom_list_uuid}"
         resp = self._connector.do_get(path=path)
-        return CustomListView(resp.json())
+        return CustomListView(resp)
 
     def edit(
         self,
-        list_uuid: uuid.UUID,
+        custom_list_uuid: uuid.UUID,
         tag: Tag,
         name: str,
     ) -> None:
@@ -88,21 +107,23 @@ class CustomListsAPI(BaseAPI):
         Note:
             Calls `PATCH /custom-lists/{list_uuid}`
         Args:
-            list_uuid: UUID of custom list
+            custom_list_uuid: UUID of custom list
             tag: :attr:`CustomListView.tag` value. Use :meth:`view` to retrieve it.
             name: New name of custom list
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.ResourceModifiedError`:
                 Custom list changed since last request. Update tag and retry.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         """
         form = {"name": name}
-        path = f"{_PATH}/{list_uuid}"
+        path = f"{_PATH}/{custom_list_uuid}"
         self._connector.do_patch(path=path, json=form, tag=tag)
 
     def filter_items(
         self,
-        list_uuid: uuid.UUID,
+        custom_list_uuid: uuid.UUID,
         *,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
@@ -112,67 +133,77 @@ class CustomListsAPI(BaseAPI):
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `GET /custom-lists/{list_uuid}/items`.
+            Calls `GET /custom-lists/{custom_list_uuid}/items`.
         Args:
-            list_uuid: UUID of custom list
+            custom_list_uuid: UUID of custom list
             cursor: Page cursor
             limit: Page limit
         Returns:
             Page with custom list items and next page cursor.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         """
         params: Dict[str, Any] = {}
         if cursor:
             params["cursor"] = cursor
         if limit:
             params["limit"] = limit
-        path = f"{_PATH}/{list_uuid}/items"
+        path = f"{_PATH}/{custom_list_uuid}/items"
         resp = self._connector.do_get(path=path, params=params)
         page = Page(self._connector.do_get, resp, RefView)
         return page
 
-    def add_item(self, list_uuid: uuid.UUID, dictionary_item_uuid: dict) -> None:
+    def add_item(
+        self, custom_list_uuid: uuid.UUID, dictionary_item_uuid: uuid.UUID
+    ) -> None:
         """
         Add item to custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `POST /custom-lists/{list_uuid}/items`
+            Calls `POST /custom-lists/{custom_list_uuid}/items`
         Args:
             list_uuid: UUID of custom list
-            dictionary_item_uuid: Dictionary item UUID to add
+            dictionary_item_uuid: Dictionary item UUID
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
-            :class:`~cybsi.api.error.SemanticError`:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         Note:
             Semantic error codes specific for this method:
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryMismatch`
         """
         params = {"dictionary_item_uuid": dictionary_item_uuid}
-        path = f"{_PATH}/{list_uuid}/items"
+        path = f"{_PATH}/{custom_list_uuid}/items"
         self._connector.do_post(path=path, json=params)
 
-    def delete_item(self, list_uuid: uuid.UUID, dictionary_item_uuid: dict) -> None:
+    def delete_item(
+        self, custom_list_uuid: uuid.UUID, dictionary_item_uuid: uuid.UUID
+    ) -> None:
         """
         Delete item from custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `DELETE /custom-lists/{list_uuid}/items/{item_uuid}`.
+            Calls `DELETE /custom-lists/{custom_list_uuid}/items/{item_uuid}`.
         Args:
-            list_uuid: UUID of custom list
-            dictionary_item_uuid: Dictionary item UUID to delete
+            custom_list_uuid: UUID of custom list
+            dictionary_item_uuid: Dictionary item UUID
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         """
-        path = f"{_PATH}/{list_uuid}/items/{dictionary_item_uuid}"
+        path = f"{_PATH}/{custom_list_uuid}/items/{dictionary_item_uuid}"
         self._connector.do_delete(path=path)
 
     def get_related_items(
         self,
-        list_uuid: uuid.UUID,
+        custom_list_uuid: uuid.UUID,
         dictionary_uuid: uuid.UUID,
         *,
         cursor: Optional[Cursor] = None,
@@ -183,9 +214,9 @@ class CustomListsAPI(BaseAPI):
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `GET /custom-lists/{list_uuid}/related-items`.
+            Calls `GET /custom-lists/{custom_list_uuid}/related-items`.
         Args:
-            list_uuid: UUID of custom list
+            custom_list_uuid: UUID of custom list
             dictionary_uuid: Dictionary UUID
             cursor: Page cursor
             limit: Page limit
@@ -194,6 +225,8 @@ class CustomListsAPI(BaseAPI):
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         Note:
             Semantic error codes specific for this method:
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryNotFound`
@@ -204,7 +237,7 @@ class CustomListsAPI(BaseAPI):
         if limit:
             params["limit"] = limit
 
-        path = f"{_PATH}/{list_uuid}/related-items"
+        path = f"{_PATH}/{custom_list_uuid}/related-items"
         resp = self._connector.do_get(path=path, params=params)
         page = Page(self._connector.do_get, resp, RefView)
         return page
@@ -238,6 +271,8 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
             Page with custom lists and next page cursor.
         Raises:
             :class:`~cybsi.api.error.SemanticError`: Request contains logic errors.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         """
         params: Dict[str, Any] = {}
         if prefix is not None:
@@ -265,6 +300,8 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
             :class:`~cybsi.api.error.ConflictError`:
                 Replist with same identifying data already exists.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         Note:
             Semantic error codes specific for this method:
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryNotFound`
@@ -273,13 +310,29 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
         return RefView(resp.json())
 
     async def view(self, custom_list_uuid: uuid.UUID) -> "CustomListView":
+        """
+        Get view of the custom list.
+
+        .. versionadded:: 2.14.0
+        Note:
+            Calls `GET /custom-lists/{custom_list_uuid}`
+        Args:
+            custom_list_uuid: Custom list UUID
+        Returns:
+            View of the custom list.
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
+            :class:`~cybsi.api.error.NotFoundError`:
+             Custom list not found.`
+        """
         path = f"{_PATH}/{custom_list_uuid}"
         resp = await self._connector.do_get(path=path)
-        return CustomListView(resp.json())
+        return CustomListView(resp)
 
     async def edit(
         self,
-        list_uuid: uuid.UUID,
+        custom_list_uuid: uuid.UUID,
         tag: Tag,
         name: str,
     ) -> None:
@@ -288,23 +341,25 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `PATCH /custom-lists/{list_uuid}`
+            Calls `PATCH /custom-lists/{custom_list_uuid}`
         Args:
-            list_uuid: UUID of custom list
+            custom_list_uuid: UUID of custom list
             tag: :attr:`CustomListView.tag` value. Use :meth:`view` to retrieve it.
             name: New name of custom list
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.ResourceModifiedError`:
                 Custom list changed since last request. Update tag and retry.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         """
         form = {"name": name}
-        path = f"{_PATH}/{list_uuid}"
+        path = f"{_PATH}/{custom_list_uuid}"
         await self._connector.do_patch(path=path, json=form, tag=tag)
 
     async def filter_items(
         self,
-        list_uuid: uuid.UUID,
+        custom_list_uuid: uuid.UUID,
         *,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
@@ -314,69 +369,77 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `GET /custom-lists/{list_uuid}/items`.
+            Calls `GET /custom-lists/{custom_list_uuid}/items`.
         Args:
-            list_uuid: UUID of custom list
+            custom_list_uuid: UUID of custom list
             cursor: Page cursor
             limit: Page limit
         Returns:
             Page with custom list items and next page cursor.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         """
         params: Dict[str, Any] = {}
         if cursor:
             params["cursor"] = cursor
         if limit:
             params["limit"] = limit
-        path = f"{_PATH}/{list_uuid}/items"
+        path = f"{_PATH}/{custom_list_uuid}/items"
         resp = await self._connector.do_get(path=path, params=params)
         page = AsyncPage(self._connector.do_get, resp, RefView)
         return page
 
-    async def add_item(self, list_uuid: uuid.UUID, dictionary_item_uuid: dict) -> None:
+    async def add_item(
+        self, custom_list_uuid: uuid.UUID, dictionary_item_uuid: uuid.UUID
+    ) -> None:
         """
         Add item to custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `POST /custom-lists/{list_uuid}/items`
+            Calls `POST /custom-lists/{custom_list_uuid}/items`
         Args:
-            list_uuid: UUID of custom list
-            dictionary_item_uuid: Dictionary item UUID to add
+            custom_list_uuid: UUID of custom list
+            dictionary_item_uuid: Dictionary item UUID
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
-            :class:`~cybsi.api.error.SemanticError`:
+            :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         Note:
             Semantic error codes specific for this method:
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryMismatch`
         """
         params = {"dictionary_item_uuid": dictionary_item_uuid}
-        path = f"{_PATH}/{list_uuid}/items"
+        path = f"{_PATH}/{custom_list_uuid}/items"
         await self._connector.do_post(path=path, json=params)
 
     async def delete_item(
-        self, list_uuid: uuid.UUID, dictionary_item_uuid: dict
+        self, custom_list_uuid: uuid.UUID, dictionary_item_uuid: uuid.UUID
     ) -> None:
         """
         Delete item from custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `DELETE /custom-lists/{list_uuid}/items/{item_uuid}`.
+            Calls `DELETE /custom-lists/{custom_list_uuid}/items/{item_uuid}`.
         Args:
-            list_uuid: UUID of custom list
-            dictionary_item_uuid: Dictionary item UUID to delete
+            custom_list_uuid: UUID of custom list
+            dictionary_item_uuid: Dictionary item UUID
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         """
-        path = f"{_PATH}/{list_uuid}/items/{dictionary_item_uuid}"
+        path = f"{_PATH}/{custom_list_uuid}/items/{dictionary_item_uuid}"
         await self._connector.do_delete(path=path)
 
     async def get_related_items(
         self,
-        list_uuid: uuid.UUID,
+        custom_list_uuid: uuid.UUID,
         dictionary_uuid: uuid.UUID,
         *,
         cursor: Optional[Cursor] = None,
@@ -387,9 +450,9 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `GET /custom-lists/{list_uuid}/related-items`.
+            Calls `GET /custom-lists/{custom_list_uuid}/related-items`.
         Args:
-            list_uuid: UUID of custom list
+            custom_list_uuid: UUID of custom list
             dictionary_uuid: Dictionary UUID
             cursor: Page cursor
             limit: Page limit
@@ -398,6 +461,8 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided arguments have invalid values.
         Note:
             Semantic error codes specific for this method:
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryNotFound`
@@ -408,7 +473,7 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
         if limit:
             params["limit"] = limit
 
-        path = f"{_PATH}/{list_uuid}/related-items"
+        path = f"{_PATH}/{custom_list_uuid}/related-items"
         resp = await self._connector.do_get(path=path, params=params)
         page = AsyncPage(self._connector.do_get, resp, RefView)
         return page
@@ -421,7 +486,7 @@ class CustomListForm(JsonObjectForm):
     Args:
         custom_list_id: String id of custom list
         name: String name of custom list
-        dictionary_uuid: UUID of dictionary, connected to custom list
+        dictionary_uuid: UUID of dictionary attached to custom list
     """
 
     def __init__(
@@ -433,7 +498,7 @@ class CustomListForm(JsonObjectForm):
         super().__init__()
         self._data["id"] = custom_list_id
         self._data["name"] = name
-        self._data["dictionary_uuid"] = str(dictionary_uuid)
+        self._data["dictionaryUuid"] = str(dictionary_uuid)
 
 
 class CustomListCommonView(RefView):
