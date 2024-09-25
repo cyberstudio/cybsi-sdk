@@ -138,6 +138,6 @@ class ResourceName(CybsiAPIEnum):
     CustomLists = "CustomLists"
     """
         .. versionadded:: 2.14
-        
-        Custom lists    
+
+        Custom lists.
     """

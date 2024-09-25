@@ -4,6 +4,7 @@ from typing import Callable, Optional, Union
 from .artifact import ArtifactsAPI, ArtifactsAsyncAPI
 from .auth import APIKeyAuth, APIKeysAPI
 from .client_config import DEFAULT_LIMITS, DEFAULT_TIMEOUTS, Limits, Timeouts
+from .custom_lists import CustomListsAPI
 from .data_source import (
     DataSourcesAPI,
     DataSourcesAsyncAPI,
@@ -188,6 +189,11 @@ class CybsiClient:
     def access_logs(self) -> AccessLogsAPI:
         """User access log API handle."""
         return AccessLogsAPI(self._connector)
+
+    @property
+    def custom_lists(self) -> CustomListsAPI:
+        """Custom list API handle."""
+        return CustomListsAPI(self._connector)
 
     def version(self) -> "VersionView":
         """Get API and server version information.
