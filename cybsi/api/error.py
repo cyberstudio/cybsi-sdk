@@ -130,6 +130,7 @@ class ConflictError(APIError):
     DuplicateKey = "DuplicateKey"
     DuplicateLogin = "DuplicateLogin"
     StoredQueryConflict = "StoredQueryConflict"
+    DuplicateCustomList = "DuplicateCustomList"
 
     def __init__(self, content: JsonObject) -> None:
         super().__init__(409, content, header="resource already exists")
@@ -310,6 +311,10 @@ class SemanticErrorCodes(CybsiAPIEnum):
     """Query is not compatible with replist."""
     StoredQueryIsLocked = "StoredQueryIsLocked"
     """Stored query is in use. Probably used in replist."""
+    CustomListNotFound = "CustomListNotFound"
+    """Custom List Not Found"""
+    DictionaryMismatch = "DictionaryMismatch"
+    """Item related to dictionary that not related to Custom list"""
 
 
 class _ErrorView(dict):
