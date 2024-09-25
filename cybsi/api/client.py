@@ -24,6 +24,7 @@ from .report import ReportsAPI, ReportsAsyncAPI
 from .search import SearchAPI
 from .search.api import SearchAsyncAPI
 from .ual import AccessLogsAPI
+from .threat_landscapes import ThreatLandscapesAPI, ThreatLandscapesAsyncAPI
 from .user import UsersAPI
 
 
@@ -195,6 +196,11 @@ class CybsiClient:
         """Custom list API handle."""
         return CustomListAPI(self._connector)
 
+    @property
+    def threat_landscape(self) -> ThreatLandscapesAPI:
+        """Threat Landscape API handle."""
+        return ThreatLandscapesAPI(self._connector)
+
     def version(self) -> "VersionView":
         """Get API and server version information.
 
@@ -297,6 +303,11 @@ class CybsiAsyncClient:
     def dictionaries(self) -> DictionariesAsyncAPI:
         """Dictionaries API handle."""
         return DictionariesAsyncAPI(self._connector)
+
+    @property
+    def threat_landscape(self) -> ThreatLandscapesAsyncAPI:
+        """Threat Landscape API handle."""
+        return ThreatLandscapesAsyncAPI(self._connector)
 
     @property
     def custom_lists(self) -> CustomListsAsyncAPI:
