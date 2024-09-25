@@ -135,6 +135,12 @@ class ResourceName(CybsiAPIEnum):
 
         User access log.
     """
+    ThreatLandscapes = "ThreatLandscapes"
+    """
+        .. versionadded:: 2.14
+
+        Threat Landscapes.
+    """
     CustomLists = "CustomLists"
     """
         .. versionadded:: 2.14
