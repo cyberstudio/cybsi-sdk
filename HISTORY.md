@@ -1,6 +1,12 @@
 Release History
 ===============
 
+2.14.0a6
+---------------------
+- Add Threat landscapes API Section
+- Add `ThreatLandscapes` to `ResourceNames`
+- Fix CustomLists API implementation (wrong request params names)
+
 2.14.0a5
 ---------------------
 - Add CustomLists API Section

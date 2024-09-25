@@ -4,7 +4,7 @@ from typing import Callable, Optional, Union
 from .artifact import ArtifactsAPI, ArtifactsAsyncAPI
 from .auth import APIKeyAuth, APIKeysAPI
 from .client_config import DEFAULT_LIMITS, DEFAULT_TIMEOUTS, Limits, Timeouts
-from .custom_list import CustomListAPI, CustomListsAsyncAPI
+from .custom_list import CustomListsAPI, CustomListsAsyncAPI
 from .data_source import (
     DataSourcesAPI,
     DataSourcesAsyncAPI,
@@ -23,8 +23,8 @@ from .replist import ReplistsAPI, ReplistsAsyncAPI
 from .report import ReportsAPI, ReportsAsyncAPI
 from .search import SearchAPI
 from .search.api import SearchAsyncAPI
+from .threat_landscape import ThreatLandscapesAPI, ThreatLandscapesAsyncAPI
 from .ual import AccessLogsAPI
-from .threat_landscapes import ThreatLandscapesAPI, ThreatLandscapesAsyncAPI
 from .user import UsersAPI
 
 
@@ -192,12 +192,12 @@ class CybsiClient:
         return AccessLogsAPI(self._connector)
 
     @property
-    def custom_lists(self) -> CustomListAPI:
+    def custom_lists(self) -> CustomListsAPI:
         """Custom list API handle."""
-        return CustomListAPI(self._connector)
+        return CustomListsAPI(self._connector)
 
     @property
-    def threat_landscape(self) -> ThreatLandscapesAPI:
+    def threat_landscapes(self) -> ThreatLandscapesAPI:
         """Threat Landscape API handle."""
         return ThreatLandscapesAPI(self._connector)
 
@@ -305,7 +305,7 @@ class CybsiAsyncClient:
         return DictionariesAsyncAPI(self._connector)
 
     @property
-    def threat_landscape(self) -> ThreatLandscapesAsyncAPI:
+    def threat_landscapes(self) -> ThreatLandscapesAsyncAPI:
         """Threat Landscape API handle."""
         return ThreatLandscapesAsyncAPI(self._connector)
 

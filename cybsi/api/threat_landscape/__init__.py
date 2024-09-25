@@ -6,6 +6,6 @@ from .api import (
     ThreatLandscapesAsyncAPI,
     ThreatLandscapeCommonView,
     ThreatLandscapeView,
-    ThreatLanscapeForm,
+    ThreatLandscapeForm,
     ThreatLandscapesCustomListView,
 )

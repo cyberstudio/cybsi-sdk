@@ -2,9 +2,9 @@ import uuid
 from typing import Any, Dict, Optional
 
 from cybsi.api import RefView, Tag
-from cybsi.api.custom_lists import CustomListCommonView
-from cybsi.api.internal import BaseAPI, JsonObjectForm, BaseAsyncAPI
-from cybsi.api.pagination import Cursor, Page, AsyncPage
+from cybsi.api.custom_list import CustomListCommonView
+from cybsi.api.internal import BaseAPI, BaseAsyncAPI, JsonObjectForm
+from cybsi.api.pagination import AsyncPage, Cursor, Page
 from cybsi.api.view import _TaggedRefView
 
 _PATH = "threat-landscapes"
@@ -24,7 +24,7 @@ class ThreatLandscapesAPI(BaseAPI):
         limit: Optional[int] = None,
     ) -> Page["ThreatLandscapeCommonView"]:
         """
-        Get a list of all threat landscapes.
+        Get a list of threat landscapes.
 
         .. versionadded:: 2.14.0
         Note:
@@ -32,6 +32,9 @@ class ThreatLandscapesAPI(BaseAPI):
         Args:
             cursor: Page cursor
             limit: Page limit
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
         """
         params: Dict[str, Any] = {}
         if cursor:
@@ -42,7 +45,7 @@ class ThreatLandscapesAPI(BaseAPI):
         page = Page(self._connector.do_get, resp, ThreatLandscapeCommonView)
         return page
 
-    def register(self, threat_landscape: "ThreatLanscapeForm") -> RefView:
+    def register(self, landscape: "ThreatLandscapeForm") -> RefView:
         """
         Register a new threat landscape.
 
@@ -50,9 +53,12 @@ class ThreatLandscapesAPI(BaseAPI):
         Note:
             Calls `POST /threat-landscapes`
         Args:
-            threat_landscape: Threat landscape form
+            landscape: Threat landscape form
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
         """
-        resp = self._connector.do_post(path=_PATH, json=threat_landscape.json())
+        resp = self._connector.do_post(path=_PATH, json=landscape.json())
         return RefView(resp.json())
 
     def view(self, landscape_uuid: uuid.UUID) -> "ThreatLandscapeView":
@@ -67,6 +73,8 @@ class ThreatLandscapesAPI(BaseAPI):
         Returns:
             View of Threat landscape
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat Landscape not found.
         """
 
@@ -86,6 +94,8 @@ class ThreatLandscapesAPI(BaseAPI):
             tag: :attr:`CustomListView.tag` value. Use :meth:`view` to retrieve it.
             name: new Threat landscape name
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
             :class:`~cybsi.api.error.ResourceModifiedError`:
                 Threat landscape changed since last request. Update tag and retry.
@@ -104,6 +114,8 @@ class ThreatLandscapesAPI(BaseAPI):
         Args:
             landscape_uuid: Threat landscape UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
         """
         path = f"{_PATH}/{landscape_uuid}"
@@ -127,6 +139,8 @@ class ThreatLandscapesAPI(BaseAPI):
             cursor: Page cursor
             limit: Page limit
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
         """
         params: Dict[str, Any] = {}
@@ -154,13 +168,15 @@ class ThreatLandscapesAPI(BaseAPI):
             landscape_uuid: Landscape UUID
             custom_list_uuid: Custom list UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
             :class:`~cybsi.api.error.SemanticError`:
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.CustomListNotFound`
         """
-        params: Dict[str, Any] = {"custom_list_uuid": custom_list_uuid}
+        params: Dict[str, Any] = {"customListUUID": str(custom_list_uuid)}
         path = f"{_PATH}/{landscape_uuid}/custom-lists"
         self._connector.do_post(path=path, json=params)
 
@@ -179,6 +195,8 @@ class ThreatLandscapesAPI(BaseAPI):
             landscape_uuid: Landscape UUID
             custom_list_uuid: Custom list UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
         """
         path = f"{_PATH}/{landscape_uuid}/custom-lists/{custom_list_uuid}"
@@ -202,6 +220,8 @@ class ThreatLandscapesAPI(BaseAPI):
             dictionary_uuid: Dictionary UUID
             custom_list_uuid: Custom list UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`:
                 Threat landscape or custom list not found.
             :class:`~cybsi.api.error.SemanticError`:
@@ -211,7 +231,7 @@ class ThreatLandscapesAPI(BaseAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryMismatch`
 
         """
-        params: Dict[str, Any] = {"dictionary_uuid": dictionary_uuid}
+        params: Dict[str, Any] = {"dictionaryUUID": str(dictionary_uuid)}
         path = (
             f"{_PATH}/{landscape_uuid}/custom-lists/"
             f"{custom_list_uuid}/related-dictionaries"
@@ -236,6 +256,8 @@ class ThreatLandscapesAPI(BaseAPI):
             dictionary_uuid: Dictionary UUID
             custom_list_uuid: Custom list UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`:
                 Threat landscape or custom list not found.
 
@@ -262,19 +284,22 @@ class ThreatLandscapesAPI(BaseAPI):
             landscape_uuid: Landscape UUID
             data_source_uuid: Data source UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
             :class:`~cybsi.api.error.SemanticError`:
         Note:
             Semantic error codes specific for this method:
             * :attr:`~cybsi.api.error.SemanticErrorCodes.DataSourceNotFound`
-            * :attr:`~cybsi.api.error.SemanticErrorCodes.EmptyLandscape`
+            * :attr:`~cybsi.api.error.SemanticErrorCodes.EmptyLandscapeQuery`
         """
         params: Dict[str, Any] = {}
         if data_source_uuid:
-            params["dataSourceUUID"] = data_source_uuid
+            params["dataSourceUUID"] = str(data_source_uuid)
         path = f"{_PATH}/{landscape_uuid}/query"
         resp = self._connector.do_post(path=path, json=params)
         return resp.json().get("query")
+
 
 class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
     """
@@ -298,6 +323,9 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
         Args:
             cursor: Page cursor
             limit: Page limit
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
         """
         params: Dict[str, Any] = {}
         if cursor:
@@ -308,7 +336,7 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
         page = AsyncPage(self._connector.do_get, resp, ThreatLandscapeCommonView)
         return page
 
-    async def register(self, threat_landscape: "ThreatLanscapeForm") -> RefView:
+    async def register(self, landscape: "ThreatLandscapeForm") -> RefView:
         """
         Register a new threat landscape.
 
@@ -316,9 +344,12 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
         Note:
             Calls `POST /threat-landscapes`
         Args:
-            threat_landscape: Threat landscape form
+            landscape: Threat landscape form
+        Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
         """
-        resp = await self._connector.do_post(path=_PATH, json=threat_landscape.json())
+        resp = await self._connector.do_post(path=_PATH, json=landscape.json())
         return RefView(resp.json())
 
     async def view(self, landscape_uuid: uuid.UUID) -> "ThreatLandscapeView":
@@ -333,6 +364,8 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
         Returns:
             View of Threat landscape
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat Landscape not found.
         """
 
@@ -352,6 +385,8 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
             tag: :attr:`CustomListView.tag` value. Use :meth:`view` to retrieve it.
             name: new Threat landscape name
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
             :class:`~cybsi.api.error.ResourceModifiedError`:
                 Threat landscape changed since last request. Update tag and retry.
@@ -370,6 +405,8 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
         Args:
             landscape_uuid: Threat landscape UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
         """
         path = f"{_PATH}/{landscape_uuid}"
@@ -393,6 +430,8 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
             cursor: Page cursor
             limit: Page limit
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
         """
         params: Dict[str, Any] = {}
@@ -420,13 +459,15 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
             landscape_uuid: Landscape UUID
             custom_list_uuid: Custom list UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
             :class:`~cybsi.api.error.SemanticError`:
         Note:
             Semantic error codes specific for this method:
               * :attr:`~cybsi.api.error.SemanticErrorCodes.CustomListNotFound`
         """
-        params: Dict[str, Any] = {"custom_list_uuid": custom_list_uuid}
+        params: Dict[str, Any] = {"customListUUID": str(custom_list_uuid)}
         path = f"{_PATH}/{landscape_uuid}/custom-lists"
         await self._connector.do_post(path=path, json=params)
 
@@ -445,6 +486,8 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
             landscape_uuid: Landscape UUID
             custom_list_uuid: Custom list UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
         """
         path = f"{_PATH}/{landscape_uuid}/custom-lists/{custom_list_uuid}"
@@ -468,6 +511,8 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
             dictionary_uuid: Dictionary UUID
             custom_list_uuid: Custom list UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`:
                 Threat landscape or custom list not found.
             :class:`~cybsi.api.error.SemanticError`:
@@ -477,7 +522,7 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
               * :attr:`~cybsi.api.error.SemanticErrorCodes.DictionaryMismatch`
 
         """
-        params: Dict[str, Any] = {"dictionary_uuid": dictionary_uuid}
+        params: Dict[str, Any] = {"dictionaryUUID": str(dictionary_uuid)}
         path = (
             f"{_PATH}/{landscape_uuid}/custom-lists/"
             f"{custom_list_uuid}/related-dictionaries"
@@ -502,6 +547,8 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
             dictionary_uuid: Dictionary UUID
             custom_list_uuid: Custom list UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`:
                 Threat landscape or custom list not found.
 
@@ -528,6 +575,8 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
             landscape_uuid: Landscape UUID
             data_source_uuid: Data source UUID
         Raises:
+            :class:`~cybsi.api.error.InvalidRequestError`:
+                Provided value are invalid (see args value requirements).
             :class:`~cybsi.api.error.NotFoundError`: Threat landscape not found.
             :class:`~cybsi.api.error.SemanticError`:
         Note:
@@ -537,12 +586,13 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
         """
         params: Dict[str, Any] = {}
         if data_source_uuid:
-            params["dataSourceUUID"] = data_source_uuid
+            params["dataSourceUUID"] = str(data_source_uuid)
         path = f"{_PATH}/{landscape_uuid}/query"
         resp = await self._connector.do_post(path=path, json=params)
         return resp.json().get("query")
 
-class ThreatLanscapeForm(JsonObjectForm):
+
+class ThreatLandscapeForm(JsonObjectForm):
     """
     Threat Landscape Form. Use to add Threat Landscapes.
 
