@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.14.0a5
+---------------------
+- Add CustomLists API Section
+- Add `CustomLists` to `ResourceNames`
+
 2.14.0a4 (2024-08-15)
 ---------------------
 - Add firstSeen and lastSeen to entity aggregate

@@ -135,3 +135,9 @@ class ResourceName(CybsiAPIEnum):
 
         User access log.
     """
+    CustomLists = "CustomLists"
+    """
+        .. versionadded:: 2.14
+
+        Custom lists.
+    """
