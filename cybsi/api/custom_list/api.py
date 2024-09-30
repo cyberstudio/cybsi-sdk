@@ -9,7 +9,7 @@ from cybsi.api.view import _TaggedRefView
 _PATH = "/custom-lists"
 
 
-class CustomListAPI(BaseAPI):
+class CustomListsAPI(BaseAPI):
     """
     API to operate custom lists.
 
@@ -165,7 +165,7 @@ class CustomListAPI(BaseAPI):
         Note:
             Calls `POST /custom-lists/{custom_list_uuid}/items`
         Args:
-            list_uuid: UUID of custom list
+            custom_list_uuid: UUID of custom list
             dictionary_item_uuid: Dictionary item UUID
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
@@ -177,7 +177,7 @@ class CustomListAPI(BaseAPI):
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryMismatch`
         """
-        params = {"dictionary_item_uuid": dictionary_item_uuid}
+        params = {"dictionaryItemUUID": str(dictionary_item_uuid)}
         path = f"{_PATH}/{custom_list_uuid}/items"
         self._connector.do_post(path=path, json=params)
 
@@ -231,7 +231,7 @@ class CustomListAPI(BaseAPI):
             Semantic error codes specific for this method:
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryNotFound`
         """
-        params: Dict[str, Any] = {"dictionary_uuid": dictionary_uuid}
+        params: Dict[str, Any] = {"dictionaryUUID": str(dictionary_uuid)}
         if cursor:
             params["cursor"] = cursor
         if limit:
@@ -413,7 +413,7 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryMismatch`
         """
-        params = {"dictionary_item_uuid": dictionary_item_uuid}
+        params = {"dictionaryItemUUID": str(dictionary_item_uuid)}
         path = f"{_PATH}/{custom_list_uuid}/items"
         await self._connector.do_post(path=path, json=params)
 
@@ -467,7 +467,7 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
             Semantic error codes specific for this method:
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryNotFound`
         """
-        params: Dict[str, Any] = {"dictionary_uuid": dictionary_uuid}
+        params: Dict[str, Any] = {"dictionaryUUID": str(dictionary_uuid)}
         if cursor:
             params["cursor"] = cursor
         if limit:

@@ -314,7 +314,9 @@ class SemanticErrorCodes(CybsiAPIEnum):
     CustomListNotFound = "CustomListNotFound"
     """Custom List Not Found"""
     DictionaryMismatch = "DictionaryMismatch"
-    """Item related to dictionary that not related to Custom list"""
+    """Item related to dictionary that not related to custom list"""
+    EmptyLandscape = "EmptyLandscape"
+    """Landscape does not contain any custom list"""
 
 
 class _ErrorView(dict):
