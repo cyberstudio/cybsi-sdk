@@ -413,7 +413,7 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryItemNotFound`
             * :attr:`cybsi.api.error.SemanticErrorCodes.DictionaryMismatch`
         """
-        params = {"dictionaryItemUUID": dictionary_item_uuid}
+        params = {"dictionaryItemUUID": str(dictionary_item_uuid)}
         path = f"{_PATH}/{custom_list_uuid}/items"
         await self._connector.do_post(path=path, json=params)
 
