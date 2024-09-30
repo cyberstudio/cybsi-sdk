@@ -1,5 +1,5 @@
 import uuid
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 
 from cybsi.api import RefView, Tag
 from cybsi.api.custom_list import CustomListCommonView
@@ -634,5 +634,5 @@ class ThreatLandscapesCustomListView(RefView):
         return CustomListCommonView(self._get("customList"))
 
     @property
-    def dictionaries(self) -> RefView:
-        return RefView(self._get("dictionaries"))
+    def dictionaries(self) -> List:
+        return self._get("dictionaries")
