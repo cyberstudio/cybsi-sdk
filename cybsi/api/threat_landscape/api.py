@@ -634,5 +634,5 @@ class ThreatLandscapesCustomListView(RefView):
         return CustomListCommonView(self._get("customList"))
 
     @property
-    def dictionaries(self) -> List:
-        return self._get("dictionaries")
+    def dictionaries(self) -> List[RefView]:
+        return [RefView(dictionary) for dictionary in self._get("dictionaries")]
