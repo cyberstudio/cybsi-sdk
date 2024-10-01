@@ -1,5 +1,5 @@
 import uuid
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 
 from cybsi.api import RefView, Tag
 from cybsi.api.custom_list import CustomListCommonView
@@ -80,7 +80,7 @@ class ThreatLandscapesAPI(BaseAPI):
 
         path = f"/threat-landscapes/{landscape_uuid}"
         resp = self._connector.do_get(path=path)
-        return ThreatLandscapeView(resp.json())
+        return ThreatLandscapeView(resp)
 
     def edit(self, landscape_uuid: uuid.UUID, tag: Tag, name: str) -> None:
         """
@@ -371,7 +371,7 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
 
         path = f"/threat-landscapes/{landscape_uuid}"
         resp = await self._connector.do_get(path=path)
-        return ThreatLandscapeView(resp.json())
+        return ThreatLandscapeView(resp)
 
     async def edit(self, landscape_uuid: uuid.UUID, tag: Tag, name: str) -> None:
         """
@@ -634,5 +634,5 @@ class ThreatLandscapesCustomListView(RefView):
         return CustomListCommonView(self._get("customList"))
 
     @property
-    def dictionaries(self) -> RefView:
-        return RefView(self._get("dictionaries"))
+    def dictionaries(self) -> List[RefView]:
+        return [RefView(dictionary) for dictionary in self._get("dictionaries")]
