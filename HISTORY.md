@@ -1,6 +1,11 @@
 Release History
 ===============
 
+2.14.0a7
+---------------------
+- Fix .dictionaries property of ThreatLandscapeCustomListView
+- Fix ThreatLandscapeView initialization
+
 2.14.0a6
 ---------------------
 - Add Threat landscapes API Section
