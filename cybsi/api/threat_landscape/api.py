@@ -80,7 +80,7 @@ class ThreatLandscapesAPI(BaseAPI):
 
         path = f"/threat-landscapes/{landscape_uuid}"
         resp = self._connector.do_get(path=path)
-        return ThreatLandscapeView(resp.json())
+        return ThreatLandscapeView(resp)
 
     def edit(self, landscape_uuid: uuid.UUID, tag: Tag, name: str) -> None:
         """
@@ -371,7 +371,7 @@ class ThreatLandscapesAsyncAPI(BaseAsyncAPI):
 
         path = f"/threat-landscapes/{landscape_uuid}"
         resp = await self._connector.do_get(path=path)
-        return ThreatLandscapeView(resp.json())
+        return ThreatLandscapeView(resp)
 
     async def edit(self, landscape_uuid: uuid.UUID, tag: Tag, name: str) -> None:
         """
