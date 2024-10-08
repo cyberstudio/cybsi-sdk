@@ -1,5 +1,5 @@
 """
-Use this section to operate Threat Landscape API
+Use this section to operate threat landscape API
 """
 from .api import (
     ThreatLandscapesAPI,

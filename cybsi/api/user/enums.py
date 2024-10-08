@@ -139,7 +139,7 @@ class ResourceName(CybsiAPIEnum):
     """
         .. versionadded:: 2.14
 
-        Threat Landscapes.
+        Threat landscapes.
     """
     CustomLists = "CustomLists"
     """
