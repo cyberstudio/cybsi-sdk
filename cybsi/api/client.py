@@ -198,7 +198,7 @@ class CybsiClient:
 
     @property
     def threat_landscapes(self) -> ThreatLandscapesAPI:
-        """Threat Landscape API handle."""
+        """Threat landscape API handle."""
         return ThreatLandscapesAPI(self._connector)
 
     def version(self) -> "VersionView":
@@ -306,7 +306,7 @@ class CybsiAsyncClient:
 
     @property
     def threat_landscapes(self) -> ThreatLandscapesAsyncAPI:
-        """Threat Landscape API handle."""
+        """Threat landscape API handle."""
         return ThreatLandscapesAsyncAPI(self._connector)
 
     @property

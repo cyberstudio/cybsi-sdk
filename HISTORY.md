@@ -1,18 +1,22 @@
 Release History
 ===============
 
-2.14.0a7
+2.14.0a8 (2024-10-08)
+---------------------
+- Add custom lists and landscape documentation
+
+2.14.0a7 (2024-09-30)
 ---------------------
 - Fix .dictionaries property of ThreatLandscapeCustomListView
 - Fix ThreatLandscapeView initialization
 
-2.14.0a6
+2.14.0a6 (2024-09-30)
 ---------------------
 - Add Threat landscapes API Section
 - Add `ThreatLandscapes` to `ResourceNames`
 - Fix CustomLists API implementation (wrong request params names)
 
-2.14.0a5
+2.14.0a5 (2024-09-30)
 ---------------------
 - Add CustomLists API Section
 - Add `CustomLists` to `ResourceNames`

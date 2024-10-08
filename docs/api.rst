@@ -247,6 +247,21 @@ AccessLogs
     :imported-members:
     :inherited-members:
 
+Custom lists
+~~~~~~~~~~~~
+.. automodule:: cybsi.api.custom_list
+    :members:
+    :imported-members:
+    :inherited-members:
+
+Threat landscapes
+~~~~~~~~~~~~~~~~~
+.. automodule:: cybsi.api.threat_landscape
+    :members:
+    :imported-members:
+    :inherited-members:
+
+
 Common views and data types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: cybsi.api.Null

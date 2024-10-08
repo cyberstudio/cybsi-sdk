@@ -10,8 +10,7 @@ _PATH = "/custom-lists"
 
 
 class CustomListsAPI(BaseAPI):
-    """
-    API to operate custom lists.
+    """API to operate custom lists.
 
     .. versionadded:: 2.14.0"""
 
@@ -22,16 +21,15 @@ class CustomListsAPI(BaseAPI):
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page["CustomListCommonView"]:
-        """
-        Get custom lists.
+        """Get custom lists.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `GET /custom-lists`
+            Calls `GET /custom-lists`.
         Args:
-            prefix: Custom list's name prefix
-            cursor: Page cursor
-            limit: Page limit
+            prefix: Custom list's name prefix.
+            cursor: Page cursor.
+            limit: Page limit.
         Return:
             Page with custom lists and next page cursor.
         Raises:
@@ -50,14 +48,13 @@ class CustomListsAPI(BaseAPI):
         return page
 
     def register(self, custom_list: "CustomListForm") -> RefView:
-        """
-        Register a new custom list.
+        """Register a custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `POST /custom-lists`
+            Calls `POST /custom-lists`.
         Args:
-            custom_list: Filled custom list form
+            custom_list: Filled custom list form.
         Returns:
             Reference to the registered custom list.
         Raises:
@@ -74,16 +71,15 @@ class CustomListsAPI(BaseAPI):
         return RefView(resp.json())
 
     def view(self, custom_list_uuid: uuid.UUID) -> "CustomListView":
-        """
-        Get view of a custom list.
+        """Get view of a custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `GET /custom-lists/{custom_list_uuid}`
+            Calls `GET /custom-lists/{custom_list_uuid}`.
         Args:
-            custom_list_uuid: Custom list UUID
+            custom_list_uuid: Custom list UUID.
         Returns:
-            Custom list view
+            Custom list view.
         Raises:
             :class:`~cybsi.api.error.InvalidRequestError`:
                 Provided arguments have invalid values.
@@ -100,16 +96,15 @@ class CustomListsAPI(BaseAPI):
         tag: Tag,
         name: str,
     ) -> None:
-        """
-        Edit the custom list.
+        """Edit the custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `PATCH /custom-lists/{list_uuid}`
+            Calls `PATCH /custom-lists/{list_uuid}`.
         Args:
-            custom_list_uuid: UUID of custom list
+            custom_list_uuid: UUID of custom list.
             tag: :attr:`CustomListView.tag` value. Use :meth:`view` to retrieve it.
-            name: New name of custom list
+            name: Custom list name.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.ResourceModifiedError`:
@@ -128,16 +123,15 @@ class CustomListsAPI(BaseAPI):
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page[RefView]:
-        """
-        Get custom list items
+        """Get custom list items.
 
         .. versionadded:: 2.14.0
         Note:
             Calls `GET /custom-lists/{custom_list_uuid}/items`.
         Args:
-            custom_list_uuid: UUID of custom list
-            cursor: Page cursor
-            limit: Page limit
+            custom_list_uuid: Custom list UUID.
+            cursor: Page cursor.
+            limit: Page limit.
         Returns:
             Page with custom list items and next page cursor.
         Raises:
@@ -158,15 +152,14 @@ class CustomListsAPI(BaseAPI):
     def add_item(
         self, custom_list_uuid: uuid.UUID, dictionary_item_uuid: uuid.UUID
     ) -> None:
-        """
-        Add item to custom list.
+        """Add item to custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `POST /custom-lists/{custom_list_uuid}/items`
+            Calls `POST /custom-lists/{custom_list_uuid}/items`.
         Args:
-            custom_list_uuid: UUID of custom list
-            dictionary_item_uuid: Dictionary item UUID
+            custom_list_uuid: Custom list UUID.
+            dictionary_item_uuid: Dictionary item UUID.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
@@ -184,15 +177,14 @@ class CustomListsAPI(BaseAPI):
     def delete_item(
         self, custom_list_uuid: uuid.UUID, dictionary_item_uuid: uuid.UUID
     ) -> None:
-        """
-        Delete item from custom list.
+        """Delete item from custom list.
 
         .. versionadded:: 2.14.0
         Note:
             Calls `DELETE /custom-lists/{custom_list_uuid}/items/{item_uuid}`.
         Args:
-            custom_list_uuid: UUID of custom list
-            dictionary_item_uuid: Dictionary item UUID
+            custom_list_uuid: Custom list UUID
+            dictionary_item_uuid: Dictionary item UUID.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.InvalidRequestError`:
@@ -209,17 +201,16 @@ class CustomListsAPI(BaseAPI):
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> Page[RefView]:
-        """
-        Get dictionary items that are related to custom list.
+        """Get dictionary items that are related to custom list.
 
         .. versionadded:: 2.14.0
         Note:
             Calls `GET /custom-lists/{custom_list_uuid}/related-items`.
         Args:
-            custom_list_uuid: UUID of custom list
-            dictionary_uuid: Dictionary UUID
-            cursor: Page cursor
-            limit: Page limit
+            custom_list_uuid: Custom list UUID
+            dictionary_uuid: Dictionary UUID.
+            cursor: Page cursor.
+            limit: Page limit.
         Returns:
             Page with related items and next page cursor.
         Raises:
@@ -244,8 +235,7 @@ class CustomListsAPI(BaseAPI):
 
 
 class CustomListsAsyncAPI(BaseAsyncAPI):
-    """
-    Async API to operate custom lists.
+    """Async API to operate custom lists.
 
     .. versionadded:: 2.14.0
     """
@@ -257,16 +247,15 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> AsyncPage["CustomListCommonView"]:
-        """
-        Get custom lists.
+        """Get custom lists.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `GET /custom-lists`
+            Calls `GET /custom-lists`.
         Args:
-            prefix: Custom list's name prefix
-            cursor: Page cursor
-            limit: Page limit
+            prefix: Custom list's name prefix.
+            cursor: Page cursor.
+            limit: Page limit.
         Return:
             Page with custom lists and next page cursor.
         Raises:
@@ -286,14 +275,13 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
         return page
 
     async def register(self, custom_list: "CustomListForm") -> RefView:
-        """
-        Register a new custom list.
+        """Register a custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `POST /custom-lists`
+            Calls `POST /custom-lists`.
         Args:
-            custom_list: Filled custom list form
+            custom_list: Filled custom list form.
         Returns:
             Reference to the registered custom list.
         Raises:
@@ -310,14 +298,13 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
         return RefView(resp.json())
 
     async def view(self, custom_list_uuid: uuid.UUID) -> "CustomListView":
-        """
-        Get view of the custom list.
+        """Get view of the custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `GET /custom-lists/{custom_list_uuid}`
+            Calls `GET /custom-lists/{custom_list_uuid}`.
         Args:
-            custom_list_uuid: Custom list UUID
+            custom_list_uuid: Custom list UUID.
         Returns:
             View of the custom list.
         Raises:
@@ -336,16 +323,15 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
         tag: Tag,
         name: str,
     ) -> None:
-        """
-        Edit the custom list.
+        """Edit the custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `PATCH /custom-lists/{custom_list_uuid}`
+            Calls `PATCH /custom-lists/{custom_list_uuid}`.
         Args:
-            custom_list_uuid: UUID of custom list
+            custom_list_uuid: Custom list UUID.
             tag: :attr:`CustomListView.tag` value. Use :meth:`view` to retrieve it.
-            name: New name of custom list
+            name: Custom list name.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.ResourceModifiedError`:
@@ -364,16 +350,15 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> AsyncPage[RefView]:
-        """
-        Get custom list items
+        """Get custom list items.
 
         .. versionadded:: 2.14.0
         Note:
             Calls `GET /custom-lists/{custom_list_uuid}/items`.
         Args:
-            custom_list_uuid: UUID of custom list
-            cursor: Page cursor
-            limit: Page limit
+            custom_list_uuid: Custom list UUID.
+            cursor: Page cursor.
+            limit: Page limit.
         Returns:
             Page with custom list items and next page cursor.
         Raises:
@@ -394,15 +379,14 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
     async def add_item(
         self, custom_list_uuid: uuid.UUID, dictionary_item_uuid: uuid.UUID
     ) -> None:
-        """
-        Add item to custom list.
+        """Add item to custom list.
 
         .. versionadded:: 2.14.0
         Note:
-            Calls `POST /custom-lists/{custom_list_uuid}/items`
+            Calls `POST /custom-lists/{custom_list_uuid}/items`.
         Args:
-            custom_list_uuid: UUID of custom list
-            dictionary_item_uuid: Dictionary item UUID
+            custom_list_uuid: Custom list UUID.
+            dictionary_item_uuid: Dictionary item UUID.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.SemanticError`: Form contains logic errors.
@@ -420,15 +404,14 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
     async def delete_item(
         self, custom_list_uuid: uuid.UUID, dictionary_item_uuid: uuid.UUID
     ) -> None:
-        """
-        Delete item from custom list.
+        """Delete item from custom list.
 
         .. versionadded:: 2.14.0
         Note:
             Calls `DELETE /custom-lists/{custom_list_uuid}/items/{item_uuid}`.
         Args:
-            custom_list_uuid: UUID of custom list
-            dictionary_item_uuid: Dictionary item UUID
+            custom_list_uuid: Custom list UUID.
+            dictionary_item_uuid: Dictionary item UUID.
         Raises:
             :class:`~cybsi.api.error.NotFoundError`: Custom list not found.
             :class:`~cybsi.api.error.InvalidRequestError`:
@@ -445,17 +428,16 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
     ) -> AsyncPage[RefView]:
-        """
-        Get dictionary items that are related to custom list.
+        """Get dictionary items that are related to custom list.
 
         .. versionadded:: 2.14.0
         Note:
             Calls `GET /custom-lists/{custom_list_uuid}/related-items`.
         Args:
-            custom_list_uuid: UUID of custom list
-            dictionary_uuid: Dictionary UUID
-            cursor: Page cursor
-            limit: Page limit
+            custom_list_uuid: Custom list UUID.
+            dictionary_uuid: Dictionary UUID.
+            cursor: Page cursor.
+            limit: Page limit.
         Returns:
             Page with related items and next page cursor.
         Raises:
@@ -480,13 +462,12 @@ class CustomListsAsyncAPI(BaseAsyncAPI):
 
 
 class CustomListForm(JsonObjectForm):
-    """
-    Custom list form.
+    """Custom list form.
 
     Args:
-        custom_list_id: String id of custom list
-        name: String name of custom list
-        dictionary_uuid: UUID of dictionary attached to custom list
+        custom_list_id: String id of custom list.
+        name: String name of custom list.
+        dictionary_uuid: UUID of dictionary attached to custom list.
     """
 
     def __init__(

@@ -315,7 +315,7 @@ class SemanticErrorCodes(CybsiAPIEnum):
     """Custom List Not Found"""
     DictionaryMismatch = "DictionaryMismatch"
     """Item related to dictionary that not related to custom list"""
-    EmptyLandscape = "EmptyLandscape"
+    EmptyLandscapeQuery = "EmptyLandscapeQuery"
     """Landscape does not contain any custom list"""
 
 
