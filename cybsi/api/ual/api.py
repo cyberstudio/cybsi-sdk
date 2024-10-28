@@ -48,6 +48,11 @@ class AccessLogsAPI(BaseAPI):
         Raises:
             :class:`~cybsi.api.error.InvalidRequestError`:
                 Provided arguments have invalid values.
+            :class:`cybsi.api.error.SemanticError`:
+                User with provided uuid does not exist.
+        Note:
+            Semantic error codes specific for this method:
+            * :attr:`~cybsi.api.error.SemanticErrorCodes.UserNotFound`
         """
 
         params: Dict[str, Any] = {}
