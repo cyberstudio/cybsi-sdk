@@ -121,6 +121,7 @@ class NotFoundError(APIError):
     def __init__(self, content: JsonObject) -> None:
         super().__init__(404, {}, header="resource not found", suffix="")
 
+
 class MethodNotAllowedError(APIError):
     """Method not allowed by server. Retry will never work"""
 
