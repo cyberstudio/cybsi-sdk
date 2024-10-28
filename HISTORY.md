@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.14.0a9 (2024-10-28)
+---------------------
+- Add Scanner to NodeRoles
+
 2.14.0a8 (2024-10-08)
 ---------------------
 - Add custom lists and landscape documentation
