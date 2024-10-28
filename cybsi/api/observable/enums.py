@@ -325,6 +325,7 @@ class NodeRole(CybsiAPIEnum):
     CrlOcsp = "CrlOcsp"  # doc: OCSP servers
     Parking = "Parking"  # doc: Unregistered domains parking
     Service = "Service"  # doc: Belongs to web service (forums, file hosting, etc)
+    Scanner = "Scanner"  # doc: IPs are detected as a scanners
 
 
 @document_enum
