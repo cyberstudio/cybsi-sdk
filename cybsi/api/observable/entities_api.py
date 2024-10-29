@@ -534,7 +534,13 @@ class EntitiesAPI(BaseAPI):
         return [EntityLinkStatisticView(v) for v in r.json()]
 
     def add_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]) -> None:
-        """Add entity labels.
+        """
+        Add entity labels.
+
+        .. deprecated:: 2.14 Labels are attribute of entity.
+            This method will be deleted soon.
+            To register labels use Generic-observation
+            :meth:`~cybsi.api.observation.generic.GenericObservationsAPI.register()`.
 
         Note:
             Calls `PUT /observable/entities/{entityUUID}/labels`.
@@ -550,6 +556,11 @@ class EntitiesAPI(BaseAPI):
     def delete_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]) -> None:
         """Delete entity labels.
 
+         .. deprecated:: 2.14
+             Labels are attribute of entity and can't be deleted.
+             This method will be deleted soon.
+             Method always raises MethodNotAllowedError.
+
         Note:
             Calls `DELETE /observable/entities/{entityUUID}/labels`.
         Args:
@@ -557,7 +568,6 @@ class EntitiesAPI(BaseAPI):
             labels: List of labels.
                 Labels are case-insensitive when compared.
         """
-
         params: Dict[str, Any] = {"label": list(labels)}
         path = f"{self._path}/{entity_uuid}/labels"
         self._connector.do_delete(path=path, params=params)
@@ -912,7 +922,13 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
         return [EntityLinkStatisticView(v) for v in r.json()]
 
     async def add_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]) -> None:
-        """Add entity labels.
+        """
+        Add entity labels.
+
+         .. deprecated:: 2.14 Labels are attribute of entity.
+             This method will be deleted soon.
+             To register labels use Generic-observation
+             :meth:`~cybsi.api.observation.generic.GenericObservationsAsyncAPI.register()`.
 
         Note:
             Calls `PUT /observable/entities/{entityUUID}/labels`.
@@ -929,6 +945,11 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
         self, entity_uuid: uuid.UUID, labels: Iterable[str]
     ) -> None:
         """Delete entity labels.
+
+         .. deprecated:: 2.14
+             Labels are attribute of entity and can't be deleted.
+             This method will be deleted soon.
+             Method always raises MethodNotAllowedError.
 
         Note:
             Calls `DELETE /observable/entities/{entityUUID}/labels`.

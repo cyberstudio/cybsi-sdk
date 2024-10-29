@@ -672,8 +672,7 @@ class DictItemAttributeValue(JsonObjectForm):
     See :meth:`~cybsi.api.observation.generic.GenericObservationForm.add_attribute_fact`
 
     Args:
-       key: Dictionary item key. The key should consist of characters
-            according to the pattern `[a-zA-Z0-9_ :.@-]` and
+       key: Dictionary item key. The key should
             have length in the range `[1;50]`.
             First and last char of key can't be space-symbol
             User-specified key case is preserved.
