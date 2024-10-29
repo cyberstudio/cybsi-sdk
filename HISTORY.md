@@ -2,7 +2,7 @@ Release History
 ===============
 
 2.14.0a10 (2024-10-28)
----------------------
+----------------------
 - Add MethodNotAllowedError
 - Deprecate metods add_labels and delete_labels
 - Fix docstrings
