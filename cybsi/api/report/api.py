@@ -850,9 +850,11 @@ class ReportHeaderView(RefView):
         return parse_rfc3339_timestamp(self._get("createdAt"))
 
     @property
-    def published_at(self) -> datetime:
+    def published_at(self) -> Optional[datetime]:
         """Report publication time."""
-        return parse_rfc3339_timestamp(self._get("publishedAt"))
+        if raw_time := self._get_optional("publishedAt"):
+            return parse_rfc3339_timestamp(raw_time)
+        return None
 
     @property
     def registered_at(self) -> datetime:
