@@ -92,6 +92,7 @@ class ReportsAPI(BaseAPI):
         external_id: Optional[str] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
+        reverse_order: bool = False,
     ) -> Page["ReportHeaderView"]:
         """Get report header filtration list that matches the specified criteria.
 
@@ -126,6 +127,7 @@ class ReportsAPI(BaseAPI):
             external_id: Filter reports by their external id. Min length is 1.
             cursor: Page cursor.
             limit: Page limit.
+            reverse_order: Result list order, default false
         Returns:
             Page of reports list and next page cursor.
         Raises:
@@ -168,7 +170,7 @@ class ReportsAPI(BaseAPI):
             params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
-
+        params["reverseOrder"] = reverse_order
         resp = self._connector.do_get(path=_REPORTS_PATH, params=params)
         page = Page(self._connector.do_get, resp, ReportHeaderView)
         return page
@@ -447,6 +449,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
         external_id: Optional[str] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
+        reverse_order: bool = False
     ) -> AsyncPage["ReportHeaderView"]:
         """Get report header filtration list that matches the specified criteria.
 
@@ -481,6 +484,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
             external_id: Filter reports by their external id. Min length is 1.
             cursor: Page cursor.
             limit: Page limit.
+            reverse_order: Result list order, default false
         Returns:
             Page of reports list and next page cursor.
         Raises:
@@ -523,7 +527,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
             params["cursor"] = str(cursor)
         if limit:
             params["limit"] = str(limit)
-
+        params["reverseOrder"] = reverse_order
         resp = await self._connector.do_get(path=_REPORTS_PATH, params=params)
         page = AsyncPage(self._connector.do_get, resp, ReportHeaderView)
         return page
