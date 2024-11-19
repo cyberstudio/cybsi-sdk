@@ -1,5 +1,13 @@
 Release History
 ===============
+2.14.0 (2024-11-19)
+---------------------
+- Deprecate `.add_labels()` and `delete_labels.()` methods `EntitiesAPI`
+- Add `MethodNotAllowedError` (405 HTTP)
+- Add reverse_order param of `ReportsAPI.filter()` method
+- Add `InvalidReplistSpecifier` to `CybsiLangErrorCodes` enum
+- Make `ReportHeaderView.published_at` property optional
+- Fix docs
 
 2.14.0a9 (2024-10-28)
 ---------------------
