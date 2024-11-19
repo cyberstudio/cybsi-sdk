@@ -122,6 +122,13 @@ class NotFoundError(APIError):
         super().__init__(404, {}, header="resource not found", suffix="")
 
 
+class MethodNotAllowedError(APIError):
+    """Method not allowed by server. Retry will never work"""
+
+    def __init__(self, content: JsonObject) -> None:
+        super().__init__(405, content, header="method not allowed")
+
+
 class ConflictError(APIError):
     """Resource already exists. Retry will never work."""
 
@@ -340,6 +347,7 @@ _error_mapping = {
     401: UnauthorizedError,
     403: ForbiddenError,
     404: NotFoundError,
+    405: MethodNotAllowedError,
     409: ConflictError,
     412: ResourceModifiedError,
     422: SemanticError,

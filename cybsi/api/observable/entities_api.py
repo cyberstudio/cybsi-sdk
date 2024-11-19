@@ -2,6 +2,8 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
+from typing_extensions import deprecated
+
 from .. import RefView
 from ..internal import BaseAPI, BaseAsyncAPI, rfc3339_timestamp
 from ..pagination import AsyncPage, Cursor, Page
@@ -533,8 +535,22 @@ class EntitiesAPI(BaseAPI):
         r = self._connector.do_get(path=path, params=params)
         return [EntityLinkStatisticView(v) for v in r.json()]
 
+    @deprecated(
+        """
+            From TA 2.14 labels are attr of entity.
+            To register labels use observation.{type}.register method
+
+            This method will be deleted soon
+        """
+    )
     def add_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]) -> None:
-        """Add entity labels.
+        """
+        Add entity labels.
+
+        .. deprecated:: 2.14 Labels are attribute of entity.
+            This method will be deleted soon.
+            To register labels use Generic-observation
+            :meth:`~cybsi.api.observation.generic.GenericObservationsAPI.register()`.
 
         Note:
             Calls `PUT /observable/entities/{entityUUID}/labels`.
@@ -547,8 +563,21 @@ class EntitiesAPI(BaseAPI):
         path = f"{self._path}/{entity_uuid}/labels"
         self._connector.do_put(path=path, json=list(labels))
 
+    @deprecated(
+        """
+            From TA 2.14 labels are attr of entity and can't be deleted.
+            Method always raises MethodNotAllowedError.
+
+            This method will be deleted soon
+        """
+    )
     def delete_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]) -> None:
         """Delete entity labels.
+
+        .. deprecated:: 2.14
+             Labels are attribute of entity and can't be deleted.
+             This method will be deleted soon.
+             Method always raises MethodNotAllowedError.
 
         Note:
             Calls `DELETE /observable/entities/{entityUUID}/labels`.
@@ -557,7 +586,6 @@ class EntitiesAPI(BaseAPI):
             labels: List of labels.
                 Labels are case-insensitive when compared.
         """
-
         params: Dict[str, Any] = {"label": list(labels)}
         path = f"{self._path}/{entity_uuid}/labels"
         self._connector.do_delete(path=path, params=params)
@@ -911,8 +939,22 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
         r = await self._connector.do_get(path=path, params=params)
         return [EntityLinkStatisticView(v) for v in r.json()]
 
+    @deprecated(
+        """
+        From TA 2.14 labels are attr of entity.
+        To register labels use observation.{type}.register method
+
+        This method will be deleted soon
+        """
+    )
     async def add_labels(self, entity_uuid: uuid.UUID, labels: Iterable[str]) -> None:
-        """Add entity labels.
+        """
+        Add entity labels.
+
+        .. deprecated:: 2.14 Labels are attribute of entity.
+             This method will be deleted soon.
+             To register labels use Generic-observation
+             :meth:`~cybsi.api.observation.generic.GenericObservationsAsyncAPI.register()`.
 
         Note:
             Calls `PUT /observable/entities/{entityUUID}/labels`.
@@ -925,10 +967,23 @@ class EntitiesAsyncAPI(BaseAsyncAPI):
         path = f"{self._path}/{entity_uuid}/labels"
         await self._connector.do_put(path=path, json=list(labels))
 
+    @deprecated(
+        """
+            From TA 2.14 labels are attr of entity and can't be deleted.
+            Method always raises MethodNotAllowedError.
+
+            This method will be deleted soon
+        """
+    )
     async def delete_labels(
         self, entity_uuid: uuid.UUID, labels: Iterable[str]
     ) -> None:
         """Delete entity labels.
+
+        .. deprecated:: 2.14
+             Labels are attribute of entity and can't be deleted.
+             This method will be deleted soon.
+             Method always raises MethodNotAllowedError.
 
         Note:
             Calls `DELETE /observable/entities/{entityUUID}/labels`.

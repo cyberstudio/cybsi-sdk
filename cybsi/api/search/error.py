@@ -56,3 +56,5 @@ class CybsiLangErrorCodes(CybsiAPIEnum):
 
     UnsupportedExpression = "UnsupportedExpression"
     """The expression is allowed by grammar but not supported yet."""
+    InvalidReplistSpecifier = "InvalidReplistSpecifier"
+    """Invalid specifier for replist"""
