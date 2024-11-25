@@ -16,6 +16,7 @@ from .enums import (
     ShareLevels,
     ThreatCategory,
     ThreatStatus,
+    RegionalInternetRegistry,
 )
 
 T = TypeVar("T")
@@ -56,6 +57,8 @@ def _convert_attribute_value_type(
         AttributeNames.Tactics: DictionaryItemCommonView,
         AttributeNames.Techniques: DictionaryItemCommonView,
         AttributeNames.Labels: DictionaryItemCommonView,
+        AttributeNames.IsDelegated: bool,
+        AttributeNames.RegionalInternetRegistry: RegionalInternetRegistry
     }
 
     return _attribute_value_types[attribute_name](val)

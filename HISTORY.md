@@ -1,5 +1,9 @@
 Release History
 ===============
+2.14.1 (2024-11-21)
+---------------------
+- Add IsDelegated and RegionalInternetRegistry attr types to converter
+
 2.14.0 (2024-11-19)
 ---------------------
 - Deprecate `.add_labels()` and `delete_labels.()` methods `EntitiesAPI`
