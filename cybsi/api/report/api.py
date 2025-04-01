@@ -449,7 +449,7 @@ class ReportsAsyncAPI(BaseAsyncAPI):
         external_id: Optional[str] = None,
         cursor: Optional[Cursor] = None,
         limit: Optional[int] = None,
-        reverse_order: bool = False
+        reverse_order: bool = False,
     ) -> AsyncPage["ReportHeaderView"]:
         """Get report header filtration list that matches the specified criteria.
 
