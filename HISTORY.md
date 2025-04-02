@@ -1,5 +1,10 @@
 Release History
 ===============
+
+2.14.2 (2025-04-01)
+---------------------
+- Replace cgi to email.message module
+
 2.14.1 (2024-11-21)
 ---------------------
 - Add IsDelegated and RegionalInternetRegistry attr types to converter

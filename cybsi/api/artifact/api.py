@@ -1,7 +1,7 @@
-import cgi
 import uuid
 from contextlib import asynccontextmanager, contextmanager
 from datetime import datetime
+from email.message import Message
 from io import BytesIO
 from typing import (
     Any,
@@ -537,14 +537,15 @@ class ArtifactAsyncContent:
 def _parse_content_filename(response) -> str:
     """Parse filename parameter from content-disposition header."""
     try:
-        value, params = cgi.parse_header(response.headers["content-disposition"])
+        msg = Message()
+        msg["content-disposition"] = response.headers["content-disposition"]
     except KeyError:
         raise CybsiError("Content-disposition header not found") from None
 
-    try:
-        return params["filename"]
-    except KeyError:
+    filename = msg.get_filename()
+    if filename is None:
         raise CybsiError("filename not found in Content-disposition header") from None
+    return filename
 
 
 class ArtifactCommonView(RefView):
