@@ -234,6 +234,7 @@ class CybsiAsyncClient:
             base_url=config.api_url,
             auth=config.auth,
             ssl_verify=config.ssl_verify,
+            embed_object_url=config.embed_object_url,
             timeouts=config.timeouts,
             limits=config.limits,
         )
