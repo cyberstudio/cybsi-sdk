@@ -1,6 +1,10 @@
 Release History
 ===============
 
+2.14.3 (2025-07-10)
+---------------------
+- Fix passing embed_object_url for async client
+
 2.14.2 (2025-04-01)
 ---------------------
 - Replace cgi to email.message module
